@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model  User{
+	id                Int @id @default(autoincrement())
+	username	        String
+	email		          String  @unique
+	profilePicture 	  String?
+	preferredContact	String?
+	walkCount 	      Int  @default (0)
+  buddyRequests     BuddyRequest[] @relation("RequesterRequests")
+	buddyPairs	      BuddyPair[] @relation("UserPairs")
+	createdAt		      DateTime @default (now())
+	updatedAt		      DateTime @updatedAt
+}
+model BuddyRequest {
+	id 	              Int @id @default(autoincrement())
+	requesterId       Int
+  requester         User  @relation("RequesterRequests", fields: [requesterId], references:[id])
+  destination       String
+	time 	            DateTime
+	status 	          RequestStatus @default(PENDING)
+	verificationCode  String
+	buddyPair 	      BuddyPair?
+	createdAt         DateTime @default(now())
+}
+
+model BuddyPair{
+id  	             Int @id @default(autoincrement())
+requestId          Int  @unique
+request          	 BuddyRequest  @relation(fields: [requestId] , references:[id])
+buddyId 	         Int
+buddy 	           User @relation("UserPairs", fields:[buddyId], references:[id])
+
+confirmed          Boolean @default(false)
+confirmedAt        DateTime?
+createdAt          DateTime @default(now())
+}
+enum RequestStatus{
+	PENDING
+	PAIRED
+	DECLINED
+}
