@@ -10,7 +10,7 @@ node_modules
 # default create-react-app build folder
 build
 
-# app secrets 
+# app secrets
 *.env
 
 # macos (https://github.com/github/gitignore/blob/main/Global/macOS.gitignore)
@@ -41,3 +41,14 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+import js from "@eslint/js";
+import globals from "globals";
+import pluginReact from "eslint-plugin-react";
+import { defineConfig } from "eslint/config";
+
+
+export default defineConfig([
+  { files: ["**/*.{js,mjs,cjs,jsx}"], languageOptions: {globals: globals.node} ,plugins: { js }, extends: ["js/recommended"] },
+  { files: ["**/*.{js,mjs,cjs,jsx}"], languageOptions: { globals: globals.browser } },
+  pluginReact.configs.flat.recommended,
+]);
