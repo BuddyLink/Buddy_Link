@@ -12,3 +12,4 @@ const firebaseConfig = {
   export default app
 
   // Setup authentication
+
