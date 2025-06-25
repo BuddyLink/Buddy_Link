@@ -1,12 +1,19 @@
-// import { useState } from 'react'
-import './App.css'
+import "./App.css";
+import CreateNewAccount from "./Components/CreateNewAccount";
+import Homepage from "./Components/Homepage";
+import SignInPage from "./Components/SignInPage";
+import { Routes, Route } from "react-router-dom";
 
 function App() {
-
   return (
     <div>
-      <h1>Hello World!</h1>
-    </div>)
+      <Routes>
+        <Route path="/" className="signInPage" element={<SignInPage />} />
+        <Route path="/signup" element={<CreateNewAccount />} />
+        <Route path="/home" element={<Homepage />} />
+      </Routes>
+    </div>
+  );
 }
 
-export default App
+export default App;
