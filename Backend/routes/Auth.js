@@ -31,11 +31,11 @@ router.post("/signup", async (req, res) => {
     ) {
       return res.status(400).json({ message: "Missing required fields" });
     }
-
-    if (password.length < 6) {
+    const minPWDLength = 6;
+    if (password.length < minPWDLength) {
       return res
         .status(400)
-        .json({ message: "Password must be at least 6 characters" });
+        .json({ message: `Password must be at least ${minPWDLength} characters` });
     }
     if (email.endsWith(".edu") === false) {
       return res
@@ -101,7 +101,7 @@ router.post("/login", async (req, res) => {
     req.session.email = emailExists.email;
     res.json({ success: true, message: "Login successful!" });
   } catch (err) {
-    console.log(err);
+    console.info(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -117,7 +117,7 @@ router.get("/me", async (req, res) => {
     });
     res.json({ id: req.session.userId, email: user.email });
   } catch (err) {
-    console.log(err);
+    console.info(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });
@@ -154,7 +154,7 @@ router.get("/profile", async (req, res) => {
       walkCount: user.walkCount,
     });
   } catch (err) {
-    console.log(err);
+    console.info(err);
     res.status(500).json({ message: "Internal server error" });
   }
 });

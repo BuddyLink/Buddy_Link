@@ -13,8 +13,8 @@ const NavBar = () => {
     }
   };
   return (
-    <div className="nav-bar">
-      <button className="nav-button" onClick={handleLogout}>
+    <div className="navBar">
+      <button className="navButton" onClick={handleLogout}>
         LogOut
       </button>
     </div>

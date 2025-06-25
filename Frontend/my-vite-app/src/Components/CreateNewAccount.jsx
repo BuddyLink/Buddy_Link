@@ -42,7 +42,7 @@ const CreateNewAccount = () => {
   return (
     <div className="CreateNewAccount">
       <h1>Create New Account</h1>
-      <form className="user-form" onSubmit={handleSubmit}>
+      <form className="userForm" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Name"
@@ -73,7 +73,7 @@ const CreateNewAccount = () => {
           value={major}
           onChange={(e) => setMajor(e.target.value)}
         />
-        <div className="form-group">
+        <div className="formGroup">
           <label> Classification: </label>
           <select
             className="classification"
@@ -94,7 +94,7 @@ const CreateNewAccount = () => {
           value={profilePicture}
           onChange={(e) => setProfilePicture(e.target.value)}
         />
-        <div className="form-group">
+        <div className="formGroup">
           <label> Preferred Contact: </label>
           <select
             className="preferredContact"
