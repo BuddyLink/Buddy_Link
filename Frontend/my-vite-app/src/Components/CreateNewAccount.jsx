@@ -18,16 +18,16 @@ const CreateNewAccount = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
-        email,
-        password,
-        name,
-        surname,
-        classification,
-        major,
-        profilePicture,
-        preferredContact,
-        phone: Number(phone),
-        walkCount: Number(0),
+      email,
+      password,
+      name,
+      surname,
+      classification,
+      major,
+      profilePicture,
+      preferredContact,
+      phone: Number(phone),
+      walkCount: Number(0),
     };
     const result = await createNewAccount(data);
     if (result?.success) {
@@ -35,14 +35,14 @@ const CreateNewAccount = () => {
       if (user) {
         navigate("/");
       }
-        } else {
-            alert(result.error || "User not created");
+    } else {
+      alert(result.error || "User not created");
     }
-  }
+  };
   return (
     <div className="CreateNewAccount">
       <h1>Create New Account</h1>
-      <form className="user-form"  onSubmit={handleSubmit}>
+      <form className="user-form" onSubmit={handleSubmit}>
         <input
           type="text"
           placeholder="Name"
@@ -95,17 +95,17 @@ const CreateNewAccount = () => {
           onChange={(e) => setProfilePicture(e.target.value)}
         />
         <div className="form-group">
-        <label> Preferred Contact: </label>
-        <select
-          className="preferredContact"
-          placeholder="Preferred Contact"
-          value={preferredContact}
-          onChange={(e) => setPreferredContact(e.target.value)}
+          <label> Preferred Contact: </label>
+          <select
+            className="preferredContact"
+            placeholder="Preferred Contact"
+            value={preferredContact}
+            onChange={(e) => setPreferredContact(e.target.value)}
           >
-          <option value="">Select a Preferred Contact</option>
-          <option value="email">Email</option>
-          <option value="phone">Phone</option>
-        </select>
+            <option value="">Select a Preferred Contact</option>
+            <option value="email">Email</option>
+            <option value="phone">Phone</option>
+          </select>
         </div>
         <input
           type="text"

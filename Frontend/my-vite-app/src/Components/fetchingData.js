@@ -14,7 +14,7 @@ export async function createNewAccount(data) {
     if (!response.ok) {
       return { error: result.error || result.message };
     }
-    return { success:true, data: result };
+    return { success: true, data: result };
   } catch (error) {
     return { error: error.message };
   }

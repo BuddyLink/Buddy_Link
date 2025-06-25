@@ -2,7 +2,6 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
-
 const router = express.Router();
 
 router.post("/signup", async (req, res) => {
@@ -21,7 +20,14 @@ router.post("/signup", async (req, res) => {
     } = req.body;
 
     if (
-      !email || !password || !name || !surname || !classification || !major || !preferredContact || !profilePicture
+      !email ||
+      !password ||
+      !name ||
+      !surname ||
+      !classification ||
+      !major ||
+      !preferredContact ||
+      !profilePicture
     ) {
       return res.status(400).json({ message: "Missing required fields" });
     }
@@ -32,7 +38,9 @@ router.post("/signup", async (req, res) => {
         .json({ message: "Password must be at least 6 characters" });
     }
     if (email.endsWith(".edu") === false) {
-      return res.status(400).json({ message: "Email must be a valid .edu email" });
+      return res
+        .status(400)
+        .json({ message: "Email must be a valid .edu email" });
     }
     const existingUser = await prisma.user.findUnique({
       where: { email },
@@ -41,7 +49,7 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser= await prisma.user.create({
+    const newUser = await prisma.user.create({
       data: {
         email,
         password: hashedPassword,
@@ -62,7 +70,7 @@ router.post("/signup", async (req, res) => {
       .json({ success: true, message: "User created successfully" });
   } catch (err) {
     console.error("Error creating user:", err);
-    res.status(500).json({ error:err.message || "Internal server error" });
+    res.status(500).json({ error: err.message || "Internal server error" });
   }
 });
 
