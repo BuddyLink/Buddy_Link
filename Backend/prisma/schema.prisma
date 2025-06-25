@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -16,7 +15,7 @@ datasource db {
 
 model  User{
 	id                Int @id @default(autoincrement())
-	name	            String
+	name	          String
     surname	          String
 	email		      String  @unique
 	password	      String
@@ -44,10 +43,10 @@ model BuddyRequest {
 }
 
 model BuddyPair{
-id  	             Int @id @default(autoincrement())
+id  	           Int @id @default(autoincrement())
 requestId          Int  @unique
-request          	 BuddyRequest  @relation(fields: [requestId] , references:[id])
-buddyId 	         Int
+request            BuddyRequest  @relation(fields: [requestId] , references:[id])
+buddyId 	       Int
 buddy 	           User @relation("UserPairs", fields:[buddyId], references:[id])
 
 confirmed          Boolean @default(false)
