@@ -13,7 +13,7 @@ const EditProfileModal = ({onClose,profile}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const data = {
+    const edtiData = {
       name,
       surname,
       classification,
@@ -22,7 +22,15 @@ const EditProfileModal = ({onClose,profile}) => {
       preferredContact,
       phone,
     };
+    const data ={}
+    for (const key in edtiData) {
+      if (edtiData[key]) {
+        data[key] = edtiData[key];
+      }
+    }
     await editProfile(data);
+    onClose();
+    window.location.reload();
   };
 
   return (
