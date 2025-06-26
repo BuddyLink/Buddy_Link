@@ -1,5 +1,4 @@
 import "./SignInPage.css";
-import NavBar from "./NavBar";
 import { Link } from "react-router-dom";
 import { login, getMe } from "./fetchingData";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +26,6 @@ const SignInPage = () => {
   };
   return (
     <div className="SignInPage">
-      <NavBar />
       <h1>Sign In</h1>
       <label>Email</label>
       <input

@@ -1,6 +1,7 @@
 import "./Homepage.css";
 import NavBar from "./NavBar";
 
+
 const Homepage = () => {
   return (
     <div className="homePage">
@@ -9,5 +10,4 @@ const Homepage = () => {
     </div>
   );
 };
-
 export default Homepage;

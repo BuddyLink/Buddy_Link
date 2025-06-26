@@ -88,3 +88,20 @@ export async function logout() {
     console.error("Failed to logout", error.message);
   }
 }
+export async function editProfile (data) {
+    try {
+      const response = await fetch(`${baseUrl}/profile/edit`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+          body: JSON.stringify(data),
+        });
+      if (!response.ok) throw new Error(`Response status: ${response.status}`);
+      return await response.json();
+    } catch (error) {
+      console.error("Failed edit profile", error.message);
+      return null;
+    }
+  }
