@@ -1,6 +1,5 @@
 const express = require("express");
 const cors = require("cors");
-// const BuddyRoutes = require('./routes/BuddyRoutes');
 const AuthRoutes = require("./routes/Auth");
 const session = require("express-session");
 
@@ -26,8 +25,6 @@ app.use(
 );
 
 app.use(AuthRoutes);
-// app.use("/", BuddyRoutes);
-
 app.listen(PORT, () => {
   console.info(`Server started on port ${PORT}`);
 });
