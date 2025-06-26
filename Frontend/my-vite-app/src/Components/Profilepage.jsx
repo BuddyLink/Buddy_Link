@@ -3,11 +3,13 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {getProfile} from "./fetchingData"
 import NavBar from "./NavBar"
+import EditProfileModal from "./EditProfileModal";
 
 
 const Profilepage = () => {
     const { id } = useParams();
     const [profile, setProfile] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
       const fetchProfile = async () => {
@@ -16,9 +18,16 @@ const Profilepage = () => {
       };
       fetchProfile();
     }, [id]);
+
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
     return (
         <div className="profilePage">
             <NavBar />
+            <div className="editProfileButton">
+            <button onClick={openModal}>Edit Profile</button>
+            {isModalOpen && <EditProfileModal profile={profile} onClose={closeModal}/>}
+            </div>
             <h1>Profile Page</h1>
             <div className="profilePageContent">
             <img src={profile.profilePicture} alt="profile pic" className="profilePic" />

@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./EditProfileModal.css";
 import { editProfile } from "./fetchingData";
 
-const EditProfileModal = () => {
+const EditProfileModal = ({onClose,profile}) => {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [classification, setClassification] = useState("");
@@ -23,30 +23,32 @@ const EditProfileModal = () => {
       phone,
     };
     await editProfile(data);
-    //   onClose();
   };
 
   return (
-    <div className="modal">
+    <div className="modal" onClick={onClose}>
       <div className="modalContent" onClick={(e) => e.stopPropagation()}>
         <form className="style" onSubmit={handleSubmit}>
           <div className="formGroup">
             <h1> Edit Profile </h1>
+            <label>Name: </label>
             <input
               type="text"
-              placeholder="Name"
+              placeholder= {profile.name}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
+            <label>Surname: </label>
             <input
               type="text"
-              placeholder="Surname"
+              placeholder= {profile.surname}
               value={surname}
               onChange={(e) => setSurname(e.target.value)}
             />
+            <label>Major: </label>
             <input
               type="text"
-              placeholder="Major"
+              placeholder= {profile.major}
               value={major}
               onChange={(e) => setMajor(e.target.value)}
             />
@@ -65,9 +67,10 @@ const EditProfileModal = () => {
                 <option value="Senior">Senior</option>
               </select>
             </div>
+            <label>ProfilePictureUrl: </label>
             <input
               type="text"
-              placeholder="Profile picture url"
+              placeholder= {profile.profilePicture}
               value={profilePicture}
               onChange={(e) => setProfilePicture(e.target.value)}
             />
@@ -84,16 +87,19 @@ const EditProfileModal = () => {
                 <option value="phone">Phone</option>
               </select>
             </div>
+            <label>Phone: </label>
             <input
               type="text"
-              placeholder="Phone Number"
+              placeholder={profile.phone}
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
             <button type="submit" className="editProfile">
               Save Changes
             </button>
-            <button className="close">Close</button>
+            <button className="close" onClick={onClose}>
+                Close
+            </button>
           </div>
         </form>
       </div>

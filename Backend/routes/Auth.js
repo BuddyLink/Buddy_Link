@@ -83,22 +83,22 @@ router.post("/login", async (req, res) => {
         .status(400)
         .json({ message: "Email and password are required" });
     }
-    const emailExists = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
     });
-    if (!emailExists) {
+    if (!user) {
       return res
         .status(401)
         .json({ message: "Email or password is incorrect" });
     }
-    const passwordMatch = await bcrypt.compare(password, emailExists.password);
+    const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return res
         .status(401)
         .json({ message: "Email or password is incorrect" });
     }
-    req.session.userId = emailExists.id;
-    req.session.email = emailExists.email;
+    req.session.userId = user.id;
+    req.session.email = user.email;
     res.json({ success: true, message: "Login successful!" });
   } catch (err) {
     console.info(err);
