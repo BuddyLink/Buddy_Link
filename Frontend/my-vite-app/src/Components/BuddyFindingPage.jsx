@@ -26,9 +26,6 @@ const BuddyFindingPage = () => {
           <button>Cancel Request</button>
         </li>
       </ul>
-      <Link to="/verify">
-        <button>Verification</button>
-      </Link>
     </div>
   );
 };
