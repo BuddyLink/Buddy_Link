@@ -1,0 +1,84 @@
+html, body{
+    margin: 0;
+    height: 100%;
+}
+
+.SignInPage{
+    display: flex;
+    flex-direction:column;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.SignInPageContainer{
+    flex:1;
+    align-items: center;
+    justify-content: center;
+}
+
+.SignInPageContent{
+    background-color: #fff;
+    display:flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    padding : 20px;
+    border-radius: 10px;
+}
+
+.SignInPageContent h1{
+    font-size: 50px;
+    font-weight: bold;
+    text-align: center;
+    color: #2c2c2c;
+}
+
+.SignInPageContent label{
+    font-size: 15px;
+    margin-bottom:3px;
+}
+
+.SignInPageContent input{
+    font-size: 20px;
+    margin-bottom: 6px;
+}
+
+.SignUpBtn{
+    background-color: #6DBF7B
+}
+
+.SignInBtn:hover{
+    background-color: white;
+}
+.SignInPageBackground{
+    background-color: #6DBF7B;
+    padding:20px;
+    margin: 250px;
+    border-radius: 10px;
+    width: 500px;
+    position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.SignUpLink{
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.SignUpLink button{
+    background-color: transparent;
+    color: #2c2c2c;
+    margin-top: 8px;
+    margin-left: 1px;
+}
+.SignUpLink button:hover{
+    border-color: blue;
+}
+.walk{
+    text-align: center;
+}
+.icon{
+    text-align: center;
+}

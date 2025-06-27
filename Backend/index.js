@@ -8,7 +8,7 @@ const PORT = 3000;
 
 app.use(
   cors({
-    origin: "http://localhost:5179",
+    origin: "http://localhost:5180",
     credentials: true,
   })
 );

@@ -13,7 +13,7 @@ const EditProfileModal = ({onClose,profile}) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const edtiData = {
+    const editData = {
       name,
       surname,
       classification,
@@ -23,9 +23,9 @@ const EditProfileModal = ({onClose,profile}) => {
       phone,
     };
     const data ={}
-    for (const key in edtiData) {
-      if (edtiData[key]) {
-        data[key] = edtiData[key];
+    for (const key in editData) {
+      if (editData[key]) {
+        data[key] = editData[key];
       }
     }
     await editProfile(data);
@@ -60,7 +60,7 @@ const EditProfileModal = ({onClose,profile}) => {
               value={major}
               onChange={(e) => setMajor(e.target.value)}
             />
-            <div className="formGroup">
+            <div className="formGroupC">
               <label> Classification: </label>
               <select
                 className="classification"
@@ -82,7 +82,7 @@ const EditProfileModal = ({onClose,profile}) => {
               value={profilePicture}
               onChange={(e) => setProfilePicture(e.target.value)}
             />
-            <div className="formGroup">
+            <div className="formGroupP">
               <label> Preferred Contact: </label>
               <select
                 className="preferredContact"
@@ -95,7 +95,7 @@ const EditProfileModal = ({onClose,profile}) => {
                 <option value="phone">Phone</option>
               </select>
             </div>
-            <label>Phone: </label>
+            <label>Phone Number: </label>
             <input
               type="text"
               placeholder={profile.phone}

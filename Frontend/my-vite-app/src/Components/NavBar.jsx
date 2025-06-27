@@ -21,6 +21,9 @@ const NavBar = () => {
       <Link to="/profile">
       <button>Profile</button>
       </Link>
+      <Link to="/home">
+      <button>Home</button>
+      </Link>
     </div>
   );
 };

@@ -3,6 +3,10 @@ import { Link } from "react-router-dom";
 import { login, getMe } from "./fetchingData";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import Header from "./Header";
+import Footer from "./Footer";
+import { MdLocationPin } from "react-icons/md";
+import { FaWalking } from "react-icons/fa";
 
 const SignInPage = () => {
   const [email, setEmail] = useState("");
@@ -26,26 +30,36 @@ const SignInPage = () => {
   };
   return (
     <div className="SignInPage">
+      <Header />
+      <div className= "SignInPageContainer">
+      <div className="SignInPageBackground">
+       <h1 className="icon"><strong><MdLocationPin /> Buddy Link</strong></h1>
+             <p className="walk"><FaWalking />WALK.TALK.REPEAT</p>
+      <div className="SignInPageContent">
       <h1>Sign In</h1>
       <label>Email</label>
       <input
         type="email"
-        placeholder="Enter email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
       <label>Password</label>
       <input
         type="password"
-        placeholder="Enter password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button onClick={handleLogin}>Sign In</button>
+      <button className="SignUpBtn" onClick={handleLogin}>Sign In</button>
+      <div className ="SignUpLink">
       <p>Not a Member? </p>
       <Link to="/signup">
-        <button>Sign Up</button>
+        <button className="link">Sign Up</button>
       </Link>
+      </div>
+    </div>
+    </div>
+    </div>
+    <Footer />
     </div>
   );
 };

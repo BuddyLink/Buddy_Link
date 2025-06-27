@@ -2,6 +2,8 @@ import "./CreateNewAccount.css";
 import { useState } from "react";
 import { createNewAccount, getMe } from "./fetchingData";
 import { useNavigate } from "react-router-dom";
+import Header from "./Header";
+import Footer from "./Footer";
 
 const CreateNewAccount = () => {
   const [name, setName] = useState("");
@@ -41,7 +43,10 @@ const CreateNewAccount = () => {
   };
   return (
     <div className="CreateNewAccount">
-      <h1>Create New Account</h1>
+        <Header />
+        <div className="CreateNewAccountContainer">
+       <div className="CreateNewAccountContent">
+      <h1 className="create">Create New Account</h1>
       <form className="userForm" onSubmit={handleSubmit}>
         <input
           type="text"
@@ -113,8 +118,11 @@ const CreateNewAccount = () => {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
         />
-        <button type="submit">Create New Account</button>
+        <button type="submit" className="createBtn">Create New Account</button>
       </form>
+    </div>
+    </div>
+    <Footer />
     </div>
   );
 };
