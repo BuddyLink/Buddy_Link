@@ -9,9 +9,8 @@ import Footer from "./Footer";
 import { LiaUserEditSolid } from "react-icons/lia";
 
 
-const Profilepage = () => {
+const Profilepage = ({setProfile, profile}) => {
     const { id } = useParams();
-    const [profile, setProfile] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
@@ -20,14 +19,14 @@ const Profilepage = () => {
         setProfile(fetchedProfile);
       };
       fetchProfile();
-    }, [id]);
+    }, [setProfile, id]);
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => setIsModalOpen(false);
     return (
         <div className="profilePage">
             <Header />
-            <NavBar />
+            <NavBar/>
             <div className="profilePageContainer">
             <div className="profilePageContent">
             <div className="editProfileButton">
