@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "eslint": "^9.29.0"
+    "dotenv": "^17.0.0"
   }
 }

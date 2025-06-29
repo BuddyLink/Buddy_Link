@@ -1,7 +1,9 @@
-import "./NavBar.css";
 import { logout } from "./fetchingData";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { GiExitDoor } from "react-icons/gi";
+import { IoPersonCircleOutline } from "react-icons/io5";
+import { IoHome } from "react-icons/io5";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -14,16 +16,21 @@ const NavBar = () => {
     }
   };
   return (
-    <div className="navBar">
-      <button className="navButton" onClick={handleLogout}>
-        LogOut
-      </button>
-      <Link to="/profile">
-      <button>Profile</button>
-      </Link>
+    <div className="fixed bottom-0 left-0 right-0 bg-green-100  text-emerald-700 py-2 px-6 flex justify-around items-center shadow-md z-50 ">
       <Link to="/home">
-      <button>Home</button>
+        <button className="text-2xl">
+          <IoHome />
+        </button>
       </Link>
+
+      <Link to="/profile">
+        <button  className="text-2xl">
+          <IoPersonCircleOutline />
+        </button>
+      </Link>
+      <button className="text-2xl" onClick={handleLogout}>
+        <GiExitDoor />
+      </button>
     </div>
   );
 };
