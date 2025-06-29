@@ -35,7 +35,9 @@ router.post("/signup", async (req, res) => {
     if (password.length < minPWDLength) {
       return res
         .status(400)
-        .json({ message: `Password must be at least ${minPWDLength} characters` });
+        .json({
+          message: `Password must be at least ${minPWDLength} characters`,
+        });
     }
     if (email.endsWith(".edu") === false) {
       return res
@@ -169,34 +171,34 @@ router.post("/logout", async (req, res) => {
   });
 });
 
-
 router.patch("/profile/edit", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-    try {
-        const editFields=[
-            "name",
-            "surname",
-            "classification",
-            "major",
-            "profilePicture",
-            "preferredContact",
-            "phone"]
-        const updates= {};
-        for (const field of editFields) {
-            if (req.body[field] !== undefined) {
-                updates[field] = req.body[field];
-            }
-        }
-        const updated = await prisma.user.update({
-        where: { id: req.session.userId },
-        data: updates,
-      });
-      res.status(200).json(updated);
-    } catch (error) {
-      res.status(500).json({ message: "Failed to update Profile" });
+  try {
+    const editFields = [
+      "name",
+      "surname",
+      "classification",
+      "major",
+      "profilePicture",
+      "preferredContact",
+      "phone",
+    ];
+    const updates = {};
+    for (const field of editFields) {
+      if (req.body[field] !== undefined) {
+        updates[field] = req.body[field];
+      }
     }
-  });
+    const updated = await prisma.user.update({
+      where: { id: req.session.userId },
+      data: updates,
+    });
+    res.status(200).json(updated);
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update Profile" });
+  }
+});
 
 module.exports = router;

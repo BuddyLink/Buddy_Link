@@ -4,7 +4,6 @@ import { getProfile } from "./fetchingData";
 import NavBar from "./NavBar";
 import EditProfileModal from "./EditProfileModal";
 import { LiaUserEditSolid } from "react-icons/lia";
-import "./Profilepage.css"
 const Profilepage = ({ setProfile, profile }) => {
   const { id } = useParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,7 +32,7 @@ const Profilepage = ({ setProfile, profile }) => {
           {isModalOpen && (
             <EditProfileModal profile={profile} onClose={closeModal} />
           )}
-        <h2 className="text-2xl font-bond text-green-900 mt-13 mb-10">
+          <h2 className="text-2xl font-bond text-green-900 mt-13 mb-10">
             {profile.name}
             {"  "}
             {profile.surname}
@@ -42,26 +41,24 @@ const Profilepage = ({ setProfile, profile }) => {
             src={profile.profilePicture}
             alt="profile pic"
             className="w-50 h-50 rounded-full mx-auto mt-4 object-cover border border-green-300"
-            onError ={(e)=>{
-                e.target.onerror = null,
-                e.target.src = defaultAvatar
-            }
-            }
+            onError={(e) => {
+              (e.target.onerror = null), (e.target.src = defaultAvatar);
+            }}
           />
-          </div>
-          <div className="mt-6 text-left text-green-900 space-y-2">
-            <h3 className="text-lg">
-              <span className="font-bold">Major: </span>
-              {profile.major}
-            </h3>
-            <h3 className="text-lg">
-              <span className="font-bold">Classification: </span>
-              {profile.classification}
-            </h3>
-            <h3 className="text-lg">
-              <span className="font-bold">Walk Count: </span>
-              {profile.walkCount}
-            </h3>
+        </div>
+        <div className="mt-6 text-left text-green-900 space-y-2">
+          <h3 className="text-lg">
+            <span className="font-bold">Major: </span>
+            {profile.major}
+          </h3>
+          <h3 className="text-lg">
+            <span className="font-bold">Classification: </span>
+            {profile.classification}
+          </h3>
+          <h3 className="text-lg">
+            <span className="font-bold">Walk Count: </span>
+            {profile.walkCount}
+          </h3>
         </div>
       </div>
       <NavBar />

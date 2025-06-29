@@ -1,4 +1,3 @@
-import "./App.css";
 import CreateNewAccount from "./Components/CreateNewAccount";
 import Homepage from "./Components/Homepage";
 import SignInPage from "./Components/SignInPage";

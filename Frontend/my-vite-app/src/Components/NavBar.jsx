@@ -24,7 +24,7 @@ const NavBar = () => {
       </Link>
 
       <Link to="/profile">
-        <button  className="text-2xl">
+        <button className="text-2xl">
           <IoPersonCircleOutline />
         </button>
       </Link>
