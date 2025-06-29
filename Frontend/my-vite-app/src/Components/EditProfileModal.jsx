@@ -46,8 +46,8 @@ const EditProfileModal = ({onClose,profile}) => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex flex-col items-center justify-center  bg-blur bg-opacity-60 z-[1000]" onClick={onClose}>
-      <div className="bg-[#f2f2f2] text-[#2e7d32] p-8 rounded-[12px] shadow-[0_6px_16px_rgba(0,0,0,0.2)] w-[90%] max-w-[550px] max-h-full overflox-y-auto text-left" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 top-0 left-0 w-full h-full flex flex-col items-center justify-center  bg-blur bg-opacity-60 z-[1000]" onClick={onClose}>
+      <div className="bg-[#f2f2f2] text-[#2e7d32] p-8 rounded-[12px] shadow-[0_6px_16px_rgba(0,0,0,0.2)] w-[90%] max-w-[550px] h-[75vh] overflow-y-auto scrollbar-thin text-left" onClick={(e) => e.stopPropagation()}>
         <form className="style" onSubmit={handleSubmit}>
           <div className="formGroup">
             <h1 className="text-2xl font-bond text-green-900 text-center mb-3 "> Edit Profile </h1>

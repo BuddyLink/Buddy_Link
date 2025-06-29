@@ -8,6 +8,7 @@ import VerificationCodePage from "./Components/VerificationCodePage";
 import SecurityPage from "./Components/SecurityPage";
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
+import MatchPage from "./Components/MatchPage";
 
 function App() {
   const [profile, setProfile] = useState([]);
@@ -24,6 +25,7 @@ function App() {
         <Route path="/buddy" element={<BuddyFindingPage />} />
         <Route path="/verify" element={<VerificationCodePage />} />
         <Route path="/security" element={<SecurityPage />} />
+        <Route path="/match" element={<MatchPage />} />
       </Routes>
     </div>
   );
