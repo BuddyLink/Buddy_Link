@@ -23,12 +23,13 @@ model  User{
     major 	          String
 	profilePicture 	  String?
 	preferredContact  String?
-    phone 	          Int
+    phone 	          String
 	walkCount 	      Int  @default (0)
     buddyRequests     BuddyRequest[] @relation("RequesterRequests")
 	buddyPairs	      BuddyPair[] @relation("UserPairs")
 	createdAt		  DateTime @default (now())
 	updatedAt		  DateTime @updatedAt
+	passwordConfirmation String @default("")
 }
 model BuddyRequest {
 	id 	              Int @id @default(autoincrement())

@@ -2,13 +2,18 @@ const express = require("express");
 const cors = require("cors");
 const AuthRoutes = require("./routes/Auth");
 const session = require("express-session");
+require("dotenv").config();
 
 const app = express();
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 const PORT = 3000;
+const CLIENT_PORT = 5173;
+const CLIENT_URL = `http://localhost:${CLIENT_PORT}`;
 
 app.use(
   cors({
-    origin: "http://localhost:5179",
+    origin: CLIENT_URL,
     credentials: true,
   })
 );

@@ -28,6 +28,16 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      // Formatting and whitespace rules
+      'no-trailing-spaces': 'error',
+      'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
+      'eol-last': ['error', 'always'],
+      'indent': ['error', 2],
+      'quotes': ['error', 'single'],
+      'semi': ['error', 'never'],
+      'comma-dangle': ['error', 'always-multiline'],
+      'object-curly-spacing': ['error', 'always'],
+      'array-bracket-spacing': ['error', 'never'],
     },
   },
 ]
