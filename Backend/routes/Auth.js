@@ -17,6 +17,7 @@ router.post("/signup", async (req, res) => {
       preferredContact,
       phone,
       walkCount = 0,
+      passwordConfirmation,
     } = req.body;
 
     if (
@@ -27,7 +28,8 @@ router.post("/signup", async (req, res) => {
       !classification ||
       !major ||
       !preferredContact ||
-      !profilePicture
+      !profilePicture ||
+      !passwordConfirmation
     ) {
       return res.status(400).json({ message: "Missing required fields" });
     }
@@ -37,6 +39,13 @@ router.post("/signup", async (req, res) => {
         .status(400)
         .json({
           message: `Password must be at least ${minPWDLength} characters`,
+        });
+    }
+    if (password !== passwordConfirmation){
+      return res
+        .status(400)
+        .json({
+          message: `Passwords must match!`,
         });
     }
     if (email.endsWith(".edu") === false) {
@@ -63,6 +72,7 @@ router.post("/signup", async (req, res) => {
         preferredContact,
         phone,
         walkCount,
+        passwordConfirmation,
       },
     });
     req.session.userId = newUser.id;

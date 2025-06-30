@@ -1,34 +1,35 @@
-import { useState } from "react";
-import { createNewAccount, getMe } from "./fetchingData";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react'
+import { createNewAccount, getMe } from './fetchingData'
+import { useNavigate } from 'react-router-dom'
 
 const CreateNewAccount = () => {
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [major, setMajor] = useState("");
-  const [classification, setClassification] = useState("");
-  const [profilePicture, setProfilePicture] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
-  const [preferredContact, setPreferredContact] = useState("");
-  const [phone, setPhone] = useState("");
-  const navigate = useNavigate();
+  const [name, setName] = useState('')
+  const [surname, setSurname] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [major, setMajor] = useState('')
+  const [classification, setClassification] = useState('')
+  const [profilePicture, setProfilePicture] = useState('')
+  const [imagePreview, setImagePreview] = useState('')
+  const [preferredContact, setPreferredContact] = useState('')
+  const [phone, setPhone] = useState('')
+  const [passwordConfirmation,setPasswordConfirmation] = useState('')
+  const navigate = useNavigate()
 
   const handleProfile = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files[0]
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onloadend = () => {
-        setImagePreview(reader.result);
-        setProfilePicture(reader.result);
-      };
-      reader.readAsDataURL(file);
+        setImagePreview(reader.result)
+        setProfilePicture(reader.result)
+      }
+      reader.readAsDataURL(file)
     }
-  };
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     const data = {
       email,
       password,
@@ -40,17 +41,18 @@ const CreateNewAccount = () => {
       preferredContact,
       phone,
       walkCount: Number(0),
-    };
-    const result = await createNewAccount(data);
+      passwordConfirmation,
+    }
+    const result = await createNewAccount(data)
     if (result?.success) {
-      const user = await getMe();
+      const user = await getMe()
       if (user) {
-        navigate("/");
+        navigate('/')
       }
     } else {
-      alert(result.error || "User not created");
+      alert(result.error || 'User not created')
     }
-  };
+  }
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 to-green-300 flex flex-col items-center justify-center px-4">
       <div className="bg-[#f1fff3] rounded-2xl shadow-md p-6 w-full max-w-md">
@@ -86,6 +88,13 @@ const CreateNewAccount = () => {
             placeholder="Password (atleast 6 characters)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500"
+          />
+          <input
+            type="password"
+            placeholder="Password Confirmation"
+            value={passwordConfirmation}
+            onChange={(e) => setPasswordConfirmation(e.target.value)}
             className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500"
           />
           <input
@@ -170,7 +179,7 @@ const CreateNewAccount = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CreateNewAccount;
+export default CreateNewAccount

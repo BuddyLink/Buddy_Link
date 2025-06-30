@@ -29,6 +29,7 @@ model  User{
 	buddyPairs	      BuddyPair[] @relation("UserPairs")
 	createdAt		  DateTime @default (now())
 	updatedAt		  DateTime @updatedAt
+	passwordConfirmation String @default("")
 }
 model BuddyRequest {
 	id 	              Int @id @default(autoincrement())

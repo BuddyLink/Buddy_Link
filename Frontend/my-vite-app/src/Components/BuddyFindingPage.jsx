@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom'
 
 const BuddyFindingPage = () => {
   return (
@@ -35,7 +35,7 @@ const BuddyFindingPage = () => {
         </li>
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default BuddyFindingPage;
+export default BuddyFindingPage
