@@ -60,6 +60,7 @@ router.post("/signup", async (req, res) => {
       return res.status(400).json({ message: "User already exists" });
     }
     const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedConPassword = await bcrypt.hash(passwordConfirmation, 10);
     const newUser = await prisma.user.create({
       data: {
         email,
@@ -72,7 +73,7 @@ router.post("/signup", async (req, res) => {
         preferredContact,
         phone,
         walkCount,
-        passwordConfirmation,
+        passwordConfirmation: hashedConPassword,
       },
     });
     req.session.userId = newUser.id;
