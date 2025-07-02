@@ -1,24 +1,24 @@
-import { useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { getProfile } from "./fetchingData";
-import NavBar from "./NavBar";
-import EditProfileModal from "./EditProfileModal";
-import { LiaUserEditSolid } from "react-icons/lia";
+import { useParams } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { getProfile } from './fetchingData'
+import NavBar from './NavBar'
+import EditProfileModal from './EditProfileModal'
+import { LiaUserEditSolid } from 'react-icons/lia'
 const Profilepage = ({ setProfile, profile }) => {
-  const { id } = useParams();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { id } = useParams()
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const fetchedProfile = await getProfile(id);
-      setProfile(fetchedProfile);
-    };
-    fetchProfile();
-  }, [setProfile, id]);
+      const fetchedProfile = await getProfile(id)
+      setProfile(fetchedProfile)
+    }
+    fetchProfile()
+  }, [setProfile, id])
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
-  const defaultAvatar = "/assets/_500W_500H.jpg";
+  const openModal = () => setIsModalOpen(true)
+  const closeModal = () => setIsModalOpen(false)
+  const defaultAvatar = '/assets/_500W_500H.jpg'
   return (
     <div className="profilePage">
       <div className="min-h-screen w-full bg-gradient-to-b from-green-50 to-green-100 flex flex-col itens-center justify-start p-8">
@@ -34,7 +34,7 @@ const Profilepage = ({ setProfile, profile }) => {
           )}
           <h2 className="text-2xl font-bond text-green-900 mt-13 mb-10">
             {profile.name}
-            {"  "}
+            {'  '}
             {profile.surname}
           </h2>
           <img
@@ -42,7 +42,7 @@ const Profilepage = ({ setProfile, profile }) => {
             alt="profile pic"
             className="w-50 h-50 rounded-full mx-auto mt-4 object-cover border border-green-300"
             onError={(e) => {
-              (e.target.onerror = null), (e.target.src = defaultAvatar);
+              (e.target.onerror = null), (e.target.src = defaultAvatar)
             }}
           />
         </div>
@@ -63,6 +63,6 @@ const Profilepage = ({ setProfile, profile }) => {
       </div>
       <NavBar />
     </div>
-  );
-};
-export default Profilepage;
+  )
+}
+export default Profilepage
