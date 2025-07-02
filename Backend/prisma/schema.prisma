@@ -35,27 +35,55 @@ model BuddyRequest {
 	id 	              Int @id @default(autoincrement())
 	requesterId       Int
     requester         User  @relation("RequesterRequests", fields: [requesterId], references:[id])
-    destination       String
+	date			  DateTime
 	time 	          DateTime
+	destination       Location @relation("RequestDestination", fields:[destinationId], references:[id])
+	destinationId     Int
+	meetingPoint	  Location @relation("RequestMeeting", fields:[meetingPointId], references:[id])
+	meetingPointId    Int
 	status 	          RequestStatus @default(PENDING)
-	verificationCode  String
 	buddyPair 	      BuddyPair?
 	createdAt         DateTime @default(now())
 }
 
 model BuddyPair{
-id  	           Int @id @default(autoincrement())
-requestId          Int  @unique
-request            BuddyRequest  @relation(fields: [requestId] , references:[id])
-buddyId 	       Int
-buddy 	           User @relation("UserPairs", fields:[buddyId], references:[id])
-
-confirmed          Boolean @default(false)
-confirmedAt        DateTime?
-createdAt          DateTime @default(now())
+	id  	           Int @id @default(autoincrement())
+	requestId          Int  @unique
+	request            BuddyRequest  @relation(fields: [requestId] , references:[id])
+	buddyId 	       Int
+	buddy 	           User @relation("UserPairs", fields:[buddyId], references:[id])
+	name			   String
+	surname			   String
+	major              String
+	classification     String
+	walkCount          Int
+	profilePic         String
+	preferredContact   String
+	email              String?
+	phone              String?
+	date			   DateTime
+	time               DateTime
+	destination        Location @relation("Destination", fields:[destinationId], references:[id])
+	destinationId      Int
+	location		   Location @relation("Location", fields:[locationId], references:[id])
+	locationId         Int
+	confirmed          Boolean @default(false)
+	confirmedAt        DateTime?
+	createdAt          DateTime @default(now())
 }
 enum RequestStatus{
 	PENDING
 	PAIRED
 	DECLINED
+}
+
+model Location{
+	id 		Int @id
+	name    String
+	latitude Float
+	longitude Float
+	destinationRequests BuddyRequest[] @relation("RequestDestination")
+	meetingPointRequests BuddyRequest[] @relation("RequestMeeting")
+	destinationRequestsPair BuddyPair[] @relation("Destination")
+	locationRequestsPair BuddyPair[] @relation("Location")
 }

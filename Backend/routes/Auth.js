@@ -172,6 +172,18 @@ router.get("/profile", async (req, res) => {
   }
 });
 
+router.get("/locations", async(req,res)=>{
+  if (!req.session.userId){
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try{
+    const locations = await prisma.location.findMany();
+    res.json(locations)
+  }catch (err){
+    res.status(500).json({ message: "Failed to fetch locations"});
+  }
+})
+
 router.post("/logout", async (req, res) => {
   req.session.destroy((err) => {
     if (err) {
