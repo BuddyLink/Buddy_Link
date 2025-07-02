@@ -1,6 +1,6 @@
-import NavBar from "./NavBar";
-import { Link } from "react-router-dom";
-import { MdLocationPin } from "react-icons/md";
+import NavBar from './NavBar'
+import { Link } from 'react-router-dom'
+import { MdLocationPin } from 'react-icons/md'
 
 const Homepage = ({ profile }) => {
   return (
@@ -15,7 +15,7 @@ const Homepage = ({ profile }) => {
       <div className="w-full max-w-md mx-auto bg-emerald-50 rounded-3xl shadow-xl px-6 py-8">
         <form className="space-y-4">
           <label className="block text-gray-700 font-semibold mb-1">
-            Destination:{" "}
+            Destination:{' '}
           </label>
           <input
             type="text"
@@ -23,21 +23,21 @@ const Homepage = ({ profile }) => {
             className="w-full p-2 border border-gray-300 rounded-mb focus:outline-none focus:ring-2 focus:ring-emerald-400"
           />
           <label className="block text-gray-700 font-semibold mb-1">
-            Date:{" "}
+            Date:{' '}
           </label>
           <input
             type="date"
             className="w-full p-2 border border-gray-300 rounded-mb focus:outline-none focus:ring-2 focus:ring-emerald-400"
           />
           <label className="block text-gray-700 font-semibold mb-1">
-            Time:{" "}
+            Time:{' '}
           </label>
           <input
             type="time"
             className="w-full p-2 border border-gray-300 rounded-mb focus:outline-none focus:ring-2 focus:ring-emerald-400"
           />
           <label className="block text-gray-700 font-semibold mb-1">
-            Meeting Point:{" "}
+            Meeting Point:{' '}
           </label>
           <input
             type="text"
@@ -53,6 +53,6 @@ const Homepage = ({ profile }) => {
       </div>
       <NavBar />
     </div>
-  );
-};
-export default Homepage;
+  )
+}
+export default Homepage
