@@ -41,7 +41,7 @@ router.post("/signup", async (req, res) => {
           message: `Password must be at least ${minPWDLength} characters`,
         });
     }
-    if (password !== psswordConfirmation
+    if (password !== passwordConfirmation
 ){
       return res
         .status(400)
