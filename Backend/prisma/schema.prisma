@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model  User{
+model User{
 	id                Int @id @default(autoincrement())
 	name	          String
     surname	          String
@@ -63,8 +63,8 @@ model BuddyPair{
 	phone              String?
 	date			   DateTime
 	time               DateTime
-	destination        Location @relation("Destination", fields:[destinationId], references:[id])
-	destinationId      Int
+	destinationPair        Location @relation("Destination", fields:[destinationPairId], references:[id])
+	destinationPairId      Int
 	location		   Location @relation("Location", fields:[locationId], references:[id])
 	locationId         Int
 	confirmed          Boolean @default(false)

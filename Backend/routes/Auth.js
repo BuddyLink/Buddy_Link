@@ -184,6 +184,51 @@ router.get("/locations", async(req,res)=>{
   }
 })
 
+router.post("/buddyrequest", async(req,res)=>{
+  if (!req.session.userId){
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try{
+    const {
+      date,
+      time,
+      destination,
+      meetingPoint
+  } = req.body;
+  if(!date ||
+    !time ||
+    !destination ||
+    !meetingPoint
+  )
+  {
+   return res.status(400).json({ message: "Missing required fields" });
+  }
+  const buddyRequest = await prisma.buddyRequest.create({
+    data: {
+      date: new Date(date),
+      time: new Date(time),
+      destination:{
+        connect: {id: Number(destination)}
+      },
+      meetingPoint:{
+        connect: {id: Number(destination)}
+        },
+      requester: {
+        connect: {id: req.session.userId}
+      },
+      status: "PENDING"
+      }
+  });
+  res
+    .status(201)
+    .json({ success: true, message: "Request created successfully" });
+  } catch (err) {
+  console.error("Error creating request:", err);
+  res.status(500).json({ error: err.message || "Internal server error" });
+  }
+  });
+
+
 router.post("/logout", async (req, res) => {
   req.session.destroy((err) => {
     if (err) {
