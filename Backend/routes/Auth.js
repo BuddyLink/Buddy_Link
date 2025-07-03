@@ -280,6 +280,19 @@ function HaversineFormula (userLat,userLon,buddyLat,buddyLon){
   return distance;
 }
 
+async function Location (Id){
+  try{
+    const locationCoordinates = await prisma.location.findUnique({
+      where:{
+        id: Number (Id),
+      }
+    })
+    return locationCoordinates
+  }catch(error){
+    console.error("Failed to get coordinates")
+  }
+}
+
 async function Matched (date,time,destinationId,meetingPointId){
   try{
     time = new Date (time)
