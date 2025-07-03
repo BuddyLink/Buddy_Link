@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const router = express.Router();
-const moment = require('moment')
+const moment = require("moment");
 
 router.post("/signup", async (req, res) => {
   try {
@@ -36,19 +36,14 @@ router.post("/signup", async (req, res) => {
     }
     const minPWDLength = 6;
     if (password.length < minPWDLength) {
-      return res
-        .status(400)
-        .json({
-          message: `Password must be at least ${minPWDLength} characters`,
-        });
+      return res.status(400).json({
+        message: `Password must be at least ${minPWDLength} characters`,
+      });
     }
-    if (password !== passwordConfirmation
-){
-      return res
-        .status(400)
-        .json({
-          message: `Passwords must match!`,
-        });
+    if (password !== passwordConfirmation) {
+      return res.status(400).json({
+        message: `Passwords must match!`,
+      });
     }
     if (email.endsWith(".edu") === false) {
       return res
@@ -170,57 +165,55 @@ router.get("/profile", async (req, res) => {
     });
   } catch (err) {
     connsole.info(err);
-    res.status(500).json  ({ mesage: "Internal server error" });  }
-}
-)
-router.get("/locations", async(req,res)=>{
-  if (!req.session.userId){
+    res.status(500).json({ mesage: "Internal server error" });
+  }
+});
+router.get("/locations", async (req, res) => {
+  if (!req.session.userId) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  try{
+  try {
     const locations = await prisma.location.findMany();
-    res.json(locations)
-  }catch (err){
-    res.status(500).json({ message: "Failed to fetch locations"});
+    res.json(locations);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch locations" });
   }
-})
+});
 
-router.post("/buddyrequest", async(req,res)=>{
-  if (!req.session.userId){
+router.post("/buddyrequest", async (req, res) => {
+  if (!req.session.userId) {
     return res.status(401).json({ message: "Unauthorized" });
   }
-  try{
-    const {
-      date,
-      time,
-      destination,
-      meetingPoint,
-  } = req.body;
-  const buddyRequest = await prisma.buddyRequest.create({
-    data: {
-      date: new Date(date),
-      time: new Date(`${date}T${time}:00.000Z`),
-      destination:{
-        connect: {id: Number(destination)}
-      },
-      meetingPoint:{
-        connect: {id: Number(meetingPoint)}
+  try {
+    const { date, time, destination, meetingPoint } = req.body;
+    const buddyRequest = await prisma.buddyRequest.create({
+      data: {
+        date: new Date(date),
+        time: new Date(`${date}T${time}:00.000Z`),
+        destination: {
+          connect: { id: Number(destination) },
         },
-      requester: {
-        connect: {id: req.session.userId}
+        meetingPoint: {
+          connect: { id: Number(meetingPoint) },
+        },
+        requester: {
+          connect: { id: req.session.userId },
+        },
+        status: "PENDING",
       },
-      status: "PENDING"
-      }
-  });
-  res
-    .status(201)
-    .json({ success: true, message: "Request created successfully", data:buddyRequest});
+    });
+    res
+      .status(201)
+      .json({
+        success: true,
+        message: "Request created successfully",
+        data: buddyRequest,
+      });
   } catch (err) {
-  console.error("Error creating request:", err);
-  res.status(500).json({ error: err.message || "Internal server error" });
+    console.error("Error creating request:", err);
+    res.status(500).json({ error: err.message || "Internal server error" });
   }
-  });
-
+});
 
 router.post("/logout", async (req, res) => {
   req.session.destroy((err) => {
@@ -262,58 +255,67 @@ router.patch("/profile/edit", async (req, res) => {
   }
 });
 
-function HaversineFormula (userLat,userLon,buddyLat,buddyLon){
-  const earthRadius = 6371e3
+function HaversineFormula(userLat, userLon, buddyLat, buddyLon) {
+  const earthRadius = 6371e3;
   const userLatRad = userLat * Math.PI/180
   const buddyLatRad = buddyLat * Math.PI/180
   const deltaLatRad = (buddyLat - userLat) * Math.PI/180
   const deltaLonRad = (buddyLon - userLon) * Math.PI/180
 
-  const a = Math.sin(deltaLatRad/2) ** 2 +
-            Math.cos(userLatRad) * Math.cos(buddyLatRad) +
-            Math.sin(deltaLonRad/2) ** 2
+  const a =
+    Math.sin(deltaLatRad/2) * Math.sin(deltaLatRad/2) +
+    Math.cos(userLatRad) * Math.cos(buddyLatRad) *
+    Math.sin(deltaLonRad/2) * Math.sin(deltaLonRad/2)
 
-  const angularDistance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+  const angularDistance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-  const distance = earthRadius * angularDistance
+  const distance = earthRadius * angularDistance;
 
   return distance;
 }
 
-async function Location (Id){
-  try{
+async function Location(Id) {
+  try {
     const locationCoordinates = await prisma.location.findUnique({
-      where:{
-        id: Number (Id),
-      }
-    })
-    return locationCoordinates
-  }catch(error){
-    console.error("Failed to get coordinates")
+      where: {
+        id: Number(Id),
+      },
+    });
+    return locationCoordinates;
+  } catch (error) {
+    console.error("Failed to get coordinates");
   }
 }
 
-async function Matched (date,time,destinationId,meetingPointId){
-  try{
-    time = new Date (time)
-    const endTime = new Date (moment(time).add(10,'minutes'))
-    const startTime = new Date (moment(time).subtract(10,'minutes'))
+async function Matched(date, time, destinationId, meetingPointId) {
+  try {
+    time = new Date(time);
+    const endTime = new Date(moment(time).add(10, "minutes"));
+    const startTime = new Date(moment(time).subtract(10, "minutes"));
     const filteredBuddies = await prisma.buddyPair.findMany({
-      where:{
+      where: {
         date: date,
         time: {
-            gte: startTime,
-            lte: endTime
+          gte: startTime,
+          lte: endTime,
         },
-        destinationPairId: destinationId,
-      }
-    })
-      return filteredBuddies
+        destinationPairId: Number(destinationId),
+      },
+    });
+    const locationCoordinates = await Location(meetingPointId)
+    const userLat = locationCoordinates.latitude
+    const userLon = locationCoordinates.longitude
 
-  }catch (error){
-    console.error("Failed to match")
+    const locationCoordinatesBuddy = await Location(filteredBuddies[0].locationId)
+    const buddyLat = locationCoordinatesBuddy.latitude
+    const buddyLon = locationCoordinatesBuddy.longitude
+
+    const distance = HaversineFormula(userLat, userLon, buddyLat, buddyLon)
+
+    return filteredBuddies, distance
+  } catch (error) {
+    console.error("Failed to match");
   }
 }
-
 
 module.exports = router;
