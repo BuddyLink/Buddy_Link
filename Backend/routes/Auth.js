@@ -41,7 +41,8 @@ router.post("/signup", async (req, res) => {
           message: `Password must be at least ${minPWDLength} characters`,
         });
     }
-    if (password !== passwordConfirmation){
+    if (password !== psswordConfirmation
+){
       return res
         .status(400)
         .json({
@@ -167,11 +168,10 @@ router.get("/profile", async (req, res) => {
       walkCount: user.walkCount,
     });
   } catch (err) {
-    console.info(err);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
-
+    connsole.info(err);
+    res.status(500).json  ({ mesage: "Internal server error" });  }
+}
+)
 router.get("/locations", async(req,res)=>{
   if (!req.session.userId){
     return res.status(401).json({ message: "Unauthorized" });
@@ -193,25 +193,17 @@ router.post("/buddyrequest", async(req,res)=>{
       date,
       time,
       destination,
-      meetingPoint
+      meetingPoint,
   } = req.body;
-  if(!date ||
-    !time ||
-    !destination ||
-    !meetingPoint
-  )
-  {
-   return res.status(400).json({ message: "Missing required fields" });
-  }
   const buddyRequest = await prisma.buddyRequest.create({
     data: {
       date: new Date(date),
-      time: new Date(time),
+      time: new Date(`${date}T${time}:00.000Z`),
       destination:{
         connect: {id: Number(destination)}
       },
       meetingPoint:{
-        connect: {id: Number(destination)}
+        connect: {id: Number(meetingPoint)}
         },
       requester: {
         connect: {id: req.session.userId}
@@ -221,7 +213,7 @@ router.post("/buddyrequest", async(req,res)=>{
   });
   res
     .status(201)
-    .json({ success: true, message: "Request created successfully" });
+    .json({ success: true, message: "Request created successfully", data:buddyRequest});
   } catch (err) {
   console.error("Error creating request:", err);
   res.status(500).json({ error: err.message || "Internal server error" });

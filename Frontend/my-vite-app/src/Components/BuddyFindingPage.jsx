@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import NavBar from './NavBar'
 
 const BuddyFindingPage = () => {
   return (
@@ -34,6 +35,7 @@ const BuddyFindingPage = () => {
           </div>
         </li>
       </ul>
+      <NavBar/>
     </div>
   )
 }
