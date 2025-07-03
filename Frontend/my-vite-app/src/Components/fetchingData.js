@@ -20,6 +20,26 @@ export async function createNewAccount(data) {
   }
 }
 
+export async function createRequest(data){
+  try{
+    const response = await fetch(`${baseUrl}/buddyrequest`,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      body: JSON.stringify(data),
+    })
+    const result = await response.json()
+    if (!response.ok) {
+      return { error: result.error || result.message }
+    }
+    return { success: true, data: result }
+  } catch (error) {
+    return { error: error.message }
+  }
+}
+
 export async function login(data) {
   try {
     const response = await fetch(`${baseUrl}/login`, {

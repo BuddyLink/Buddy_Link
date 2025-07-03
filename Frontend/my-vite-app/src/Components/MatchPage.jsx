@@ -1,14 +1,14 @@
-import { Link } from "react-router-dom";
-import { RiShieldUserFill } from "react-icons/ri";
-import { MdVerifiedUser } from "react-icons/md";
+import { Link } from 'react-router-dom'
+import { RiShieldUserFill } from 'react-icons/ri'
+import { MdVerifiedUser } from 'react-icons/md'
 
 const MatchPage = () => {
   return (
     <div className="flex justify-center bg-gradient-to-br from-emerald-400 to-green-100  items-center min-h-screen bg-gray-100 px-4">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
         <h1 className="text-2xl font-bold text-center text-green-700 mb-2">
-          {" "}
-          Buddy Match{" "}
+          {' '}
+          Buddy Match{' '}
         </h1>
         <div className="flex justify-center mb-4">
           <img
@@ -31,10 +31,10 @@ const MatchPage = () => {
             <span className="font-semibold">Details: </span> tom@gmail.com
           </p>
           <p>
-            <span className="font-semibold">Meeting Point: </span>Cafeteria{" "}
+            <span className="font-semibold">Meeting Point: </span>Cafeteria{' '}
           </p>
           <p>
-            <span className="font-semibold">Time: </span> 5:00 PM{" "}
+            <span className="font-semibold">Time: </span> 5:00 PM{' '}
           </p>
           <p>
             <span className="font-semibold">Destination: </span>Libary
@@ -56,7 +56,7 @@ const MatchPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MatchPage;
+export default MatchPage

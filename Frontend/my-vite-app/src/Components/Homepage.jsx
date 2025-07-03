@@ -2,21 +2,33 @@ import NavBar from './NavBar'
 import { Link } from 'react-router-dom'
 import { MdLocationPin } from 'react-icons/md'
 import { useState, useEffect } from 'react'
-import { getLocations } from './fetchingData'
+import { getLocations, createRequest } from './fetchingData'
 
 const Homepage = ({ profile }) => {
   const [destination,setDestination]=useState('')
   const [locations,setLocations]=useState([])
   const[meetingPoint,setMeetingPoint]=useState('')
+  const [time, setTime]=useState('')
+  const [date, setDate]=useState('')
 
   useEffect(() => {
     const fetchLocations = async ()=> {
       const fetchedLocations = await getLocations()
-      console.log(fetchedLocations)
       setLocations(fetchedLocations)
     }
     fetchLocations()
   },[])
+
+  const handleRequest = async(e) =>{
+    e.preventDefault()
+    const data={
+      date,
+      time,
+      destination,
+      meetingPoint,
+    }
+    await createRequest(data)
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-500 to-green-100 flex flex-col justify-between pt-10 pb-28 px-4">
@@ -28,12 +40,13 @@ const Homepage = ({ profile }) => {
         <p className="text-l font-medium">Hey {profile.name}, time to roam !</p>
       </div>
       <div className="w-full max-w-md mx-auto bg-emerald-50 rounded-3xl shadow-xl px-6 py-8">
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleRequest}>
 
           <label className="block text-gray-700 font-semibold mb-1">
             Destination:{' '}
           </label>
           <select
+            required
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
             className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] text-gray-500 hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
@@ -42,7 +55,7 @@ const Homepage = ({ profile }) => {
               Select a Destination
             </option>
             {locations.map((location)=>(
-              <option key={location.id} value={location.name}>
+              <option key={location.id} value={location.id}>
                 {location.name}
               </option>
             ))}
@@ -53,6 +66,9 @@ const Homepage = ({ profile }) => {
           </label>
           <input
             type="date"
+            required
+            value={date}
+            onChange= {(e)=> setDate(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-mb focus:outline-none focus:ring-2 focus:ring-emerald-400"
           />
           <label className="block text-gray-700 font-semibold mb-1">
@@ -60,12 +76,16 @@ const Homepage = ({ profile }) => {
           </label>
           <input
             type="time"
+            required
+            value={time}
+            onChange= {(e)=> setTime(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-mb focus:outline-none focus:ring-2 focus:ring-emerald-400"
           />
           <label className="block text-gray-700 font-semibold mb-1">
             Meeting Point:{' '}
           </label>
           <select
+            required
             value={meetingPoint}
             onChange={(e) => setMeetingPoint(e.target.value)}
             className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] text-gray-500 hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
@@ -74,16 +94,16 @@ const Homepage = ({ profile }) => {
               Select a Destination
             </option>
             {locations.map((location)=>(
-              <option key={location.id} value={location.name}>
+              <option key={location.id} value={location.id}>
                 {location.name}
               </option>
             ))}
           </select>
-          <Link to="/buddy">
-            <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 mt-4 rounded-md transition">
+          {/* <Link to="/buddy"> */}
+          <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 mt-4 rounded-md transition">
               Find a Buddy!!
-            </button>
-          </Link>
+          </button>
+          {/* </Link> */}
         </form>
       </div>
       <NavBar />
