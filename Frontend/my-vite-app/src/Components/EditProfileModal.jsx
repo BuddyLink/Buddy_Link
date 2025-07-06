@@ -1,30 +1,30 @@
-import { useState } from "react";
-import { editProfile } from "./fetchingData";
+import { useState } from 'react'
+import { editProfile } from './fetchingData'
 
 const EditProfileModal = ({ onClose, profile }) => {
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [classification, setClassification] = useState("");
-  const [major, setMajor] = useState("");
-  const [profilePicture, setProfilePicture] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
-  const [preferredContact, setPreferredContact] = useState("");
-  const [phone, setPhone] = useState("");
+  const [name, setName] = useState('')
+  const [surname, setSurname] = useState('')
+  const [classification, setClassification] = useState('')
+  const [major, setMajor] = useState('')
+  const [profilePicture, setProfilePicture] = useState('')
+  const [imagePreview, setImagePreview] = useState('')
+  const [preferredContact, setPreferredContact] = useState('')
+  const [phone, setPhone] = useState('')
 
   const handleProfile = (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files[0]
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onloadend = () => {
-        setImagePreview(reader.result);
-        setProfilePicture(reader.result);
-      };
-      reader.readAsDataURL(file);
+        setImagePreview(reader.result)
+        setProfilePicture(reader.result)
+      }
+      reader.readAsDataURL(file)
     }
-  };
+  }
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault()
     const editData = {
       name,
       surname,
@@ -33,32 +33,32 @@ const EditProfileModal = ({ onClose, profile }) => {
       profilePicture,
       preferredContact,
       phone,
-    };
-    const data = {};
+    }
+    const data = {}
     for (const key in editData) {
       if (editData[key]) {
-        data[key] = editData[key];
+        data[key] = editData[key]
       }
     }
-    await editProfile(data);
-    onClose();
-    window.location.reload();
-  };
+    await editProfile(data)
+    onClose()
+    window.location.reload()
+  }
 
   return (
     <div
-      className="fixed inset-0 top-0 left-0 w-full h-full flex flex-col items-center justify-center  bg-blur bg-opacity-60 z-[1000]"
+      className="fixed inset-0 top-0 left-0 w-full h-full flex flex-col items-center justify-center z-[1000] backdrop-blur-md"
       onClick={onClose}
     >
       <div
-        className="bg-[#f2f2f2] text-[#2e7d32] p-8 rounded-[12px] shadow-[0_6px_16px_rgba(0,0,0,0.2)] w-[90%] max-w-[550px] h-[75vh] overflow-y-auto scrollbar-thin text-left"
+        className="bg-green-50 text-[#2e7d32] p-8 rounded-[12px] shadow-[0_6px_16px_rgba(0,0,0,0.2)] w-[90%] max-w-[550px] h-[75vh] overflow-y-auto scrollbar-thin text-left"
         onClick={(e) => e.stopPropagation()}
       >
         <form className="style" onSubmit={handleSubmit}>
           <div className="formGroup">
             <h1 className="text-2xl font-bond text-green-900 text-center mb-3 ">
-              {" "}
-              Edit Profile{" "}
+              {' '}
+              Edit Profile{' '}
             </h1>
             <label>Name: </label>
             <input
@@ -99,7 +99,7 @@ const EditProfileModal = ({ onClose, profile }) => {
                 <option value="Senior">Senior</option>
               </select>
             </div>
-            <label className="block text-sm font-medium text-green-800">
+            <label >
               Upload Profile Picture :
             </label>
             <input
@@ -154,7 +154,7 @@ const EditProfileModal = ({ onClose, profile }) => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default EditProfileModal;
+export default EditProfileModal

@@ -54,15 +54,16 @@ const CreateNewAccount = () => {
     }
   }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 to-green-300 flex flex-col items-center justify-center px-4">
-      <div className="bg-[#f1fff3] rounded-2xl shadow-md p-6 w-full max-w-md">
-        <h2 className="text-2xl font-semibold text-green-800 mb-4 text-center">
+    <div className="min-h-screen bg-gradient-to-br from-green-100 to-green-300 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="bg-[#f1fff3] rounded-2xl shadow-md p-6 w-full max-w-md sm:max-w-lg lg:max-w-xl sm:p-10 mt-3 mb-3 ">
+        <h2 className="text-2xl lg:text-4xl font-semibold text-green-800 mb-4 text-center">
           Create New Account
         </h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4">
             <input
               type="text"
+              required
               placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -70,6 +71,7 @@ const CreateNewAccount = () => {
             />
             <input
               type="text"
+              required
               placeholder="Surname"
               value={surname}
               onChange={(e) => setSurname(e.target.value)}
@@ -78,6 +80,7 @@ const CreateNewAccount = () => {
           </div>
           <input
             type="text"
+            required
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -85,6 +88,7 @@ const CreateNewAccount = () => {
           />
           <input
             type="password"
+            required
             placeholder="Password (atleast 6 characters)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -92,6 +96,7 @@ const CreateNewAccount = () => {
           />
           <input
             type="password"
+            required
             placeholder="Password Confirmation"
             value={passwordConfirmation}
             onChange={(e) => setPasswordConfirmation(e.target.value)}
@@ -99,6 +104,7 @@ const CreateNewAccount = () => {
           />
           <input
             type="text"
+            required
             placeholder="Major"
             value={major}
             onChange={(e) => setMajor(e.target.value)}
@@ -106,6 +112,7 @@ const CreateNewAccount = () => {
           />
           <select
             name="classification"
+            required
             value={classification}
             onChange={(e) => setClassification(e.target.value)}
             className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] text-gray-500 hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
@@ -132,6 +139,7 @@ const CreateNewAccount = () => {
             </label>
             <input
               type="file"
+              required
               accept="image/*"
               onChange={handleProfile}
               className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
