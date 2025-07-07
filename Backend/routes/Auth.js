@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 const router = express.Router();
+const moment = require('moment')
 
 router.post("/signup", async (req, res) => {
   try {
@@ -41,7 +42,7 @@ router.post("/signup", async (req, res) => {
           message: `Password must be at least ${minPWDLength} characters`,
         });
     }
-    if (password !== psswordConfirmation
+    if (password !== passwordConfirmation
 ){
       return res
         .status(400)
@@ -260,5 +261,46 @@ router.patch("/profile/edit", async (req, res) => {
     res.status(500).json({ message: "Failed to update Profile" });
   }
 });
+
+function HaversineFormula (userLat,userLon,buddyLat,buddyLon){
+  const earthRadius = 6371e3
+  const userLatRad = userLat * Math.PI/180
+  const buddyLatRad = buddyLat * Math.PI/180
+  const deltaLatRad = (buddyLat - userLat) * Math.PI/180
+  const deltaLonRad = (buddyLon - userLon) * Math.PI/180
+
+  const a = Math.sin(deltaLatRad/2) ** 2 +
+            Math.cos(userLatRad) * Math.cos(buddyLatRad) +
+            Math.sin(deltaLonRad/2) ** 2
+
+  const angularDistance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+
+  const distance = earthRadius * angularDistance
+
+  return distance;
+}
+
+async function Matched (date,time,destinationId,meetingPointId){
+  try{
+    time = new Date (time)
+    const endTime = new Date (moment(time).add(10,'minutes'))
+    const startTime = new Date (moment(time).subtract(10,'minutes'))
+    const filteredBuddies = await prisma.buddyPair.findMany({
+      where:{
+        date: date,
+        time: {
+            gte: startTime,
+            lte: endTime
+        },
+        destinationPairId: destinationId,
+      }
+    })
+      return filteredBuddies
+
+  }catch (error){
+    console.error("Failed to match")
+  }
+}
+
 
 module.exports = router;

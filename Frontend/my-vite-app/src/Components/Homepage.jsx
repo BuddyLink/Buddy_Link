@@ -91,7 +91,7 @@ const Homepage = ({ profile }) => {
             className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] text-gray-500 hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
           >
             <option className="hover: bg-green-100" value="">
-              Select a Destination
+              Select a Meeting Point
             </option>
             {locations.map((location)=>(
               <option key={location.id} value={location.id}>

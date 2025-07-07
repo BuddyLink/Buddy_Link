@@ -26,7 +26,6 @@ model User{
     phone 	          String
 	walkCount 	      Int  @default (0)
     buddyRequests     BuddyRequest[] @relation("RequesterRequests")
-	buddyPairs	      BuddyPair[] @relation("UserPairs")
 	createdAt		  DateTime @default (now())
 	updatedAt		  DateTime @updatedAt
 	passwordConfirmation String @default("")
@@ -42,16 +41,11 @@ model BuddyRequest {
 	meetingPoint	  Location @relation("RequestMeeting", fields:[meetingPointId], references:[id])
 	meetingPointId    Int
 	status 	          RequestStatus @default(PENDING)
-	buddyPair 	      BuddyPair?
 	createdAt         DateTime @default(now())
 }
 
 model BuddyPair{
 	id  	           Int @id @default(autoincrement())
-	requestId          Int  @unique
-	request            BuddyRequest  @relation(fields: [requestId] , references:[id])
-	buddyId 	       Int
-	buddy 	           User @relation("UserPairs", fields:[buddyId], references:[id])
 	name			   String
 	surname			   String
 	major              String
@@ -63,8 +57,8 @@ model BuddyPair{
 	phone              String?
 	date			   DateTime
 	time               DateTime
-	destinationPair        Location @relation("Destination", fields:[destinationPairId], references:[id])
-	destinationPairId      Int
+	destinationPair    Location @relation("Destination", fields:[destinationPairId], references:[id])
+	destinationPairId  Int
 	location		   Location @relation("Location", fields:[locationId], references:[id])
 	locationId         Int
 	confirmed          Boolean @default(false)
