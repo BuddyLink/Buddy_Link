@@ -5,8 +5,8 @@ import { MdVerifiedUser } from 'react-icons/md'
 const MatchPage = () => {
   return (
     <div className="flex justify-center bg-gradient-to-br from-emerald-400 to-green-100  items-center min-h-screen bg-gray-100 px-4">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center text-green-700 mb-2">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md lg:px-10 lg:py-10">
+        <h1 className="text-2xl lg:text-4xl lg:mb-3 font-bold text-center text-green-700 mb-2">
           {' '}
           Buddy Match{' '}
         </h1>
@@ -14,7 +14,7 @@ const MatchPage = () => {
           <img
             src="https://i.pravatar.cc/300"
             alt="Buddy Img"
-            className="w-32 h-32 rounded-full object-cover"
+            className="w-32 h-32 lg:w-40 h-40 rounded-full object-cover"
           />
         </div>
         <div className=" text-left space-y-1 text-gray-700">

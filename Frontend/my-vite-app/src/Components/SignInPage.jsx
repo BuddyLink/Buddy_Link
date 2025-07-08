@@ -1,49 +1,49 @@
-import { Link } from "react-router-dom";
-import { login, getMe } from "./fetchingData";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { MdLocationPin } from "react-icons/md";
-import { FaWalking } from "react-icons/fa";
+import { Link } from 'react-router-dom'
+import { login, getMe } from './fetchingData'
+import { useNavigate } from 'react-router-dom'
+import { useState } from 'react'
+import { MdLocationPin } from 'react-icons/md'
+import { FaWalking } from 'react-icons/fa'
 
 const SignInPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
   const handleLogin = async () => {
     const data = {
       email,
       password,
-    };
-    const result = await login(data);
+    }
+    const result = await login(data)
     if (result?.success) {
-      const user = await getMe();
+      const user = await getMe()
       if (user) {
-        navigate("/home");
+        navigate('/home')
       }
     } else {
-      alert(result.error || "User not found");
+      alert(result.error || 'User not found')
     }
-  };
+  }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-400 to-green-100 flex items-center justify-center py-10">
-      <div className="bg-white shadow-xl rounded-2xl p-8 w-full max-w-sm mt-15 mr-3 ml-3 ">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-400 to-green-100 flex items-center justify-center py-10 sm:px-6 lg:px-8">
+      <div className=" w-full max-w-sm sm:max-w-md md:max-w-lg bg-white shadow-xl rounded-2xl p-6 sm:p-8 mt-15 mr-3 ml-3 ">
         <div className="text-center mb-6">
-          <h1 className="text-4xl font-bold text-emerald-600 mb-2 flex flex-row items-center gap-2  items-center justify-center">
+          <h1 className="text-4xl sm:text-4xl md:text-6xl font-bold text-emerald-600 mb-2 flex flex-row items-center gap-2  items-center justify-center">
             <strong className="flex flex-row">
               <MdLocationPin /> Buddy Link
             </strong>
           </h1>
-          <p className="text-l items-center justify-center font-semibold text-gray-700 mb-6 flex flex-row">
+          <p className="text-l md:text-xl items-center justify-center font-semibold text-gray-700 mb-6 flex flex-row">
             <FaWalking />
             WALK.TALK.REPEAT
           </p>
-          <h1 className="text-xl font-semibold text-gray-800 mb-4 text-center tracking-wide">
+          <h1 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4 text-center tracking-wide">
             Sign In
           </h1>
           <div className="space-y-4">
             <label className="block text-left justify-left text-m font-medium text-gray-700 mb-1.5 ">
-              Email{" "}
+              Email{' '}
             </label>
             <input
               type="email"
@@ -78,7 +78,7 @@ const SignInPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SignInPage;
+export default SignInPage
