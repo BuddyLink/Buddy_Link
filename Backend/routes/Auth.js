@@ -302,20 +302,31 @@ async function Matched(date, time, destinationId, meetingPointId) {
         destinationPairId: Number(destinationId),
       },
     });
+
     const locationCoordinates = await Location(meetingPointId)
     const userLat = locationCoordinates.latitude
     const userLon = locationCoordinates.longitude
 
-    const locationCoordinatesBuddy = await Location(filteredBuddies[0].locationId)
+  const distances =[]
+  for (let i=0; i < filteredBuddies.length; i++){
+    const locationCoordinatesBuddy = await Location(filteredBuddies[i].locationId)
     const buddyLat = locationCoordinatesBuddy.latitude
     const buddyLon = locationCoordinatesBuddy.longitude
 
     const distance = HaversineFormula(userLat, userLon, buddyLat, buddyLon)
 
-    return filteredBuddies, distance
+    distances.push({distance, buddy:filteredBuddies[i] })
+  }
+  distances.sort((a,b)=>a.distance - b.distance)
+
+  const sortedBuddies = distances.map(item => item.buddy)
+
+  return sortedBuddies
   } catch (error) {
     console.error("Failed to match");
   }
 }
+
+// Matched("2025-07-05T00:00:00.000Z","2025-07-05T15:10:00.000Z","8","8")
 
 module.exports = router;
