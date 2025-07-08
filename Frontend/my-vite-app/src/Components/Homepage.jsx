@@ -27,7 +27,12 @@ const Homepage = ({ profile }) => {
       destination,
       meetingPoint,
     }
-    await createRequest(data)
+    const response = await createRequest(data)
+    if(response.success){
+      console.log('Matched' , response.data.matched)
+    }else{
+      console.error(response.error)
+    }
   }
 
   return (

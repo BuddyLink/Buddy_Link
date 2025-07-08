@@ -164,8 +164,8 @@ router.get("/profile", async (req, res) => {
       walkCount: user.walkCount,
     });
   } catch (err) {
-    connsole.info(err);
-    res.status(500).json({ mesage: "Internal server error" });
+    console.info(err);
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 router.get("/locations", async (req, res) => {
@@ -201,14 +201,20 @@ router.post("/buddyrequest", async (req, res) => {
         },
         status: "PENDING",
       },
+      include: {
+        destination: true,
+        meetingPoint: true,
+      },
     });
-    res
-      .status(201)
-      .json({
-        success: true,
-        message: "Request created successfully",
-        data: buddyRequest,
-      });
+    const destinationId = buddyRequest.destination.id;
+    const meetingPointId = buddyRequest.meetingPoint.id;
+    const matched = await Matched(date, time, destinationId, meetingPointId);
+
+    res.status(201).json({
+      success: true,
+      message: "Request created successfully",
+      matched: matched,
+    });
   } catch (err) {
     console.error("Error creating request:", err);
     res.status(500).json({ error: err.message || "Internal server error" });
@@ -257,15 +263,17 @@ router.patch("/profile/edit", async (req, res) => {
 
 function HaversineFormula(userLat, userLon, buddyLat, buddyLon) {
   const earthRadius = 6371e3;
-  const userLatRad = userLat * Math.PI/180
-  const buddyLatRad = buddyLat * Math.PI/180
-  const deltaLatRad = (buddyLat - userLat) * Math.PI/180
-  const deltaLonRad = (buddyLon - userLon) * Math.PI/180
+  const userLatRad = (userLat * Math.PI) / 180;
+  const buddyLatRad = (buddyLat * Math.PI) / 180;
+  const deltaLatRad = ((buddyLat - userLat) * Math.PI) / 180;
+  const deltaLonRad = ((buddyLon - userLon) * Math.PI) / 180;
 
   const a =
-    Math.sin(deltaLatRad/2) * Math.sin(deltaLatRad/2) +
-    Math.cos(userLatRad) * Math.cos(buddyLatRad) *
-    Math.sin(deltaLonRad/2) * Math.sin(deltaLonRad/2)
+    Math.sin(deltaLatRad / 2) * Math.sin(deltaLatRad / 2) +
+    Math.cos(userLatRad) *
+      Math.cos(buddyLatRad) *
+      Math.sin(deltaLonRad / 2) *
+      Math.sin(deltaLonRad / 2);
 
   const angularDistance = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
@@ -289,12 +297,15 @@ async function Location(Id) {
 
 async function Matched(date, time, destinationId, meetingPointId) {
   try {
-    time = new Date(time);
-    const endTime = new Date(moment(time).add(10, "minutes"));
-    const startTime = new Date(moment(time).subtract(10, "minutes"));
+    const dateTimeString = `${date}T${time}:00.000Z`;
+    const baseDateTime = moment(dateTimeString);
+
+    const endTime = new Date(baseDateTime.clone().add(10, "minutes"));
+    const startTime = new Date(baseDateTime.clone().subtract(10, "minutes"))
+
     const filteredBuddies = await prisma.buddyPair.findMany({
       where: {
-        date: date,
+        date: new Date(date),
         time: {
           gte: startTime,
           lte: endTime,
@@ -302,31 +313,35 @@ async function Matched(date, time, destinationId, meetingPointId) {
         destinationPairId: Number(destinationId),
       },
     });
+    if (filteredBuddies.length === 0){
+      return "No Buddies Available"
+    }
+    const locationCoordinates = await Location(meetingPointId);
+    const userLat = locationCoordinates.latitude;
+    const userLon = locationCoordinates.longitude;
 
-    const locationCoordinates = await Location(meetingPointId)
-    const userLat = locationCoordinates.latitude
-    const userLon = locationCoordinates.longitude
+    const distances = [];
+    for (let i = 0; i < filteredBuddies.length; i++) {
+      const locationCoordinatesBuddy = await Location(
+        filteredBuddies[i].locationId
+      );
+      const buddyLat = locationCoordinatesBuddy.latitude;
+      const buddyLon = locationCoordinatesBuddy.longitude;
 
-  const distances =[]
-  for (let i=0; i < filteredBuddies.length; i++){
-    const locationCoordinatesBuddy = await Location(filteredBuddies[i].locationId)
-    const buddyLat = locationCoordinatesBuddy.latitude
-    const buddyLon = locationCoordinatesBuddy.longitude
+      const distance = HaversineFormula(userLat, userLon, buddyLat, buddyLon);
 
-    const distance = HaversineFormula(userLat, userLon, buddyLat, buddyLon)
+      distances.push({ distance, buddy: filteredBuddies[i] });
+    }
+    distances.sort((a, b) => a.distance - b.distance);
 
-    distances.push({distance, buddy:filteredBuddies[i] })
-  }
-  distances.sort((a,b)=>a.distance - b.distance)
+    const sortedBuddies = distances.map((item) => item.buddy);
 
-  const sortedBuddies = distances.map(item => item.buddy)
-
-  return sortedBuddies
+    return sortedBuddies;
   } catch (error) {
-    console.error("Failed to match");
+    console.error("Failed to match")
+    return JSON.stringify({message: error.message })
   }
 }
 
-// Matched("2025-07-05T00:00:00.000Z","2025-07-05T15:10:00.000Z","8","8")
 
 module.exports = router;
