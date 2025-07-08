@@ -25,4 +25,3 @@ Here’s an example image of a PR that follows this template!
 
 Consider adding this PR template to your Github repo by following the GitHub guide here:
 https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/creating-a-pull-request-template-for-your-repository
-
