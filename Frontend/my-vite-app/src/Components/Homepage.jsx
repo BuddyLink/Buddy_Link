@@ -3,13 +3,15 @@ import { Link } from 'react-router-dom'
 import { MdLocationPin } from 'react-icons/md'
 import { useState, useEffect } from 'react'
 import { getLocations, createRequest } from './fetchingData'
+import { useNavigate } from 'react-router-dom'
 
-const Homepage = ({ profile }) => {
+const Homepage = ({ profile,setMatch }) => {
   const [destination,setDestination]=useState('')
   const [locations,setLocations]=useState([])
   const[meetingPoint,setMeetingPoint]=useState('')
   const [time, setTime]=useState('')
   const [date, setDate]=useState('')
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchLocations = async ()=> {
@@ -30,6 +32,8 @@ const Homepage = ({ profile }) => {
     const response = await createRequest(data)
     if(response.success){
       console.log('Matched' , response.data.matched)
+      setMatch(response.data.matched)
+      navigate('/buddy')
     }else{
       console.error(response.error)
     }
@@ -104,11 +108,9 @@ const Homepage = ({ profile }) => {
               </option>
             ))}
           </select>
-          {/* <Link to="/buddy"> */}
           <button type="submit" className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 mt-4 rounded-md transition">
               Find a Buddy!!
           </button>
-          {/* </Link> */}
         </form>
       </div>
       <NavBar />
