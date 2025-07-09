@@ -1,5 +1,7 @@
 import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
+import { MdEmojiPeople } from "react-icons/md";
+import { Commet } from "react-loading-indicators";
 
 const buddyFindingPage = ({ match }) => {
   const navigate = useNavigate();
@@ -8,7 +10,7 @@ const buddyFindingPage = ({ match }) => {
     navigate("/match", { state: person });
   };
   return (
-    <div className="min-h-screen bg-green-50 py-6 px-4 lg:bg-gradient-to-br from-green-100 to-green-50 lg:text-l">
+    <div className="min-h-screen bg-green-50 py-6 px-4 lg:bg-gradient-to-br from-green-100 to-green-50 mb-8 lg:text-l">
       <h1 className="text-2xl font-bold text-center text-green-700 mb-2 lg:text-4xl lg:mt-4">
         Pick a Buddy
       </h1>
@@ -26,6 +28,13 @@ const buddyFindingPage = ({ match }) => {
                 src={person.profilePic}
                 alt="Buddy profile"
                 className="w-23 h-23 rounded-full object-cover border-2 border-green-500"
+                loading="lazy"
+                style={{
+                  maxWidth: "92px",
+                  maxHeight: "92px",
+                  width: "auto",
+                  height: "auto",
+                }}
               />
               <div className="flex-1 ml-5 lg:text-m">
                 <p className="font-semibold text-gray-800 ">
@@ -43,12 +52,10 @@ const buddyFindingPage = ({ match }) => {
                 <div className="flex  justify-center gap-3 mt-3">
                   <button
                     onClick={() => handleClick(person)}
-                    className="bg-green-600 text-white px-4 py-0 rounded-md hover:bg-green-700 transition text-sm font-medium lg:text-m"
+                    className="items-center flex ml-15 gap-1 bg-green-600 text-white px-2 py-2 rounded hover:bg-green-700 transition lg:text-m"
                   >
-                    Send Request
-                  </button>
-                  <button className="bg-green-600 text-white px-4 py-0 rounded-md hover:bg-green-700 transition text-sm font-medium lg:text-m">
-                    Cancel Request
+                    <MdEmojiPeople />
+                    BuddyUp
                   </button>
                 </div>
               </div>
