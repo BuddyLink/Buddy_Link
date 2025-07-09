@@ -1,128 +1,127 @@
-const baseUrl = "http://localhost:3000"
+const baseUrl = 'http://localhost:3000';
 
 export async function createNewAccount(data) {
   try {
     const response = await fetch(`${baseUrl}/signup`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: "include",
+      credentials: 'include',
       body: JSON.stringify(data),
-    })
-    const result = await response.json()
+    });
+    const result = await response.json();
     if (!response.ok) {
-      return { error: result.error || result.message }
+      return { error: result.error || result.message };
     }
-    return { success: true, data: result }
+    return { success: true, data: result };
   } catch (error) {
-    return { error: error.message }
+    return { error: error.message };
   }
 }
 
 export async function createRequest(data) {
   try {
     const response = await fetch(`${baseUrl}/buddyrequest`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: "include",
+      credentials: 'include',
       body: JSON.stringify(data),
     });
-    const result = await response.json()
+    const result = await response.json();
     if (!response.ok) {
-      return { error: result.error || result.message }
+      return { error: result.error || result.message };
     }
-    return { success: true, data: result }
+    return { success: true, data: result };
   } catch (error) {
-    return { error: error.message }
+    return { error: error.message };
   }
 }
 
 export async function login(data) {
   try {
     const response = await fetch(`${baseUrl}/login`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: "include",
+      credentials: 'include',
       body: JSON.stringify(data),
     });
-    const result = await response.json()
+    const result = await response.json();
     if (!response.ok) {
-      return { error: result.message }
+      return { error: result.message };
     }
-    return { success: true, data: result }
+    return { success: true, data: result };
   } catch (error) {
-    return { error: error.message }
+    return { error: error.message };
   }
 }
 
 export async function getProfile() {
   try {
     const response = await fetch(`${baseUrl}/profile`, {
-      credentials: "include",
-    })
+      credentials: 'include',
+    });
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
     }
-    const data = await response.json()
-    return data
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error("Failed to get profile", error.message)
+    console.error('Failed to get profile', error.message);
   }
 }
-
 
 export async function getMe() {
   try {
     const response = await fetch(`${baseUrl}/me`, {
-      credentials: "include",
-    })
+      credentials: 'include',
+    });
     if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`)
+      throw new Error(`Response status: ${response.status}`);
     }
-    const data = await response.json()
-    return data
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error("Failed to get me", error.message)
+    console.error('Failed to get me', error.message);
   }
 }
 
 export async function logout() {
   try {
     const response = await fetch(`${baseUrl}/logout`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: "include",
+      credentials: 'include',
     });
     if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`)
+      throw new Error(`Response status: ${response.status}`);
     }
-    const data = await response.json()
-    return data
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error("Failed to logout", error.message)
+    console.error('Failed to logout', error.message);
   }
 }
 export async function editProfile(data) {
   try {
     const response = await fetch(`${baseUrl}/profile/edit`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: "include",
+      credentials: 'include',
       body: JSON.stringify(data),
-    })
-    if (!response.ok) throw new Error(`Response status: ${response.status}`)
-    return await response.json()
+    });
+    if (!response.ok) throw new Error(`Response status: ${response.status}`);
+    return await response.json();
   } catch (error) {
-    console.error("Failed edit profile", error.message)
+    console.error('Failed edit profile', error.message);
     return null;
   }
 }
@@ -130,18 +129,18 @@ export async function editProfile(data) {
 export async function getLocations() {
   try {
     const response = await fetch(`${baseUrl}/locations`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: "include",
-    })
+      credentials: 'include',
+    });
     if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`)
+      throw new Error(`Response status: ${response.status}`);
     }
-    const data = await response.json()
+    const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Failed to fetch locations", error.message)
+    console.error('Failed to fetch locations', error.message);
   }
 }

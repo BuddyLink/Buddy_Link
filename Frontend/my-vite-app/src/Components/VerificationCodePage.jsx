@@ -1,7 +1,7 @@
-import { MdVerifiedUser } from 'react-icons/md'
-import NavBar from './NavBar'
+import { MdVerifiedUser } from 'react-icons/md';
+import NavBar from './NavBar';
 
-const VerificationCodePage = () => {
+const verificationCodePage = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-emerald-400 to-green-100 px-4 ">
       <div className="bg-white p-6 rounded-lg shadow-md w-full text-center sm:p-6 md:p-10 w-80 sm:w-96 md:w-[30rem] lg:-[36rem] ">
@@ -9,7 +9,9 @@ const VerificationCodePage = () => {
         <h1 className="text-xl font-semibold text-gray-800 mb-2 md:text-2xl">
           Verify Your Buddy
         </h1>
-        <p className="text-gray-600 mb-4 text-sm md:text-m">Enter Verification Code: </p>
+        <p className="text-gray-600 mb-4 text-sm md:text-m">
+          Enter Verification Code:{' '}
+        </p>
         <div className="flex justify-center gap-2 mb-6">
           <input
             type="tel"
@@ -48,7 +50,7 @@ const VerificationCodePage = () => {
       </div>
       <NavBar />
     </div>
-  )
-}
+  );
+};
 
-export default VerificationCodePage
+export default verificationCodePage;
