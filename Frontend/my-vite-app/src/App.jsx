@@ -8,10 +8,11 @@ import SecurityPage from './Components/SecurityPage';
 import { Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import MatchPage from './Components/MatchPage';
+import { useLocalStorage } from 'usehooks-ts'
 
 function App() {
   const [profile, setProfile] = useState([]);
-  const [match, setMatch] = useState([]);
+  const [match, setMatch] = useLocalStorage('match',[]);
   return (
     <div>
       <Routes>

@@ -5,7 +5,7 @@ import { getLocations, createRequest } from "./fetchingData";
 import { useNavigate } from "react-router-dom";
 import { Commet } from 'react-loading-indicators'
 
-const Homepage = ({ profile, setMatch }) => {
+const Homepage = ({ profile, setMatch}) => {
   const [destination, setDestination] = useState("");
   const [locations, setLocations] = useState([]);
   const [meetingPoint, setMeetingPoint] = useState("");
