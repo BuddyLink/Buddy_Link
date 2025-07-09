@@ -1,7 +1,12 @@
-import { Link } from 'react-router-dom'
 import NavBar from './NavBar'
+import { useNavigate } from 'react-router-dom'
 
 const BuddyFindingPage = ({ match }) => {
+  const navigate = useNavigate()
+
+  const handleClick = (person)=>{
+    navigate('/match', { state: person })
+  }
   return (
     <div className="min-h-screen bg-green-50 py-6 px-4 lg:bg-gradient-to-br from-green-100 to-green-50 lg:text-l">
       <h1 className="text-2xl font-bold text-center text-green-700 mb-2 lg:text-4xl lg:mt-4">
@@ -24,11 +29,11 @@ const BuddyFindingPage = ({ match }) => {
               <p className="text-sm text-gray-600 lg:text-m">{person.classification}</p>
               <p className="text-sm text-gray-600 lg:text-m">Walk Count: {person.walkCount}</p>
               <div className="flex  justify-center gap-3 mt-3">
-                <Link to="/match">
-                  <button className="bg-green-600 text-white px-4 py-0 rounded-md hover:bg-green-700 transition text-sm font-medium lg:text-m">
+                <button
+                  onClick ={()=> handleClick(person)}
+                  className="bg-green-600 text-white px-4 py-0 rounded-md hover:bg-green-700 transition text-sm font-medium lg:text-m">
                   Send Request
-                  </button>
-                </Link>
+                </button>
                 <button className="bg-green-600 text-white px-4 py-0 rounded-md hover:bg-green-700 transition text-sm font-medium lg:text-m">
                 Cancel Request
                 </button>
