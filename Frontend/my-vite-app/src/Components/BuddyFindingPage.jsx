@@ -1,7 +1,6 @@
 import NavBar from "./NavBar";
 import { useNavigate } from "react-router-dom";
 import { MdEmojiPeople } from "react-icons/md";
-import { Commet } from "react-loading-indicators";
 
 const buddyFindingPage = ({ match }) => {
   const navigate = useNavigate();
