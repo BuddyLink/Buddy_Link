@@ -4,6 +4,7 @@ import { getProfile } from './fetchingData'
 import NavBar from './NavBar'
 import EditProfileModal from './EditProfileModal'
 import { LiaUserEditSolid } from 'react-icons/lia'
+
 const Profilepage = ({ setProfile, profile }) => {
   const { id } = useParams()
   const [isModalOpen, setIsModalOpen] = useState(false)

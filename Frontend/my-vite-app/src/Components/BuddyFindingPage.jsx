@@ -1,7 +1,12 @@
-import { Link } from 'react-router-dom'
 import NavBar from './NavBar'
+import { useNavigate } from 'react-router-dom'
 
-const BuddyFindingPage = () => {
+const BuddyFindingPage = ({ match }) => {
+  const navigate = useNavigate()
+
+  const handleClick = (person)=>{
+    navigate('/match', { state: person })
+  }
   return (
     <div className="min-h-screen bg-green-50 py-6 px-4 lg:bg-gradient-to-br from-green-100 to-green-50 lg:text-l">
       <h1 className="text-2xl font-bold text-center text-green-700 mb-2 lg:text-4xl lg:mt-4">
@@ -11,29 +16,34 @@ const BuddyFindingPage = () => {
         One Step close to your destination !
       </p>
       <ul className="space-y-6 max-w-md mx-auto lg:w-200">
-        <li className="bg-white p-4 rounded-xl shadow-md flex items-center space-x-4 ">
-          <img
-            src="https://i.pravatar.cc/300"
-            alt="Buddy profile"
-            className="w-23 h-23 rounded-full object-cover border-2 border-green-500"
-          />
-          <div className="flex-1 ml-5 lg:text-m">
-            <p className="font-semibold text-gray-800 ">Tom Peter</p>
-            <p className="text-sm text-gray-600 lg:text-m"> Chemistry</p>
-            <p className="text-sm text-gray-600 lg:text-m">Senior</p>
-            <p className="text-sm text-gray-600 lg:text-m">Walk Count: 12</p>
-            <div className="flex  justify-center gap-3 mt-3">
-              <Link to="/match">
-                <button className="bg-green-600 text-white px-4 py-0 rounded-md hover:bg-green-700 transition text-sm font-medium lg:text-m">
+        {match && match.length >0 ? (match.map((person, index)=>(
+          <li key={index} className="bg-white p-4 rounded-xl shadow-md flex items-center space-x-4 ">
+            <img
+              src= {person.profilePic}
+              alt="Buddy profile"
+              className="w-23 h-23 rounded-full object-cover border-2 border-green-500"
+            />
+            <div className="flex-1 ml-5 lg:text-m">
+              <p className="font-semibold text-gray-800 ">{person.name} {' '} {person.surname}</p>
+              <p className="text-sm text-gray-600 lg:text-m">{person.major}</p>
+              <p className="text-sm text-gray-600 lg:text-m">{person.classification}</p>
+              <p className="text-sm text-gray-600 lg:text-m">Walk Count: {person.walkCount}</p>
+              <div className="flex  justify-center gap-3 mt-3">
+                <button
+                  onClick ={()=> handleClick(person)}
+                  className="bg-green-600 text-white px-4 py-0 rounded-md hover:bg-green-700 transition text-sm font-medium lg:text-m">
                   Send Request
                 </button>
-              </Link>
-              <button className="bg-green-600 text-white px-4 py-0 rounded-md hover:bg-green-700 transition text-sm font-medium lg:text-m">
+                <button className="bg-green-600 text-white px-4 py-0 rounded-md hover:bg-green-700 transition text-sm font-medium lg:text-m">
                 Cancel Request
-              </button>
+                </button>
+              </div>
             </div>
-          </div>
-        </li>
+          </li>
+        ))
+        ):(
+          <p className="text-center text-gray-500 justify-center text-semibold mt-20 text-3xl"> No Buddies Found</p>
+        )}
       </ul>
       <NavBar/>
     </div>
