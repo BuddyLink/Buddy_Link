@@ -1,8 +1,10 @@
 import NavBar from "./NavBar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const buddyFindingPage = ({ match }) => {
+const BuddyFindingPage = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const match = location.state.match;
 
   const handleClick = (person) => {
     navigate("/match", { state: person });
@@ -16,7 +18,7 @@ const buddyFindingPage = ({ match }) => {
         One Step close to your destination !
       </p>
       <ul className="space-y-6 max-w-md mx-auto lg:w-200">
-        {match && Array.isArray(match) && match.length > 0 ? (
+        {match && match.length > 0 ? (
           match.map((person, index) => (
             <li
               key={index}
@@ -66,4 +68,5 @@ const buddyFindingPage = ({ match }) => {
   );
 };
 
-export default buddyFindingPage;
+export default BuddyFindingPage;
+

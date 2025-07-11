@@ -1,12 +1,13 @@
-import NavBar from './NavBar';
-import { MdLocationPin } from 'react-icons/md';
-import { useState, useEffect } from 'react';
-import { getLocations, createRequest } from './fetchingData';
-import { useNavigate } from 'react-router-dom';
-import { Commet } from 'react-loading-indicators';
 
-const homePage = ({ profile, setMatch }) => {
-  const [destination, setDestination] = useState('');
+import NavBar from "./NavBar";
+import { MdLocationPin } from "react-icons/md";
+import { useState, useEffect } from "react";
+import { getLocations, createRequest } from "./fetchingData";
+import { useNavigate } from "react-router-dom";
+import { Commet } from "react-loading-indicators";
+
+const Homepage = ({ profile }) => {
+  const [destination, setDestination] = useState("");
   const [locations, setLocations] = useState([]);
   const [meetingPoint, setMeetingPoint] = useState('');
   const [time, setTime] = useState('');
@@ -33,17 +34,18 @@ const homePage = ({ profile, setMatch }) => {
     };
     const response = await createRequest(data);
     if (response.success) {
-      setMatch(response.data.matched);
-      navigate('/buddy');
+      navigate("/buddy", { state: { match: response.data.matched } });
     } else {
       console.error(response.error);
     }
     setIsLoading(false);
   };
   if (isloading) {
-    return (<div className="min-h-screen flex items-center text-center justify-center">
-      <Commet color={['#32cd32', '#327fcd', '#cd32cd', '#cd8032']} />
-    </div>);
+    return (
+      <div className="min-h-screen flex items-center text-center justify-center">
+        <Commet color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} />
+      </div>
+    );
   }
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-500 to-green-100 flex flex-col justify-between pt-10 pb-28 px-4 sm:px-6 md:px-12 md:justify-center lg:px-8">
