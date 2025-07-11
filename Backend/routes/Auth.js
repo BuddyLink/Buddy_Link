@@ -299,7 +299,7 @@ async function locationCod(Id) {
     console.error("Failed to get coordinates");
   }
 }
-
+// resource: https://www.youtube.com/watch?v=x_Z9FcAPmbk
 function merge(leftArray, rightArray) {
   const merged = [];
   let i = 0;
@@ -379,7 +379,7 @@ async function matchedBuddy(date, time, destinationId, meetingPointId) {
     const sorted = mergeSort(distances);
     const sortedBuddies = sorted.map((item) => item.buddy);
 
-    return sortedBuddies;
+    return sortedBuddies; 
   } catch (error) {
     console.error("Failed to match");
     return JSON.stringify({ message: error.message });

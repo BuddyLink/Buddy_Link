@@ -59,7 +59,7 @@ const matchPage = () => {
             <Link to="/security">
               <button className="flex items-center gap-1 bg-gray-300 text-black px-4 py-2 rounded hover:bg-green-700 transition ">
                 <RiShieldUserFill />
-                Sefety
+                Safety
               </button>
             </Link>
             <Link to="/verify">
