@@ -388,7 +388,7 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
     const sorted = mergeSort(distances);
     const sortedBuddies = sorted.map((item) => item.buddy);
 
-    potentialBuddies.set("cacheKey", sortedBuddies);
+    potentialBuddies.set(cacheKey, sortedBuddies);
 
     return sortedBuddies;
   } catch (error) {
