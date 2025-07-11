@@ -1,5 +1,6 @@
 import NavBar from "./NavBar";
 import { useNavigate, useLocation } from "react-router-dom";
+import { MdEmojiPeople } from "react-icons/md";
 
 const BuddyFindingPage = () => {
   const navigate = useNavigate();
@@ -28,6 +29,13 @@ const BuddyFindingPage = () => {
                 src={person.profilePic}
                 alt="Buddy profile"
                 className="w-23 h-23 rounded-full object-cover border-2 border-green-500"
+                loading="lazy"
+                style={{
+                  maxWidth: "92px",
+                  maxHeight: "92px",
+                  width: "auto",
+                  height: "auto",
+                }}
               />
               <div className="flex-1 ml-5 lg:text-m">
                 <p className="font-semibold text-gray-800 ">
@@ -45,12 +53,10 @@ const BuddyFindingPage = () => {
                 <div className="flex  justify-center gap-3 mt-3">
                   <button
                     onClick={() => handleClick(person)}
-                    className="bg-green-600 text-white px-4 py-0 rounded-md hover:bg-green-700 transition text-sm font-medium lg:text-m"
+                    className="items-center flex ml-15 gap-1 bg-green-600 text-white px-2 py-2 rounded hover:bg-green-700 transition lg:text-m"
                   >
-                    Send Request
-                  </button>
-                  <button className="bg-green-600 text-white px-4 py-0 rounded-md hover:bg-green-700 transition text-sm font-medium lg:text-m">
-                    Cancel Request
+                    <MdEmojiPeople />
+                    BuddyUp
                   </button>
                 </div>
               </div>
@@ -69,4 +75,3 @@ const BuddyFindingPage = () => {
 };
 
 export default BuddyFindingPage;
-
