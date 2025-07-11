@@ -324,13 +324,19 @@ function merge(leftArray, rightArray) {
   return merged;
 }
 
-function mergeSort(array) {
+function mergeSort(array, currentDepth = 0, MAX_DEPTH = 50) {
+  if (currentDepth > MAX_DEPTH) {
+    throw new Error("Maximum recursion depth has exceeded!!");
+  }
   if (array.length <= 1) return array;
   const half = Math.floor(array.length / 2);
   const left = array.slice(0, half);
   const right = array.slice(half);
 
-  return merge(mergeSort(left), mergeSort(right));
+  return merge(
+    mergeSort(left, currentDepth + 1, MAX_DEPTH),
+    mergeSort(right, currentDepth + 1, MAX_DEPTH)
+  );
 }
 
 async function matchedBuddy(date, time, destinationId, meetingPointId) {
