@@ -17,8 +17,6 @@ app.use(
   })
 );
 
-app.use(json());
-
 app.use(
   session({
     secret: "buddy_link_session",

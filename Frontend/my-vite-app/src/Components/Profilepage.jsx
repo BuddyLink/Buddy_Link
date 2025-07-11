@@ -41,7 +41,6 @@ const profilePage = ({ setProfile, profile }) => {
           <img
             src={profile.profilePicture}
             alt="profile pic"
-            r
             className="w-50 h-50 sm:w-65 sm:h-65 rounded-full mx-auto mt-4 object-cover border border-green-300"
             onError={(e) => {
               (e.target.onerror = null), (e.target.src = defaultAvatar);
