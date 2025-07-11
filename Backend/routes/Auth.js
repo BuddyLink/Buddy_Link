@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { hash, compare } from "bcrypt";
 import { PrismaClient } from "@prisma/client";
+const potentialBuddies = new Map();
 const prisma = new PrismaClient();
 const router = Router();
 import moment from "moment";
@@ -112,7 +113,7 @@ router.post("/login", async (req, res) => {
     res.json({ success: true, message: "Login successful!" });
   } catch (err) {
     console.info(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ error: err.message || "Internal server error" });
   }
 });
 
@@ -204,15 +205,18 @@ router.post("/buddyrequest", async (req, res) => {
       include: {
         destination: true,
         meetingPoint: true,
+        requester: true,
       },
     });
     const destinationId = buddyRequest.destination.id;
     const meetingPointId = buddyRequest.meetingPoint.id;
+    const userId = buddyRequest.requester.id;
     const matched = await matchedBuddy(
       date,
       time,
       destinationId,
-      meetingPointId
+      meetingPointId,
+      userId
     );
 
     res.status(201).json({
@@ -339,7 +343,7 @@ function mergeSort(array, currentDepth = 0, MAX_DEPTH = 50) {
   );
 }
 
-async function matchedBuddy(date, time, destinationId, meetingPointId) {
+async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
   try {
     const dateTimeString = `${date}T${time}:00.000Z`;
     const baseDateTime = moment(dateTimeString);
@@ -360,6 +364,17 @@ async function matchedBuddy(date, time, destinationId, meetingPointId) {
     if (filteredBuddies.length === 0) {
       return "No Buddies Available";
     }
+
+    const cacheKey = `${userId}::${meetingPointId}::[${filteredBuddies.join(
+      ","
+    )}]`;
+
+    for (const key of potentialBuddies.keys()) {
+      if (key === cacheKey) {
+        return potentialBuddies.get(cacheKey);
+      }
+    }
+
     const locationCoordinates = await locationCod(meetingPointId);
     const userLat = locationCoordinates.latitude;
     const userLon = locationCoordinates.longitude;
@@ -378,8 +393,10 @@ async function matchedBuddy(date, time, destinationId, meetingPointId) {
     }
     const sorted = mergeSort(distances);
     const sortedBuddies = sorted.map((item) => item.buddy);
+    
+    potentialBuddies.set(cacheKey, sortedBuddies);
 
-    return sortedBuddies; 
+    return sortedBuddies;
   } catch (error) {
     console.error("Failed to match");
     return JSON.stringify({ message: error.message });
