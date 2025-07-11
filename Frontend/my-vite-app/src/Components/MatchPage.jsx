@@ -1,10 +1,10 @@
-import { Link, useLocation } from 'react-router-dom'
-import { RiShieldUserFill } from 'react-icons/ri'
-import { MdVerifiedUser } from 'react-icons/md'
+import { Link, useLocation } from 'react-router-dom';
+import { RiShieldUserFill } from 'react-icons/ri';
+import { MdVerifiedUser } from 'react-icons/md';
 
-const MatchPage = () => {
-  const location = useLocation()
-  const selected = location.state
+const matchPage = () => {
+  const location = useLocation();
+  const selected = location.state;
 
   return (
     <div className="flex justify-center bg-gradient-to-br from-emerald-400 to-green-100  items-center min-h-screen bg-gray-100 px-4">
@@ -35,7 +35,7 @@ const MatchPage = () => {
               <span className="font-semibold">Details: </span> {selected.email || selected.phone}
             </p>
             <p>
-              <span className="font-semibold">Meeting Time: </span> { new Date(selected.time).toLocaleTimeString('en-US',{ hour:'2-digit', minute: '2-digit',hour12: true, timeZone:'UTC'})}
+              <span className="font-semibold">Meeting Time: </span> { new Date(selected.time).toLocaleTimeString('en-US',{ hour:'2-digit', minute: '2-digit',hour12: true, timeZone:'UTC' })}
             </p>
           </div>
           <div className="mt-4 flex justify-center gap-5">
@@ -55,7 +55,7 @@ const MatchPage = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default MatchPage
+export default matchPage;

@@ -1,35 +1,35 @@
-import { useState } from 'react'
-import { createNewAccount, getMe } from './fetchingData'
-import { useNavigate } from 'react-router-dom'
+import { useState } from 'react';
+import { createNewAccount, getMe } from './fetchingData';
+import { useNavigate } from 'react-router-dom';
 
-const CreateNewAccount = () => {
-  const [name, setName] = useState('')
-  const [surname, setSurname] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [major, setMajor] = useState('')
-  const [classification, setClassification] = useState('')
-  const [profilePicture, setProfilePicture] = useState('')
-  const [imagePreview, setImagePreview] = useState('')
-  const [preferredContact, setPreferredContact] = useState('')
-  const [phone, setPhone] = useState('')
-  const [passwordConfirmation,setPasswordConfirmation] = useState('')
-  const navigate = useNavigate()
+const createNewUserAccount = () => {
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [major, setMajor] = useState('');
+  const [classification, setClassification] = useState('');
+  const [profilePicture, setProfilePicture] = useState('');
+  const [imagePreview, setImagePreview] = useState('');
+  const [preferredContact, setPreferredContact] = useState('');
+  const [phone, setPhone] = useState('');
+  const [passwordConfirmation,setPasswordConfirmation] = useState('');
+  const navigate = useNavigate();
 
   const handleProfile = (e) => {
-    const file = e.target.files[0]
+    const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result)
-        setProfilePicture(reader.result)
-      }
-      reader.readAsDataURL(file)
+        setImagePreview(reader.result);
+        setProfilePicture(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const data = {
       email,
       password,
@@ -42,17 +42,17 @@ const CreateNewAccount = () => {
       phone,
       walkCount: Number(0),
       passwordConfirmation,
-    }
-    const result = await createNewAccount(data)
+    };
+    const result = await createNewAccount(data);
     if (result?.success) {
-      const user = await getMe()
+      const user = await getMe();
       if (user) {
-        navigate('/')
+        navigate('/');
       }
     } else {
-      alert(result.error || 'User not created')
+      alert(result.error || 'User not created');
     }
-  }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-100 to-green-300 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
       <div className="bg-[#f1fff3] rounded-2xl shadow-md p-6 w-full max-w-md sm:max-w-lg lg:max-w-xl sm:p-10 mt-3 mb-3 ">
@@ -187,7 +187,7 @@ const CreateNewAccount = () => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default CreateNewAccount
+export default createNewUserAccount;

@@ -1,30 +1,30 @@
-import { Link } from 'react-router-dom'
-import { login, getMe } from './fetchingData'
-import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
-import { MdLocationPin } from 'react-icons/md'
-import { FaWalking } from 'react-icons/fa'
+import { Link } from 'react-router-dom';
+import { login, getMe } from './fetchingData';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { MdLocationPin } from 'react-icons/md';
+import { FaWalking } from 'react-icons/fa';
 
-const SignInPage = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const navigate = useNavigate()
+const signInPage = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     const data = {
       email,
       password,
-    }
-    const result = await login(data)
+    };
+    const result = await login(data);
     if (result?.success) {
-      const user = await getMe()
+      const user = await getMe();
       if (user) {
-        navigate('/home')
+        navigate('/home');
       }
     } else {
-      alert(result.error || 'User not found')
+      alert(result.error || 'User not found');
     }
-  }
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-400 to-green-100 flex items-center justify-center py-10 sm:px-6 lg:px-8">
       <div className=" w-full max-w-sm sm:max-w-md md:max-w-lg bg-white shadow-xl rounded-2xl p-6 sm:p-8 mt-15 mr-3 ml-3 ">
@@ -78,7 +78,7 @@ const SignInPage = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SignInPage
+export default signInPage;

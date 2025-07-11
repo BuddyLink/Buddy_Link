@@ -1,12 +1,11 @@
-const express = require("express");
-const cors = require("cors");
-const AuthRoutes = require("./routes/Auth");
-const session = require("express-session");
-require("dotenv").config();
+import express, { json, urlencoded } from "express";
+import cors from "cors";
+import AuthRoutes from "./routes/Auth.js";
+import session from "express-session";
 
 const app = express();
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ limit: "10mb", extended: true }));
+app.use(json({ limit: "10mb" }));
+app.use(urlencoded({ limit: "10mb", extended: true }));
 const PORT = 3000;
 const CLIENT_PORT = 5173;
 const CLIENT_URL = `http://localhost:${CLIENT_PORT}`;
@@ -18,7 +17,7 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(json());
 
 app.use(
   session({

@@ -69,3 +69,4 @@ const BuddyFindingPage = () => {
 };
 
 export default BuddyFindingPage;
+

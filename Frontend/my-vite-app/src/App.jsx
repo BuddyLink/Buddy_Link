@@ -20,6 +20,7 @@ function App() {
           path="/profile"
           element={<Profilepage setProfile={setProfile} profile={profile} />}
         />
+
         <Route path="/home" element={<Homepage profile={profile} />} />
         <Route path="/buddy" element={<BuddyFindingPage />} />
         <Route path="/verify" element={<VerificationCodePage />} />
