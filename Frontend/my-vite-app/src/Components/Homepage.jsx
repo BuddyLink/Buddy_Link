@@ -1,16 +1,17 @@
+
 import NavBar from "./NavBar";
 import { MdLocationPin } from "react-icons/md";
 import { useState, useEffect } from "react";
 import { getLocations, createRequest } from "./fetchingData";
 import { useNavigate } from "react-router-dom";
-import { Commet } from 'react-loading-indicators'
+import { Commet } from "react-loading-indicators";
 
-const Homepage = ({ profile, setMatch }) => {
+const Homepage = ({ profile }) => {
   const [destination, setDestination] = useState("");
   const [locations, setLocations] = useState([]);
-  const [meetingPoint, setMeetingPoint] = useState("");
-  const [time, setTime] = useState("");
-  const [date, setDate] = useState("");
+  const [meetingPoint, setMeetingPoint] = useState('');
+  const [time, setTime] = useState('');
+  const [date, setDate] = useState('');
   const navigate = useNavigate();
   const [isloading, setIsLoading] = useState(false);
 
@@ -33,17 +34,18 @@ const Homepage = ({ profile, setMatch }) => {
     };
     const response = await createRequest(data);
     if (response.success) {
-      setMatch(response.data.matched);
-      navigate("/buddy");
+      navigate("/buddy", { state: { match: response.data.matched } });
     } else {
       console.error(response.error);
     }
     setIsLoading(false);
   };
   if (isloading) {
-    return (<div className="min-h-screen flex items-center text-center justify-center">
-    <Commet color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} />
-    </div>)
+    return (
+      <div className="min-h-screen flex items-center text-center justify-center">
+        <Commet color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} />
+      </div>
+    );
   }
   return (
     <div className="min-h-screen bg-gradient-to-b from-emerald-500 to-green-100 flex flex-col justify-between pt-10 pb-28 px-4 sm:px-6 md:px-12 md:justify-center lg:px-8">
@@ -59,7 +61,7 @@ const Homepage = ({ profile, setMatch }) => {
       <div className="w-full max-w-2xl mx-auto bg-emerald-50 rounded-3xl shadow-xl px-6 py-8 sm:p-8 md:mt-5 md:pt-15 md:pb-15">
         <form className="space-y-4" onSubmit={handleRequest}>
           <label className="block text-gray-700 font-semibold mb-1 md:text-xl md:font-normal">
-            Destination:{" "}
+            Destination:{' '}
           </label>
           <select
             required
@@ -78,7 +80,7 @@ const Homepage = ({ profile, setMatch }) => {
           </select>
 
           <label className="block text-gray-700 font-semibold mb-1 md:text-xl md:font-normal">
-            Date:{" "}
+            Date:{' '}
           </label>
           <input
             type="date"
@@ -88,7 +90,7 @@ const Homepage = ({ profile, setMatch }) => {
             className="w-full p-2 sm:p-3 border border-gray-300 rounded-mb focus:outline-none focus:ring-2 focus:ring-emerald-400"
           />
           <label className="block text-gray-700 font-semibold mb-1 md:text-xl md:font-normal">
-            Time:{" "}
+            Time:{' '}
           </label>
           <input
             type="time"
@@ -98,7 +100,7 @@ const Homepage = ({ profile, setMatch }) => {
             className="w-full p-2  sm:p-3 border border-gray-300 rounded-mb focus:outline-none focus:ring-2 focus:ring-emerald-400"
           />
           <label className="block text-gray-700 font-semibold mb-1 md:text-xl md:font-normal">
-            Meeting Point:{" "}
+            Meeting Point:{' '}
           </label>
           <select
             required
@@ -127,4 +129,4 @@ const Homepage = ({ profile, setMatch }) => {
     </div>
   );
 };
-export default Homepage;
+export default homePage;

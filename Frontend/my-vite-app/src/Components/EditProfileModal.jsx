@@ -1,30 +1,30 @@
-import { useState } from 'react'
-import { editProfile } from './fetchingData'
+import { useState } from 'react';
+import { editProfile } from './fetchingData';
 
-const EditProfileModal = ({ onClose, profile }) => {
-  const [name, setName] = useState('')
-  const [surname, setSurname] = useState('')
-  const [classification, setClassification] = useState('')
-  const [major, setMajor] = useState('')
-  const [profilePicture, setProfilePicture] = useState('')
-  const [imagePreview, setImagePreview] = useState('')
-  const [preferredContact, setPreferredContact] = useState('')
-  const [phone, setPhone] = useState('')
+const editProfileModal = ({ onClose, profile }) => {
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
+  const [classification, setClassification] = useState('');
+  const [major, setMajor] = useState('');
+  const [profilePicture, setProfilePicture] = useState('');
+  const [imagePreview, setImagePreview] = useState('');
+  const [preferredContact, setPreferredContact] = useState('');
+  const [phone, setPhone] = useState('');
 
   const handleProfile = (e) => {
-    const file = e.target.files[0]
+    const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setImagePreview(reader.result)
-        setProfilePicture(reader.result)
-      }
-      reader.readAsDataURL(file)
+        setImagePreview(reader.result);
+        setProfilePicture(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     const editData = {
       name,
       surname,
@@ -33,17 +33,17 @@ const EditProfileModal = ({ onClose, profile }) => {
       profilePicture,
       preferredContact,
       phone,
-    }
-    const data = {}
+    };
+    const data = {};
     for (const key in editData) {
       if (editData[key]) {
-        data[key] = editData[key]
+        data[key] = editData[key];
       }
     }
-    await editProfile(data)
-    onClose()
-    window.location.reload()
-  }
+    await editProfile(data);
+    onClose();
+    window.location.reload();
+  };
 
   return (
     <div
@@ -154,7 +154,7 @@ const EditProfileModal = ({ onClose, profile }) => {
         </form>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default EditProfileModal
+export default editProfileModal;

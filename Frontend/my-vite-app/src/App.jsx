@@ -1,17 +1,16 @@
-import CreateNewAccount from './Components/CreateNewAccount';
-import Homepage from './Components/Homepage';
-import SignInPage from './Components/SignInPage';
-import Profilepage from './Components/Profilepage';
-import BuddyFindingPage from './Components/BuddyFindingPage';
-import VerificationCodePage from './Components/VerificationCodePage';
-import SecurityPage from './Components/SecurityPage';
-import { Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
-import MatchPage from './Components/MatchPage';
+import CreateNewAccount from "./Components/CreateNewAccount";
+import Homepage from "./Components/Homepage";
+import SignInPage from "./Components/SignInPage";
+import Profilepage from "./Components/Profilepage";
+import BuddyFindingPage from "./Components/BuddyFindingPage";
+import VerificationCodePage from "./Components/VerificationCodePage";
+import SecurityPage from "./Components/SecurityPage";
+import { Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import MatchPage from "./Components/MatchPage";
 
 function App() {
   const [profile, setProfile] = useState([]);
-  const [match, setMatch] = useState([]);
   return (
     <div>
       <Routes>
@@ -21,8 +20,9 @@ function App() {
           path="/profile"
           element={<Profilepage setProfile={setProfile} profile={profile} />}
         />
-        <Route path="/home" element={<Homepage profile={profile} setMatch={setMatch} />} />
-        <Route path="/buddy" element={<BuddyFindingPage match= {match}/>} />
+
+        <Route path="/home" element={<Homepage profile={profile} />} />
+        <Route path="/buddy" element={<BuddyFindingPage />} />
         <Route path="/verify" element={<VerificationCodePage />} />
         <Route path="/security" element={<SecurityPage />} />
         <Route path="/match" element={<MatchPage />} />
