@@ -218,7 +218,26 @@ router.post("/buddyrequest", async (req, res) => {
       meetingPointId,
       userId
     );
-
+    // what if I put a condition if matched === [] ,  set timer call matched again at an interval
+    const timer = 0;
+    const searchInterval = async(matched) =>{
+      if(matched.length === 0){
+        const matched = await matchedBuddy(
+          date,
+          time,
+          destinationId,
+          meetingPointId,
+          userId
+        );
+        timer + 3000
+      }
+      if (timer === 120000){
+        clearInterval(timerId)
+        return  "No buddies found!"
+      }
+      const timerId = setInterval(searchInterval,3000,matched)
+    }
+    
     res.status(201).json({
       success: true,
       message: "Request created successfully",
@@ -393,7 +412,7 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
     }
     const sorted = mergeSort(distances);
     const sortedBuddies = sorted.map((item) => item.buddy);
-    
+
     potentialBuddies.set(cacheKey, sortedBuddies);
 
     return sortedBuddies;
