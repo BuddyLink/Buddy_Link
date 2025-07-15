@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { getLocations, createRequest } from "./fetchingData";
 import { useNavigate } from "react-router-dom";
 import { Commet } from "react-loading-indicators";
+import Timer from "./Timer";
 
 const homePage = ({ profile }) => {
   const [destination, setDestination] = useState("");
@@ -14,7 +15,7 @@ const homePage = ({ profile }) => {
   const navigate = useNavigate();
   const [isloading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-
+  const timeInterval = 60000
   useEffect(() => {
     const fetchLocations = async () => {
       const fetchedLocations = await getLocations();
@@ -45,8 +46,7 @@ const homePage = ({ profile }) => {
               setIsSearching(false);
               navigate("/buddy", { state: { match: response.data.matched } });
             }
-
-            if (timer <= 60000) {
+            if (timer < 60000) {
               setTimeout(searchInterval, 30000);
               timer += 30000;
             } else {
@@ -78,9 +78,10 @@ const homePage = ({ profile }) => {
   }
   if (isSearching) {
     return (
-      <div className="min-h-screen flex items-center text-center justify-center">
+      <div className="min-h-screen flex flex-col gap-5 items-center text-center justify-center">
         <p>Searching.....</p>
         <Commet color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} />
+        <Timer duration={timeInterval}/>
       </div>
     );
   }
