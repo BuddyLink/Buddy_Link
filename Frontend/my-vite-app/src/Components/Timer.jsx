@@ -4,8 +4,11 @@ const Timer = ({ duration }) => {
   const [time, setTime] = useState(duration);
   const intervalTime = 1000;
   const timeUpdate = () => {
-    if(time > 0){
-    setTime(time - intervalTime)};
+    if (time > 0) {
+      setTime(time - intervalTime);
+    } else {
+      console.info("Timer has ended");
+    }
   };
   useEffect(() => {
     setTimeout(timeUpdate, intervalTime);
