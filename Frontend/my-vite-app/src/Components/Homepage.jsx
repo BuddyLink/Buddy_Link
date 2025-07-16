@@ -1,4 +1,3 @@
-
 import NavBar from "./NavBar";
 import { MdLocationPin } from "react-icons/md";
 import { useState, useEffect } from "react";
@@ -9,11 +8,14 @@ import { Commet } from "react-loading-indicators";
 const homePage = ({ profile }) => {
   const [destination, setDestination] = useState("");
   const [locations, setLocations] = useState([]);
-  const [meetingPoint, setMeetingPoint] = useState('');
-  const [time, setTime] = useState('');
-  const [date, setDate] = useState('');
+  const [meetingPoint, setMeetingPoint] = useState("");
+  const [time, setTime] = useState("");
+  const [date, setDate] = useState("");
   const navigate = useNavigate();
   const [isloading, setIsLoading] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const timeDuration = 60000;
+  const timeInterval = 30000;
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -34,7 +36,36 @@ const homePage = ({ profile }) => {
     };
     const response = await createRequest(data);
     if (response.success) {
-      navigate("/buddy", { state: { match: response.data.matched } });
+      let timer = 0;
+      if (response.data.matched.length === 0) {
+        const searchInterval = async () => {
+          try {
+            setIsSearching(true);
+            const response = await createRequest(data);
+
+            if (response.data.matched.length > 0) {
+              setIsSearching(false);
+              navigate("/buddy", { state: { match: response.data.matched } });
+            }
+
+            if (timer <= timeDuration) {
+              setTimeout(searchInterval, timeInterval);
+              timer += timeInterval;
+            } else {
+              setIsSearching(false);
+              return navigate("/buddy", {
+                state: { match: response.data.matched },
+              });
+            }
+          } catch (error) {
+            console.error("Error while searching:", error);
+          }
+        };
+        searchInterval();
+      }
+      if (response.data.matched.length > 0) {
+        navigate("/buddy", { state: { match: response.data.matched } });
+      }
     } else {
       console.error(response.error);
     }
@@ -43,6 +74,14 @@ const homePage = ({ profile }) => {
   if (isloading) {
     return (
       <div className="min-h-screen flex items-center text-center justify-center">
+        <Commet color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} />
+      </div>
+    );
+  }
+  if (isSearching) {
+    return (
+      <div className="min-h-screen flex items-center text-center justify-center">
+        <p>Searching.....</p>
         <Commet color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} />
       </div>
     );
@@ -61,7 +100,7 @@ const homePage = ({ profile }) => {
       <div className="w-full max-w-2xl mx-auto bg-emerald-50 rounded-3xl shadow-xl px-6 py-8 sm:p-8 md:mt-5 md:pt-15 md:pb-15">
         <form className="space-y-4" onSubmit={handleRequest}>
           <label className="block text-gray-700 font-semibold mb-1 md:text-xl md:font-normal">
-            Destination:{' '}
+            Destination:{" "}
           </label>
           <select
             required
@@ -80,7 +119,7 @@ const homePage = ({ profile }) => {
           </select>
 
           <label className="block text-gray-700 font-semibold mb-1 md:text-xl md:font-normal">
-            Date:{' '}
+            Date:{" "}
           </label>
           <input
             type="date"
@@ -90,7 +129,7 @@ const homePage = ({ profile }) => {
             className="w-full p-2 sm:p-3 border border-gray-300 rounded-mb focus:outline-none focus:ring-2 focus:ring-emerald-400"
           />
           <label className="block text-gray-700 font-semibold mb-1 md:text-xl md:font-normal">
-            Time:{' '}
+            Time:{" "}
           </label>
           <input
             type="time"
@@ -100,7 +139,7 @@ const homePage = ({ profile }) => {
             className="w-full p-2  sm:p-3 border border-gray-300 rounded-mb focus:outline-none focus:ring-2 focus:ring-emerald-400"
           />
           <label className="block text-gray-700 font-semibold mb-1 md:text-xl md:font-normal">
-            Meeting Point:{' '}
+            Meeting Point:{" "}
           </label>
           <select
             required

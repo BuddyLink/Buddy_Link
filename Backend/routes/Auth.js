@@ -218,7 +218,6 @@ router.post("/buddyrequest", async (req, res) => {
       meetingPointId,
       userId
     );
-
     res.status(201).json({
       success: true,
       message: "Request created successfully",
@@ -361,9 +360,6 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
         destinationPairId: Number(destinationId),
       },
     });
-    if (filteredBuddies.length === 0) {
-      return "No Buddies Available";
-    }
 
     const cacheKey = `${userId}::${meetingPointId}::[${filteredBuddies.join(
       ","
@@ -393,7 +389,7 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
     }
     const sorted = mergeSort(distances);
     const sortedBuddies = sorted.map((item) => item.buddy);
-    
+
     potentialBuddies.set(cacheKey, sortedBuddies);
 
     return sortedBuddies;
