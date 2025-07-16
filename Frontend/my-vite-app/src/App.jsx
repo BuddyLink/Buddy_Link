@@ -11,6 +11,18 @@ import MatchPage from "./Components/MatchPage";
 
 function App() {
   const [profile, setProfile] = useState([]);
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js",{scope: "/"}).then(
+      (registration) => {
+        console.info("Service worker registratiom succeeded:", registration);
+      },
+      (error) => {
+        console.error(`service worker registration failed: ${error}`);
+      }
+    );
+  } else {
+    console.error("Service worker not supported");
+  }
   return (
     <div>
       <Routes>
