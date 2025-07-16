@@ -14,6 +14,8 @@ const homePage = ({ profile }) => {
   const navigate = useNavigate();
   const [isloading, setIsLoading] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
+  const timeDuration = 60000;
+  const timeInterval = 30000;
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -46,9 +48,9 @@ const homePage = ({ profile }) => {
               navigate("/buddy", { state: { match: response.data.matched } });
             }
 
-            if (timer <= 60000) {
-              setTimeout(searchInterval, 30000);
-              timer += 30000;
+            if (timer <= timeDuration) {
+              setTimeout(searchInterval, timeInterval);
+              timer += timeInterval;
             } else {
               setIsSearching(false);
               return navigate("/buddy", {
@@ -56,7 +58,7 @@ const homePage = ({ profile }) => {
               });
             }
           } catch (error) {
-            return "Search failed";
+            console.error("Error while searching:", error);
           }
         };
         searchInterval();
