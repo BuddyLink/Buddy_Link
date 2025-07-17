@@ -1,14 +1,19 @@
 import NavBar from "./NavBar";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MdEmojiPeople } from "react-icons/md";
+import { createMatch } from "./fetchingData";
 
 const BuddyFindingPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const match = location.state.match;
 
-  const handleClick = (person) => {
+  const handleClick = async (person) => {
     navigate("/match", { state: person });
+    const data = {
+      buddyPair: person.id,
+    };
+    const response = await createMatch(data);
   };
   return (
     <div className="min-h-screen bg-green-50 py-6 px-4 lg:bg-gradient-to-br from-green-100 to-green-50 lg:text-l">
