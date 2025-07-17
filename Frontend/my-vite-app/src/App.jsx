@@ -10,6 +10,7 @@ import { useState } from "react";
 import MatchPage from "./Components/MatchPage";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { createToken } from "./Components/fetchingData";
 const vapidKey = import.meta.env.VITE_VAPID_KEY;
 
 function App() {
@@ -53,8 +54,15 @@ function App() {
           console.error(`service worker registration failed: ${error}`);
         }
       )
-      .then((token) => {
-        console.info(token);
+      .then(async (token) => {
+        if (token) {
+          const data = {
+            fcmToken: token,
+          };
+          const response = await createToken(data);
+        } else {
+          console.info("No registration token available");
+        }
       });
   } else {
     console.error("Service worker not supported");

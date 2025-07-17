@@ -425,4 +425,33 @@ router.post("/match", async (req, res) => {
   }
 });
 
+router.post("/token", async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try {
+    const { fcmToken } = req.body;
+    const existingToken = await prisma.token.findUnique({
+      where: { fcmToken },
+    });
+    if (!existingToken) {
+      await prisma.token.create({
+        data: {
+          fcmToken,
+          user: {
+            connect: { id: req.session.userId },
+          },
+        },
+      });
+    }
+    res.status(201).json({
+      success: true,
+      message: "Token captured",
+    });
+  } catch (error) {
+    console.error("Error while capturing token");
+    res.status(500).json({ error: error.message || "Internal server error" });
+  }
+});
+
 export default router;

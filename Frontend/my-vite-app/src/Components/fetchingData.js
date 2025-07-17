@@ -164,3 +164,23 @@ export async function createMatch(data) {
     return { error: error.message };
   }
 }
+
+export async function createToken(data) {
+  try {
+    const response = await fetch(`${baseUrl}/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      return { error: result.error || result.message };
+    }
+    return { success: true, data: result };
+  } catch (error) {
+    return { error: error.message };
+  }
+}
