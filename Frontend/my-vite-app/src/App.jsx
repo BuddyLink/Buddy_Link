@@ -8,21 +8,58 @@ import SecurityPage from "./Components/SecurityPage";
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import MatchPage from "./Components/MatchPage";
+import { initializeApp } from "firebase/app";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+const vapidKey = import.meta.env.VITE_VAPID_KEY;
 
 function App() {
   const [profile, setProfile] = useState([]);
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js",{scope: "/"}).then(
-      (registration) => {
-        console.info("Service worker registratiom succeeded:", registration);
-      },
-      (error) => {
-        console.error(`service worker registration failed: ${error}`);
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA-u_TIvRbN6FAQmGsb9xbgqaAtsDmT2OI",
+    authDomain: "capstone-project-ef714.firebaseapp.com",
+    projectId: "capstone-project-ef714",
+    storageBucket: "capstone-project-ef714.firebasestorage.app",
+    messagingSenderId: "573306703898",
+    appId: "1:573306703898:web:47f462dbbe411aca0801a3",
+  };
+  const app = initializeApp(firebaseConfig);
+  const messaging = getMessaging(app);
+  onMessage(messaging, (payload) => {
+    console.info("Message received. ", payload);
+  });
+  function requestPermission() {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        console.info("Notification permission granted.");
+      } else {
+        console.info("Permission request denied");
       }
-    );
+    });
+  }
+
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register("/sw.js", { scope: "/" })
+      .then(
+        (registration) => {
+          requestPermission();
+          return getToken(messaging, {
+            vapidKey: vapidKey,
+            serviceWorkerRegistration: registration,
+          });
+        },
+        (error) => {
+          console.error(`service worker registration failed: ${error}`);
+        }
+      )
+      .then((token) => {
+        console.info(token);
+      });
   } else {
     console.error("Service worker not supported");
   }
+
   return (
     <div>
       <Routes>
