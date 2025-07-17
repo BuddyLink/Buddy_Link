@@ -29,6 +29,7 @@ model User{
 	createdAt		  DateTime @default (now())
 	updatedAt		  DateTime @updatedAt
 	passwordConfirmation String @default("")
+	match 			  Match[] @relation("Match")
 }
 model BuddyRequest {
 	id 	              Int @id @default(autoincrement())
@@ -64,6 +65,7 @@ model BuddyPair{
 	confirmed          Boolean @default(false)
 	confirmedAt        DateTime?
 	createdAt          DateTime @default(now())
+	match 			   Match[] @relation("BuddyMatch")
 }
 enum RequestStatus{
 	PENDING
@@ -80,4 +82,13 @@ model Location{
 	meetingPointRequests BuddyRequest[] @relation("RequestMeeting")
 	destinationRequestsPair BuddyPair[] @relation("Destination")
 	locationRequestsPair BuddyPair[] @relation("Location")
+}
+
+model Match{
+	id         Int @id @default(autoincrement())
+	userId     Int
+	user       User  @relation("Match", fields: [userId], references:[id])
+	buddyId    Int
+	buddyPair  BuddyPair  @relation("BuddyMatch", fields: [buddyId], references:[id])
+	createdAt  DateTime @default(now())
 }

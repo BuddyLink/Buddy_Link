@@ -399,4 +399,30 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
   }
 }
 
+router.post("/match", async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try {
+    const { buddyPair } = req.body;
+    const matchedPair = await prisma.match.create({
+      data: {
+        buddyPair: {
+          connect: { id: Number(buddyPair) },
+        },
+        user: {
+          connect: { id: req.session.userId },
+        },
+      },
+    });
+    res.status(201).json({
+      success: true,
+      message: "Match captured",
+    });
+  } catch (error) {
+    console.error("Error while capturing match");
+    res.status(500).json({ error: error.message || "Internal server error" });
+  }
+});
+
 export default router;
