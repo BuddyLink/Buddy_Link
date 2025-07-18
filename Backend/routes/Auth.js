@@ -1,10 +1,21 @@
-import { Router } from "express";
+import { application, Router } from "express";
 import { hash, compare } from "bcrypt";
 import { PrismaClient } from "@prisma/client";
 const potentialBuddies = new Map();
 const prisma = new PrismaClient();
 const router = Router();
 import moment from "moment";
+import admin from "firebase-admin";
+import { createRequire } from "module";
+var require = createRequire(import.meta.url);
+
+var serviceAccount = require("../serviceAccountKey.json");
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
 
 router.post("/signup", async (req, res) => {
   try {
@@ -399,32 +410,6 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
   }
 }
 
-router.post("/match", async (req, res) => {
-  if (!req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-  try {
-    const { buddyPair } = req.body;
-    const matchedPair = await prisma.match.create({
-      data: {
-        buddyPair: {
-          connect: { id: Number(buddyPair) },
-        },
-        user: {
-          connect: { id: req.session.userId },
-        },
-      },
-    });
-    res.status(201).json({
-      success: true,
-      message: "Match captured",
-    });
-  } catch (error) {
-    console.error("Error while capturing match");
-    res.status(500).json({ error: error.message || "Internal server error" });
-  }
-});
-
 router.post("/token", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: "Unauthorized" });
@@ -450,6 +435,70 @@ router.post("/token", async (req, res) => {
     });
   } catch (error) {
     console.error("Error while capturing token");
+    res.status(500).json({ error: error.message || "Internal server error" });
+  }
+});
+
+function randomNumberGenerator() {
+  const randomNumber = new Uint8Array(5);
+  crypto.getRandomValues(randomNumber);
+  let digit = [];
+  for (var i = 0; i < randomNumber.length; i++) {
+    let number = randomNumber[i];
+    const numberArray = number.toString().split("").map(Number);
+    let firstDigit = numberArray[0];
+    digit.push(firstDigit);
+    var verificationCode = digit.join("");
+  }
+  return verificationCode;
+}
+
+router.post("/match", async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try {
+    const { buddyPair } = req.body;
+    const matchedPair = await prisma.match.create({
+      data: {
+        buddyPair: {
+          connect: { id: Number(buddyPair) },
+        },
+        user: {
+          connect: { id: req.session.userId },
+        },
+      },
+    }
+
+  );
+    const code = randomNumberGenerator();
+    const token = await prisma.token.findFirst({
+      where: { userId: req.session.userId },
+    });
+    const Token = token.fcmToken;
+    const message = {
+      notification: {
+        title: "Verification Code",
+        body: code,
+      },
+      token: Token,
+    };
+    admin
+      .messaging()
+      .send(message)
+      .then((response) => {
+        console.info("Successfully", response);
+      })
+      .catch((error) => {
+        console.error("Error sending message", error);
+      });
+
+    res.status(201).json({
+      success: true,
+      message: "Match captured",
+    });
+  } catch (error) {
+    console.error("Error while capturing match");
     res.status(500).json({ error: error.message || "Internal server error" });
   }
 });
