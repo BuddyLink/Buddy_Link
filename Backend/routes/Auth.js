@@ -552,6 +552,10 @@ router.post('/verify',codeLimiter, async (req, res) => {
     if (!codeMatch) {
       return res.status(401).json({ message: 'Verification code incorrect' });
     }
+    await prisma.user.update({
+      where:{ id: req.session.userId },
+      data:{ walkCount:{ increment: 1 } },
+    });
     res.json({
       success: true,
       message: 'Code verified',
