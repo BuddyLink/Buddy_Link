@@ -43,10 +43,11 @@ function App() {
       .then(
         (registration) => {
           requestPermission();
-          return getToken(messaging, {
+          const token = getToken(messaging, {
             vapidKey: vapidKey,
             serviceWorkerRegistration: registration,
           });
+          return token;
         },
         (error) => {
           console.error(`service worker registration falied: ${error}`);
@@ -67,11 +68,14 @@ function App() {
   }
 
   onMessage(messaging, (payload) => {
-    console.log("Message received. ", payload);
-    new Notification(payload.notification.title, {
-      body: payload.notification.body,
-      icon: "/firebase-logo.png",
-    });
+    if (Notification.permission === "granted") {
+      new Notification(payload.notification.title, {
+        body: payload.notification.body,
+        requireInteraction: true,
+      });
+    } else {
+      console.warn("Notification permission not granted.");
+    }
   });
   return (
     <div>

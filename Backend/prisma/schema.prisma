@@ -96,7 +96,8 @@ model Match{
 
 model Token{
 	id	       Int @id @default(autoincrement())
-	fcmToken   String 
-	userId     Int @unique
+	fcmToken   String
+	userId     Int
 	user       User  @relation("Token", fields: [userId], references:[id])
+	@@unique([fcmToken, userId])
 }

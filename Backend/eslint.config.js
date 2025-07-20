@@ -27,7 +27,6 @@ export default [
       'array-bracket-spacing': ['error', 'never'],
       'no-irregular-whitespace': 'error',
       // Node.js specific rules
-      'no-console': 'warn',
       'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },
