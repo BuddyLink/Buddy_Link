@@ -7,6 +7,7 @@ const router = Router();
 import moment from 'moment';
 import admin from 'firebase-admin';
 import { createRequire } from 'module';
+import rateLimit from 'express-rate-limit';
 var require = createRequire(import.meta.url);
 
 var serviceAccount = require('../serviceAccountKey.json');
@@ -477,6 +478,17 @@ router.post('/match', async (req, res) => {
       },
     });
     const code = randomNumberGenerator();
+
+    const hashedCode = await hash(code, 10);
+    await prisma.codeInput.create({
+      data: {
+        codeInput: hashedCode,
+        user: {
+          connect: { id: req.session.userId },
+        },
+      },
+    });
+
     const token = await prisma.token.findFirst({
       orderBy: {
         id: 'desc',
@@ -510,6 +522,43 @@ router.post('/match', async (req, res) => {
     });
   } catch (error) {
     console.error('Error while capturing match');
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+const codeLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 3,
+  message:{ error: 'Too many attempts. Please try again later' },
+});
+
+router.post('/verify',codeLimiter, async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  try {
+    const { codeInput } = req.body;
+    const code = await prisma.codeInput.findFirst({
+      where: { userId: req.session.userId },
+      orderBy: {
+        id: 'desc',
+      },
+    });
+    if(!code){
+      return res.status(404).json({ message: 'No code found for user' });
+    }
+    const codeMatch = await compare(codeInput, code.codeInput);
+
+    if (!codeMatch) {
+      return res.status(401).json({ message: 'Verification code incorrect' });
+    }
+    res.json({
+      success: true,
+      message: 'Code verified',
+    });
+
+  } catch (error) {
+    console.error('Error while verifying code', error);
     res.status(500).json({ error: error.message || 'Internal server error' });
   }
 });

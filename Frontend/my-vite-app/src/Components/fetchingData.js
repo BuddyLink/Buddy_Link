@@ -184,3 +184,27 @@ export async function createToken(data) {
     return { error: error.message };
   }
 }
+
+export async function insertCode(data) {
+  try {
+    const response = await fetch(`${baseUrl}/verify`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      return {
+        success: false,
+        message: result.message || "Verification failed",
+        status: response.status,
+      };
+    }
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, message: error.message || "Server error" };
+  }
+}

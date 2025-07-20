@@ -31,6 +31,7 @@ model User{
 	passwordConfirmation String @default("")
 	match 			  Match[] @relation("Match")
 	token 			  Token[] @relation("Token")
+	codeInput 		  CodeInput[] @relation("CodeInput")
 }
 model BuddyRequest {
 	id 	              Int @id @default(autoincrement())
@@ -100,4 +101,11 @@ model Token{
 	userId     Int
 	user       User  @relation("Token", fields: [userId], references:[id])
 	@@unique([fcmToken, userId])
+}
+
+model CodeInput{
+	id	       Int @id @default(autoincrement())
+	codeInput  String
+	userId     Int
+	user       User  @relation("CodeInput", fields: [userId], references:[id])
 }

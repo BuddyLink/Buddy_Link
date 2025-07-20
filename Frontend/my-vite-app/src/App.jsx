@@ -5,6 +5,7 @@ import Profilepage from "./Components/Profilepage";
 import BuddyFindingPage from "./Components/BuddyFindingPage";
 import VerificationCodePage from "./Components/VerificationCodePage";
 import SecurityPage from "./Components/SecurityPage";
+import StartJourney from "./Components/StartJourney";
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import MatchPage from "./Components/MatchPage";
@@ -91,6 +92,7 @@ function App() {
         <Route path="/verify" element={<VerificationCodePage />} />
         <Route path="/security" element={<SecurityPage />} />
         <Route path="/match" element={<MatchPage />} />
+        <Route path="/start" element={<StartJourney />} />
       </Routes>
     </div>
   );
