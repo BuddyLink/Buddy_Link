@@ -51,7 +51,7 @@ const matchPage = () => {
                 hour: "2-digit",
                 minute: "2-digit",
                 hour12: true,
-                timeZone: "UTC",
+                timeZone: "America/Los_Angeles",
               })}
             </p>
           </div>

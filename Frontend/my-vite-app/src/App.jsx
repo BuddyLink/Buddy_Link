@@ -9,6 +9,7 @@ import StartJourney from "./Components/StartJourney";
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import MatchPage from "./Components/MatchPage";
+import PastBuddies from "./Components/PastBuddies";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { createToken } from "./Components/fetchingData";
@@ -93,6 +94,7 @@ function App() {
         <Route path="/security" element={<SecurityPage />} />
         <Route path="/match" element={<MatchPage />} />
         <Route path="/start" element={<StartJourney />} />
+        <Route path="/past" element={<PastBuddies />} />
       </Routes>
     </div>
   );

@@ -208,3 +208,18 @@ export async function insertCode(data) {
     return { success: false, message: error.message || "Server error" };
   }
 }
+
+export async function getPastBuddies() {
+  try {
+    const response = await fetch(`${baseUrl}/pastbuddies`, {
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to get past buddies", error.message);
+  }
+}

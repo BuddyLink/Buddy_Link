@@ -529,10 +529,10 @@ router.post('/match', async (req, res) => {
 const codeLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 3,
-  message:{ error: 'Too many attempts. Please try again later' },
+  message: { error: 'Too many attempts. Please try again later' },
 });
 
-router.post('/verify',codeLimiter, async (req, res) => {
+router.post('/verify', codeLimiter, async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
@@ -544,7 +544,7 @@ router.post('/verify',codeLimiter, async (req, res) => {
         id: 'desc',
       },
     });
-    if(!code){
+    if (!code) {
       return res.status(404).json({ message: 'No code found for user' });
     }
     const codeMatch = await compare(codeInput, code.codeInput);
@@ -553,17 +553,54 @@ router.post('/verify',codeLimiter, async (req, res) => {
       return res.status(401).json({ message: 'Verification code incorrect' });
     }
     await prisma.user.update({
-      where:{ id: req.session.userId },
-      data:{ walkCount:{ increment: 1 } },
+      where: { id: req.session.userId },
+      data: { walkCount: { increment: 1 } },
     });
     res.json({
       success: true,
       message: 'Code verified',
     });
-
   } catch (error) {
     console.error('Error while verifying code', error);
     res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+router.get('/pastbuddies', async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  try {
+    const pastBuddies = await prisma.match.findMany({
+      where: { userId: req.session.userId },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      select: {
+        createdAt: true,
+        buddyPair: {
+          select: {
+            id: true,
+            name: true,
+            surname: true,
+            major: true,
+            classification: true,
+            walkCount: true,
+            profilePic: true,
+          },
+        },
+      },
+      take: 5,
+    });
+    res.json(
+      pastBuddies.map((buddy) => ({
+        ...buddy.buddyPair,
+        matchedAt: buddy.createdAt,
+      })),
+    );
+  } catch (err) {
+    console.info(err);
+    res.status(500).json({ message: `Internal server error ${err}` });
   }
 });
 
