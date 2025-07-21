@@ -33,8 +33,8 @@ const pastBuddies = () => {
   };
 
   return (
-    <div className="min-h-screen bg-green-50 py-6 px-4 lg:bg-gradient-to-br from-green-100 to-green-50 lg:text-l mb-15">
-      <h1 className="text-2xl font-bold text-center text-green-700 mb-2 lg:text-4xl lg:mt-4">
+    <div className="min-h-screen bg-green-50 py-6 px-4 lg:bg-gradient-to-br from-green-100 to-green-50 lg:text-l mb-15 dark:bg-gray-900 dark:lg:bg-gradient-to-br dark:lg:from-gray-900 dark:lg:to-gray-800">
+      <h1 className="text-3xl font-bold text-center text-green-700 mb-3 lg:text-4xl lg:mt-4 dark:text-emerald-400">
         Past Buddies
       </h1>
       <ul className="space-y-6 max-w-md mx-auto lg:w-200">
@@ -46,7 +46,7 @@ const pastBuddies = () => {
             return (
               <li
                 key={index}
-                className="bg-white p-4 rounded-xl shadow-md flex items-center space-x-4 "
+                className="bg-white p-4 rounded-xl shadow-md flex items-center space-x-4 dark:bg-gray-800 dark:border-green-300"
               >
                 <img
                   src={buddy.profilePic}
@@ -61,29 +61,29 @@ const pastBuddies = () => {
                   }}
                 />
                 <div className="flex-1 ml-5 lg:text-m">
-                  <p className="font-semibold text-gray-800 ">
+                  <p className="font-semibold text-gray-700 dark:text-gray-300">
                     {buddy.name} {buddy.surname}
                   </p>
-                  <p className="text-sm text-gray-600 lg:text-m">
+                  <p className="text-sm text-gray-600 lg:text-m dark:text-gray-300">
                     {buddy.major}
                   </p>
-                  <p className="text-sm text-gray-600 lg:text-m">
+                  <p className="text-sm text-gray-600 lg:text-m dark:text-gray-300">
                     {buddy.classification}
                   </p>
-                  <p className="text-sm text-gray-600 lg:text-m">
+                  <p className="text-sm text-gray-600 lg:text-m dark:text-gray-300">
                     Walk Count: {buddy.walkCount}
                   </p>
-                  <p className="text-sm text-gray-600 lg:text-m">
+                  <p className="text-sm text-gray-600 lg:text-m dark:text-gray-300">
                     {new Date(buddy.matchedAt).toLocaleDateString("en-US")}
                     {"   @"}
                     {new Date(buddy.matchedAt).toLocaleTimeString("en-US", {
                       hour: "2-digit",
                       minute: "2-digit",
                       hour12: true,
-                      timeZone: "America/Los_Angeles",
+                      timeZone: "UTC",
                     })}
                   </p>
-                  <div className="flex justify-center gap-3 mt-3">
+                  <div className="flex justify-center gap-3 mt-3 ml-20">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();

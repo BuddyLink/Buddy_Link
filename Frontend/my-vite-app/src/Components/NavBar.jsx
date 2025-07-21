@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { GiExitDoor } from "react-icons/gi";
 import { IoPersonCircleOutline } from "react-icons/io5";
 import { IoHome } from "react-icons/io5";
-import { IoBookmarksOutline } from "react-icons/io5";
+import { GiPlayerPrevious } from "react-icons/gi";
 
 const navBar = () => {
   const navigate = useNavigate();
@@ -17,29 +17,32 @@ const navBar = () => {
     }
   };
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-green-100  text-emerald-700 py-2 px-6 flex justify-around items-center shadow-md z-50 ">
+    <div className="fixed bottom-0 left-0 right-0 bg-green-100 gap-0 text-emerald-700 py-2 px-1 flex justify-around items-center shadow-md z-50 dark:bg-gray-900 dark:text-emerald-400">
       <Link to="/home">
-        <button className="text-2xl flex flex-col">
-          <IoHome />
-          <p className="text-l">Home</p>
+        <button className="flex flex-col items-center hover:text-green-600 hover:scale-110 transform transition-colors duration-200 dark:hover:text-emerald-600 ">
+          <IoHome className="text-2xl " />
+          <p className="text-xs">Home</p>
         </button>
       </Link>
 
       <Link to="/profile">
-        <button className="text-2xl flex flex-col">
-          <IoPersonCircleOutline />
-          <p className="text-l">Profile</p>
+        <button className="flex flex-col items-center hover:text-green-600 hover:scale-110 transform transition-colors duration-200 dark:hover:text-emerald-600 ">
+          <IoPersonCircleOutline className="text-2xl" />
+          <p className="text-xs">Profile</p>
         </button>
       </Link>
       <Link to="/past">
-        <button className="text-2xl flex flex-col">
-          <IoBookmarksOutline />
-          <p className=" block text-l">Activity</p>
+        <button className="flex flex-col items-center hover:text-green-600 hover:scale-110 transform transition-colors duration-200 dark:hover:text-emerald-600 ">
+          <GiPlayerPrevious className="text-2xl" />
+          <p className="text-xs">Activity</p>
         </button>
       </Link>
-      <button className="text-2xl flex flex-col" onClick={handleLogout}>
-        <GiExitDoor />
-        <p className="text-l">LogOut</p>
+      <button
+        className="flex flex-col items-center hover:text-green-600 hover:scale-110 transform transition-colors duration-200 dark:hover:text-emerald-600 "
+        onClick={handleLogout}
+      >
+        <GiExitDoor className="text-2xl" />
+        <p className="text-xs">LogOut</p>
       </button>
     </div>
   );
