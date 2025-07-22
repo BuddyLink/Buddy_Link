@@ -21,7 +21,7 @@ const timeFormat = (time) => {
   let total_minutes = Number(Math.floor(total_seconds / 60));
   let seconds = Number(total_seconds % 60);
 
-  return `Minutes: ${total_minutes} Seconds: ${seconds}`;
+  return `${total_minutes} Minutes  ${seconds} Seconds`;
 };
 
 export default Timer;

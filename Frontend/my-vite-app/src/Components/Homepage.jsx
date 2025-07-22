@@ -81,8 +81,8 @@ const homePage = ({ profile }) => {
   }
   if (isSearching) {
     return (
-      <div className="min-h-screen flex flex-col gap-5 items-center text-center justify-center">
-        <p>Searching.....</p>
+      <div className="min-h-screen bg-gradient-to-b from-emerald-500 to-green-100 dark:from-gray-900 dark:to-gray-800 flex flex-col gap-5 items-center text-center justify-center">
+        <p className="text-3xl text-white ">Searching for Buddy.....</p>
         <Commet color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} />
         <Timer duration={timeDuration}/>
       </div>
@@ -108,7 +108,7 @@ const homePage = ({ profile }) => {
             required
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
-            className="block appearance-none w-full h-12 pl-4 pr-10 rounded-md border border-gray-400 bg-[#f1fff3] dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400  leading-tight text-gray-500 hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="block appearance-none w-full h-12 pl-4 pr-10 rounded-md border border-gray-400 bg-[#f1fff3] dark:text-white dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400  leading-tight text-gray-500 hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
           >
             <option className="hover: bg-green-100" value="">
               Select a Destination
