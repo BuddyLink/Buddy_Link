@@ -13,31 +13,29 @@ import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { createToken } from "./Components/fetchingData";
 const vapidKey = import.meta.env.VITE_VAPID_KEY;
 
+const firebaseConfig = {
+  apiKey: "AIzaSyA-u_TIvRbN6FAQmGsb9xbgqaAtsDmT2OI",
+  authDomain: "capstone-project-ef714.firebaseapp.com",
+  projectId: "capstone-project-ef714",
+  storageBucket: "capstone-project-ef714.firebasestorage.app",
+  messagingSenderId: "573306703898",
+  appId: "1:573306703898:web:47f462dbbe411aca0801a3",
+};
+const app = initializeApp(firebaseConfig);
+const messaging = getMessaging(app);
+
+function requestPermission() {
+  Notification.requestPermission().then((permission) => {
+    if (permission === "granted") {
+      console.info("Notification permission granted.");
+    } else {
+      console.info("Permission request denied");
+    }
+  });
+}
+
 function App() {
   const [profile, setProfile] = useState([]);
-
-  const firebaseConfig = {
-    apiKey: "AIzaSyA-u_TIvRbN6FAQmGsb9xbgqaAtsDmT2OI",
-    authDomain: "capstone-project-ef714.firebaseapp.com",
-    projectId: "capstone-project-ef714",
-    storageBucket: "capstone-project-ef714.firebasestorage.app",
-    messagingSenderId: "573306703898",
-    appId: "1:573306703898:web:47f462dbbe411aca0801a3",
-  };
-  const app = initializeApp(firebaseConfig);
-  const messaging = getMessaging(app);
-  onMessage(messaging, (payload) => {
-    console.info("Message received. ", payload);
-  });
-  function requestPermission() {
-    Notification.requestPermission().then((permission) => {
-      if (permission === "granted") {
-        console.info("Notification permission granted.");
-      } else {
-        console.info("Permission request denied");
-      }
-    });
-  }
 
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker
@@ -45,13 +43,14 @@ function App() {
       .then(
         (registration) => {
           requestPermission();
-          return getToken(messaging, {
+          const token = getToken(messaging, {
             vapidKey: vapidKey,
             serviceWorkerRegistration: registration,
           });
+          return token;
         },
         (error) => {
-          console.error(`service worker registration failed: ${error}`);
+          console.error(`service worker registration falied: ${error}`);
         }
       )
       .then(async (token) => {
@@ -65,9 +64,19 @@ function App() {
         }
       });
   } else {
-    console.error("Service worker not supported");
+    console.error("Service worker not supported ");
   }
 
+  onMessage(messaging, (payload) => {
+    if (Notification.permission === "granted") {
+      new Notification(payload.notification.title, {
+        body: payload.notification.body,
+        requireInteraction: true,
+      });
+    } else {
+      console.warn("Notification permission not granted.");
+    }
+  });
   return (
     <div>
       <Routes>
@@ -77,7 +86,6 @@ function App() {
           path="/profile"
           element={<Profilepage setProfile={setProfile} profile={profile} />}
         />
-
         <Route path="/home" element={<Homepage profile={profile} />} />
         <Route path="/buddy" element={<BuddyFindingPage />} />
         <Route path="/verify" element={<VerificationCodePage />} />
