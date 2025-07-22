@@ -30,6 +30,7 @@ model User{
 	updatedAt		  DateTime @updatedAt
 	passwordConfirmation String @default("")
 	match 			  Match[] @relation("Match")
+	token 			  Token[] @relation("Token")
 }
 model BuddyRequest {
 	id 	              Int @id @default(autoincrement())
@@ -91,4 +92,11 @@ model Match{
 	buddyId    Int
 	buddyPair  BuddyPair  @relation("BuddyMatch", fields: [buddyId], references:[id])
 	createdAt  DateTime @default(now())
+}
+
+model Token{
+	id	       Int @id @default(autoincrement())
+	fcmToken   String @unique
+	userId     Int
+	user       User  @relation("Token", fields: [userId], references:[id])
 }
