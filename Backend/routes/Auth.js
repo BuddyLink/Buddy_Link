@@ -1,12 +1,23 @@
-import { Router } from "express";
-import { hash, compare } from "bcrypt";
-import { PrismaClient } from "@prisma/client";
+import { Router } from 'express';
+import { hash, compare } from 'bcrypt';
+import { PrismaClient } from '@prisma/client';
 const potentialBuddies = new Map();
 const prisma = new PrismaClient();
 const router = Router();
-import moment from "moment";
+import moment from 'moment';
+import admin from 'firebase-admin';
+import { createRequire } from 'module';
+var require = createRequire(import.meta.url);
 
-router.post("/signup", async (req, res) => {
+var serviceAccount = require('../serviceAccountKey.json');
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
+
+router.post('/signup', async (req, res) => {
   try {
     const {
       email,
@@ -33,7 +44,7 @@ router.post("/signup", async (req, res) => {
       !profilePicture ||
       !passwordConfirmation
     ) {
-      return res.status(400).json({ message: "Missing required fields" });
+      return res.status(400).json({ message: 'Missing required fields' });
     }
     const minPWDLength = 6;
     if (password.length < minPWDLength) {
@@ -43,19 +54,19 @@ router.post("/signup", async (req, res) => {
     }
     if (password !== passwordConfirmation) {
       return res.status(400).json({
-        message: "Passwords must match!",
+        message: 'Passwords must match!',
       });
     }
-    if (email.endsWith(".edu") === false) {
+    if (email.endsWith('.edu') === false) {
       return res
         .status(400)
-        .json({ message: "Email must be a valid .edu email" });
+        .json({ message: 'Email must be a valid .edu email' });
     }
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(400).json({ message: 'User already exists' });
     }
     const hashedPassword = await hash(password, 10);
     const hashedConPassword = await hash(passwordConfirmation, 10);
@@ -78,21 +89,21 @@ router.post("/signup", async (req, res) => {
     req.session.email = newUser.email;
     res
       .status(201)
-      .json({ success: true, message: "User created successfully" });
+      .json({ success: true, message: 'User created successfully' });
   } catch (err) {
-    console.error("Error creating user:", err);
-    res.status(500).json({ error: err.message || "Internal server error" });
+    console.error('Error creating user:', err);
+    res.status(500).json({ error: err.message || 'Internal server error' });
   }
 });
 
-router.post("/login", async (req, res) => {
+router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
       return res
         .status(400)
-        .json({ message: "Email and password are required" });
+        .json({ message: 'Email and password are required' });
     }
     const user = await prisma.user.findUnique({
       where: { email: email.toLowerCase() },
@@ -100,26 +111,26 @@ router.post("/login", async (req, res) => {
     if (!user) {
       return res
         .status(401)
-        .json({ message: "Email or password is incorrect" });
+        .json({ message: 'Email or password is incorrect' });
     }
     const passwordMatch = await compare(password, user.password);
     if (!passwordMatch) {
       return res
         .status(401)
-        .json({ message: "Email or password is incorrect" });
+        .json({ message: 'Email or password is incorrect' });
     }
     req.session.userId = user.id;
     req.session.email = user.email;
-    res.json({ success: true, message: "Login successful!" });
+    res.json({ success: true, message: 'Login successful!' });
   } catch (err) {
     console.info(err);
-    res.status(500).json({ error: err.message || "Internal server error" });
+    res.status(500).json({ error: err.message || 'Internal server error' });
   }
 });
 
-router.get("/me", async (req, res) => {
+router.get('/me', async (req, res) => {
   if (!req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: 'Unauthorized' });
   }
   try {
     const user = await prisma.user.findUnique({
@@ -129,13 +140,13 @@ router.get("/me", async (req, res) => {
     res.json({ id: req.session.userId, email: user.email });
   } catch (err) {
     console.info(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-router.get("/profile", async (req, res) => {
+router.get('/profile', async (req, res) => {
   if (!req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: 'Unauthorized' });
   }
   try {
     const user = await prisma.user.findUnique({
@@ -166,24 +177,25 @@ router.get("/profile", async (req, res) => {
     });
   } catch (err) {
     console.info(err);
-    res.status(500).json({ message: "Internal server error" });
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
-router.get("/locations", async (req, res) => {
+
+router.get('/locations', async (req, res) => {
   if (!req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: 'Unauthorized' });
   }
   try {
     const locations = await prisma.location.findMany();
     res.json(locations);
   } catch (err) {
-    res.status(500).json({ message: "Failed to fetch locations" });
+    res.status(500).json({ message: 'Failed to fetch locations', error: err });
   }
 });
 
-router.post("/buddyrequest", async (req, res) => {
+router.post('/buddyrequest', async (req, res) => {
   if (!req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: 'Unauthorized' });
   }
   try {
     const { date, time, destination, meetingPoint } = req.body;
@@ -200,7 +212,7 @@ router.post("/buddyrequest", async (req, res) => {
         requester: {
           connect: { id: req.session.userId },
         },
-        status: "PENDING",
+        status: 'PENDING',
       },
       include: {
         destination: true,
@@ -216,42 +228,42 @@ router.post("/buddyrequest", async (req, res) => {
       time,
       destinationId,
       meetingPointId,
-      userId
+      userId,
     );
     res.status(201).json({
       success: true,
-      message: "Request created successfully",
+      message: 'Request created successfully',
       matched: matched,
     });
   } catch (err) {
-    console.error("Error creating request:", err);
-    res.status(500).json({ error: err.message || "Internal server error" });
+    console.error('Error creating request:', err);
+    res.status(500).json({ error: err.message || 'Internal server error' });
   }
 });
 
-router.post("/logout", async (req, res) => {
+router.post('/logout', async (req, res) => {
   req.session.destroy((err) => {
     if (err) {
-      return res.status(500).json({ message: "Internal server error" });
+      return res.status(500).json({ message: 'Internal server error' });
     }
-    res.clearCookie("connect.sid");
-    res.json({ message: "Logout successful!" });
+    res.clearCookie('connect.sid');
+    res.json({ message: 'Logout successful!' });
   });
 });
 
-router.patch("/profile/edit", async (req, res) => {
+router.patch('/profile/edit', async (req, res) => {
   if (!req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: 'Unauthorized' });
   }
   try {
     const editFields = [
-      "name",
-      "surname",
-      "classification",
-      "major",
-      "profilePicture",
-      "preferredContact",
-      "phone",
+      'name',
+      'surname',
+      'classification',
+      'major',
+      'profilePicture',
+      'preferredContact',
+      'phone',
     ];
     const updates = {};
     for (const field of editFields) {
@@ -265,7 +277,9 @@ router.patch("/profile/edit", async (req, res) => {
     });
     res.status(200).json(updated);
   } catch (error) {
-    res.status(500).json({ message: "Failed to update Profile" });
+    res
+      .status(500)
+      .json({ message: 'Failed to update Profile', error: error.message });
   }
 });
 
@@ -299,7 +313,7 @@ async function locationCod(Id) {
     });
     return locationCoordinates;
   } catch (error) {
-    console.error("Failed to get coordinates");
+    console.error('Failed to get coordinates', error);
   }
 }
 // resource: https://www.youtube.com/watch?v=x_Z9FcAPmbk
@@ -329,7 +343,7 @@ function merge(leftArray, rightArray) {
 
 function mergeSort(array, currentDepth = 0, MAX_DEPTH = 50) {
   if (currentDepth > MAX_DEPTH) {
-    throw new Error("Maximum recursion depth has exceeded!!");
+    throw new Error('Maximum recursion depth has exceeded!!');
   }
   if (array.length <= 1) return array;
   const half = Math.floor(array.length / 2);
@@ -338,7 +352,7 @@ function mergeSort(array, currentDepth = 0, MAX_DEPTH = 50) {
 
   return merge(
     mergeSort(left, currentDepth + 1, MAX_DEPTH),
-    mergeSort(right, currentDepth + 1, MAX_DEPTH)
+    mergeSort(right, currentDepth + 1, MAX_DEPTH),
   );
 }
 
@@ -347,8 +361,8 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
     const dateTimeString = `${date}T${time}:00.000Z`;
     const baseDateTime = moment(dateTimeString);
 
-    const endTime = new Date(baseDateTime.clone().add(10, "minutes"));
-    const startTime = new Date(baseDateTime.clone().subtract(10, "minutes"));
+    const endTime = new Date(baseDateTime.clone().add(10, 'minutes'));
+    const startTime = new Date(baseDateTime.clone().subtract(10, 'minutes'));
 
     const filteredBuddies = await prisma.buddyPair.findMany({
       where: {
@@ -362,7 +376,7 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
     });
 
     const cacheKey = `${userId}::${meetingPointId}::[${filteredBuddies.join(
-      ","
+      ',',
     )}]`;
 
     for (const key of potentialBuddies.keys()) {
@@ -378,7 +392,7 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
     const distances = [];
     for (let i = 0; i < filteredBuddies.length; i++) {
       const locationCoordinatesBuddy = await locationCod(
-        filteredBuddies[i].locationId
+        filteredBuddies[i].locationId,
       );
       const buddyLat = locationCoordinatesBuddy.latitude;
       const buddyLon = locationCoordinatesBuddy.longitude;
@@ -394,15 +408,62 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
 
     return sortedBuddies;
   } catch (error) {
-    console.error("Failed to match");
+    console.error('Failed to match');
     return JSON.stringify({ message: error.message });
   }
 }
 
-router.post("/match", async (req, res) => {
+router.post('/token', async (req, res) => {
   if (!req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: 'Unauthorized' });
   }
+  try {
+    const { fcmToken } = req.body;
+    const existingToken = await prisma.token.findFirst({
+      where: {
+        fcmToken,
+        userId: req.session.userId,
+      },
+    });
+    if (!existingToken) {
+      await prisma.token.create({
+        data: {
+          fcmToken,
+          user: {
+            connect: { id: req.session.userId },
+          },
+        },
+      });
+    }
+    res.status(201).json({
+      success: true,
+      message: 'Token captured',
+    });
+  } catch (error) {
+    console.error('Error while capturing token');
+    res.status(500).json({ error: error.message || 'Internal server error' });
+  }
+});
+
+function randomNumberGenerator() {
+  const randomNumber = new Uint8Array(5);
+  crypto.getRandomValues(randomNumber);
+  let digit = [];
+  for (var i = 0; i < randomNumber.length; i++) {
+    let number = randomNumber[i];
+    const numberArray = number.toString().split('').map(Number);
+    let firstDigit = numberArray[0];
+    digit.push(firstDigit);
+    var verificationCode = digit.join('');
+  }
+  return verificationCode;
+}
+
+router.post('/match', async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+
   try {
     const { buddyPair } = req.body;
     const matchedPair = await prisma.match.create({
@@ -415,13 +476,41 @@ router.post("/match", async (req, res) => {
         },
       },
     });
+    const code = randomNumberGenerator();
+    const token = await prisma.token.findFirst({
+      orderBy: {
+        id: 'desc',
+      },
+    });
+    const Token = token.fcmToken;
+    try {
+      const message = {
+        notification: {
+          title: 'Verification Code',
+          body: code,
+        },
+        token: Token,
+      };
+      admin
+        .messaging()
+        .send(message)
+        .then((response) => {
+          console.info('Successfully', response);
+        })
+        .catch((error) => {
+          console.error('Error sending message', error);
+        });
+    } catch (error) {
+      console.error('Error while sending message', error);
+    }
+
     res.status(201).json({
       success: true,
-      message: "Match captured",
+      message: 'Match captured',
     });
   } catch (error) {
-    console.error("Error while capturing match");
-    res.status(500).json({ error: error.message || "Internal server error" });
+    console.error('Error while capturing match');
+    res.status(500).json({ error: error.message || 'Internal server error' });
   }
 });
 
