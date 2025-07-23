@@ -9,7 +9,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyA-u_TIvRbN6FAQmGsb9xbgqaAtsDmT2OI",
   authDomain: "capstone-project-ef714.firebaseapp.com",
   projectId: "capstone-project-ef714",
-  storageBucket: "capstone-project-ef714.firebasestorage.app",
+  storageBucket: "capstone-project-ef714.firebasestorage.app", 
   messagingSenderId: "573306703898",
   appId: "1:573306703898:web:47f462dbbe411aca0801a3",
 };
