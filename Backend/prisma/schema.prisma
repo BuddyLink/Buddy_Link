@@ -32,7 +32,7 @@ model User{
 	match 			  Match[] @relation("Match")
 	token 			  Token[] @relation("Token")
 	codeInput 		  CodeInput[] @relation("CodeInput")
-	status 			  String @default("ACTIVE")
+	status 			  String @default("INACTIVE")
 	preferences       Json @default("{}")
 }
 model BuddyRequest {
