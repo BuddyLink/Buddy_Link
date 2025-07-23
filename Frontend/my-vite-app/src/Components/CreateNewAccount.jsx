@@ -14,6 +14,9 @@ const createNewUserAccount = () => {
   const [preferredContact, setPreferredContact] = useState("");
   const [phone, setPhone] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [distancePreferences, setDistancePreferences] = useState("");
+  const [majorPreferences, setMajorPreferences] = useState("");
+  const [classificationPreferences, setClassificationPreferences] = useState("");
   const navigate = useNavigate();
 
   const handleProfile = (e) => {
@@ -27,6 +30,11 @@ const createNewUserAccount = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  let preferences = {};
+  preferences["distance"] = distancePreferences;
+  preferences["major"] = majorPreferences;
+  preferences["classification"] = classificationPreferences;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,6 +50,7 @@ const createNewUserAccount = () => {
       phone,
       walkCount: Number(0),
       passwordConfirmation,
+      preferences,
     };
     const result = await createNewAccount(data);
     if (result?.success) {
@@ -178,6 +187,54 @@ const createNewUserAccount = () => {
             className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
             maxLength="15"
           />
+          <h2 className="font-semibold text-green-800 dark:text-emerald-600">
+            Set your pairing preferences below :{" "}
+          </h2>
+          <label className="block text-sm font-medium text-green-800 dark:text-gray-300">
+            Distance Preference :
+          </label>
+          <div>
+            <input
+              type="range"
+              required
+              id="distancePreference"
+              min="1"
+              max="100"
+              value={distancePreferences}
+              onChange={(e) => setDistancePreferences(e.target.value)}
+              className="w-full rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
+            />
+          </div>
+          <label className="block text-sm font-medium text-green-800 dark:text-gray-300">
+            Major Preference :
+          </label>
+          <div>
+            <input
+              type="range"
+              required
+              id="majorPreference"
+              min="1"
+              max="100"
+              value={majorPreferences}
+              onChange={(e) => setMajorPreferences(e.target.value)}
+              className="w-full rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
+            />
+          </div>
+          <label className="block text-sm font-medium text-green-800 dark:text-gray-300">
+            Classification Preference :
+          </label>
+          <div>
+            <input
+              type="range"
+              required
+              id="classificationPreference"
+              min="1"
+              max="100"
+              value={classificationPreferences}
+              onChange={(e) => setClassificationPreferences(e.target.value)}
+              className="w-full rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
+            />
+          </div>
           <button
             type="submit"
             className="w-full bg-green-600 text-white font-semibold py-2 rounded-md mt-2 hover:bg-green-800 dark:bg-emerald-500 dark:hover:bg-emerald-800 dark:text-gray-100"

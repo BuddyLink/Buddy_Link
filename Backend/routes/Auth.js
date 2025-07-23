@@ -32,6 +32,7 @@ router.post('/signup', async (req, res) => {
       phone,
       walkCount = 0,
       passwordConfirmation,
+      preferences,
     } = req.body;
 
     if (
@@ -84,6 +85,7 @@ router.post('/signup', async (req, res) => {
         phone,
         walkCount,
         passwordConfirmation: hashedConPassword,
+        preferences,
       },
     });
     req.session.userId = newUser.id;
@@ -421,23 +423,51 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
       }
     }
 
+    const userPreferences = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { preferences: true,
+        major: true,
+        classification: true },
+    },
+    );
+    const totalPreferences = Number(userPreferences.preferences.distance) + Number(userPreferences.preferences.major) + Number(userPreferences.preferences.classification);
+    const distanceWeight = Number(userPreferences.preferences.distance) / totalPreferences;
+    const majorWeight = Number(userPreferences.preferences.major) / totalPreferences;
+    const classificationWeight = Number(userPreferences.preferences.classification) / totalPreferences;
+
     const locationCoordinates = await locationCod(meetingPointId);
     const userLat = locationCoordinates.latitude;
     const userLon = locationCoordinates.longitude;
 
-    const distances = [];
+    const scores = [];
     for (let i = 0; i < filteredBuddies.length; i++) {
-      const locationCoordinatesBuddy = await locationCod(
-        filteredBuddies[i].locationId,
-      );
+      const buddy = filteredBuddies[i];
+      const locationCoordinatesBuddy = await locationCod(buddy.locationId);
       const buddyLat = locationCoordinatesBuddy.latitude;
       const buddyLon = locationCoordinatesBuddy.longitude;
 
       const distance = haversineFormula(userLat, userLon, buddyLat, buddyLon);
 
-      distances.push({ distance, buddy: filteredBuddies[i] });
+      let distanceScore = 0;
+      let majorScore = 0;
+      let classificationScore = 0;
+
+      if (buddy.major === userPreferences.major) {
+        majorScore = 1 * majorWeight;}
+      if (buddy.classification === userPreferences.classification) {
+        classificationScore = 1 * classificationWeight;}
+      if ( distance < 500) {
+        distanceScore = 1 * distanceWeight;
+      }
+      else if ( distance < 1000) {
+        distanceScore = 0.5 * distanceWeight;}
+      else if ( distance < 1500) {
+        distanceScore = 0.25 * distanceWeight;}
+
+      const totalScore = majorScore + classificationScore + distanceScore;
+      scores.push({ totalScore, buddy: buddy });
     }
-    const sorted = mergeSort(distances);
+    const sorted = mergeSort(scores);
     const sortedBuddies = sorted.map((item) => item.buddy);
 
     potentialBuddies.set(cacheKey, sortedBuddies);
