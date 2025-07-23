@@ -223,7 +223,7 @@ router.post('/buddyrequest', async (req, res) => {
     });
     const destinationId = buddyRequest.destination.id;
     const meetingPointId = buddyRequest.meetingPoint.id;
-    const userId = buddyRequest.requester.id;
+    const userId = req.session.userId;
     const matched = await matchedBuddy(
       date,
       time,
@@ -231,14 +231,48 @@ router.post('/buddyrequest', async (req, res) => {
       meetingPointId,
       userId,
     );
+    const latestRequestId = await prisma.buddyRequest.findFirst({
+      orderBy: {
+        id: 'desc',
+      },
+    });
+    const requestId = latestRequestId.id;
+
+    await prisma.user.update({
+      where: { id: req.session.userId },
+      data: { status: 'ACTIVE' },
+    });
+
     res.status(201).json({
       success: true,
       message: 'Request created successfully',
       matched: matched,
+      requestId: requestId,
     });
   } catch (err) {
     console.error('Error creating request:', err);
     res.status(500).json({ error: err.message || 'Internal server error' });
+  }
+});
+
+router.delete('/cancelRequest' , async(req, res)=>{
+  if (!req.session.userId) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  const { id } = req.body;
+  try{
+    await prisma.buddyRequest.delete({
+      where:{ id: parseInt(id) },
+    });
+
+    await prisma.user.update({
+      where: { id: req.session.userId },
+      data: { status: 'INACTIVE' },
+    });
+
+    res.status(200).json({ message: 'Deleted' });
+  }catch(error){
+    res.status(500).json({ error: error.message || 'Failed to delete request' });
   }
 });
 
@@ -373,6 +407,7 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
           lte: endTime,
         },
         destinationPairId: Number(destinationId),
+        status: 'ACTIVE',
       },
     });
 
@@ -554,7 +589,8 @@ router.post('/verify', codeLimiter, async (req, res) => {
     }
     await prisma.user.update({
       where: { id: req.session.userId },
-      data: { walkCount: { increment: 1 } },
+      data: { walkCount: { increment: 1 },
+        status: 'INACTIVE' },
     });
     res.json({
       success: true,
