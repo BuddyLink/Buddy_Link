@@ -4,10 +4,9 @@ importScripts(
 importScripts(
   "https://www.gstatic.com/firebasejs/11.0.0/firebase-messaging-compat.js"
 );
-const fcmApiKey = import.meta.env.VITE_FCM_API_KEY;
 
 const firebaseConfig = {
-  apiKey: fcmApiKey,
+  apiKey: "AIzaSyA-u_TIvRbN6FAQmGsb9xbgqaAtsDmT2OI",
   authDomain: "capstone-project-ef714.firebaseapp.com",
   projectId: "capstone-project-ef714",
   storageBucket: "capstone-project-ef714.firebasestorage.app",
