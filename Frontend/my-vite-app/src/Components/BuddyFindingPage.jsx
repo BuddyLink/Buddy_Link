@@ -1,12 +1,13 @@
 import NavBar from "./NavBar";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MdEmojiPeople } from "react-icons/md";
-import { createMatch } from "./fetchingData";
+import { createMatch, deleteRequest } from "./fetchingData";
 
 const BuddyFindingPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const match = location.state.match;
+  const requestId = location.state.requestId;
 
   const handleClick = async (person) => {
     navigate("/match", { state: person });
@@ -15,8 +16,23 @@ const BuddyFindingPage = () => {
     };
     const response = await createMatch(data);
   };
+
+  const handleDelete = async () => {
+    const data = {
+      id: requestId,
+    };
+    await deleteRequest(data);
+    navigate("/home");
+  };
+
   return (
     <div className="min-h-screen bg-green-50 py-6 px-4 lg:bg-gradient-to-br from-green-100 to-green-50 lg:text-l dark:bg-gray-900 dark:text-white mb-15 dark:bg-gray-900 dark:lg:bg-gradient-to-br dark:lg:from-gray-900 dark:lg:to-gray-800">
+      <button
+        onClick={() => handleDelete()}
+        className="items-center flex gap-1 bg-green-600 dark:bg-emerald-600 text-white px-2 py-2 rounded hover:bg-green-700 transition lg:text-m"
+      >
+        Close
+      </button>
       <h1 className="text-2xl font-bold text-center text-green-700 mb-2 lg:text-4xl lg:mt-4 dark:text-green-300 dark:text-emerald-400">
         Pick a Buddy
       </h1>

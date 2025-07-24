@@ -223,3 +223,23 @@ export async function getPastBuddies() {
     console.error("Failed to get past buddies", error.message);
   }
 }
+
+export async function deleteRequest(data) {
+  try {
+    const response = await fetch(`${baseUrl}/cancelRequest`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    return true;
+  } catch (error) {
+    console.error({ error: error.message } || "Failed to delete request");
+    return false;
+  }
+}

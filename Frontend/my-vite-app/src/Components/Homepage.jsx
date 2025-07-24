@@ -46,7 +46,12 @@ const homePage = ({ profile }) => {
 
             if (response.data.matched.length > 0) {
               setIsSearching(false);
-              navigate("/buddy", { state: { match: response.data.matched } });
+              navigate("/buddy", {
+                state: {
+                  match: response.data.matched,
+                  requestId: response.data.requestId,
+                },
+              });
             }
 
             if (timer < timeDuration) {
@@ -55,7 +60,10 @@ const homePage = ({ profile }) => {
             } else {
               setIsSearching(false);
               return navigate("/buddy", {
-                state: { match: response.data.matched },
+                state: {
+                  match: response.data.matched,
+                  requestId: response.data.requestId,
+                },
               });
             }
           } catch (error) {
@@ -65,7 +73,12 @@ const homePage = ({ profile }) => {
         searchInterval();
       }
       if (response.data.matched.length > 0) {
-        navigate("/buddy", { state: { match: response.data.matched } });
+        navigate("/buddy", {
+          state: {
+            match: response.data.matched,
+            requestId: response.data.requestId,
+          },
+        });
       }
     } else {
       console.error(response.error);
@@ -84,7 +97,7 @@ const homePage = ({ profile }) => {
       <div className="min-h-screen bg-gradient-to-b from-emerald-500 to-green-100 dark:from-gray-900 dark:to-gray-800 flex flex-col gap-5 items-center text-center justify-center">
         <p className="text-3xl text-white ">Searching for Buddy.....</p>
         <Commet color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} />
-        <Timer duration={timeDuration}/>
+        <Timer duration={timeDuration} />
       </div>
     );
   }
