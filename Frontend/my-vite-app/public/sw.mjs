@@ -4,12 +4,13 @@ importScripts(
 importScripts(
   "https://www.gstatic.com/firebasejs/11.0.0/firebase-messaging-compat.js"
 );
+const fcmApiKey = import.meta.env.VITE_FCM_API_KEY;
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA-u_TIvRbN6FAQmGsb9xbgqaAtsDmT2OI",
+  apiKey: fcmApiKey,
   authDomain: "capstone-project-ef714.firebaseapp.com",
   projectId: "capstone-project-ef714",
-  storageBucket: "capstone-project-ef714.firebasestorage.app", 
+  storageBucket: "capstone-project-ef714.firebasestorage.app",
   messagingSenderId: "573306703898",
   appId: "1:573306703898:web:47f462dbbe411aca0801a3",
 };

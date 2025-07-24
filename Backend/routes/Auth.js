@@ -1,8 +1,8 @@
 import { Router } from "express";
 import { hash, compare } from "bcrypt";
 import { PrismaClient } from "@prisma/client";
-const potentialBuddies = new Map();
 const prisma = new PrismaClient();
+const potentialBuddies = new Map();
 const router = Router();
 import moment from "moment";
 import admin from "firebase-admin";
@@ -361,7 +361,7 @@ function merge(leftArray, rightArray) {
   let i = 0;
   let j = 0;
   while (i < leftArray.length && j < rightArray.length) {
-    if (leftArray[i].distance < rightArray[j].distance) {
+    if (leftArray[i].totalScore < rightArray[j].totalScore) {
       merged.push(leftArray[i]);
       i++;
     } else {
@@ -399,7 +399,6 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
   try {
     const dateTimeString = `${date}T${time}:00.000Z`;
     const baseDateTime = moment(dateTimeString);
-
     const endTime = new Date(baseDateTime.clone().add(10, "minutes"));
     const startTime = new Date(baseDateTime.clone().subtract(10, "minutes"));
 
@@ -415,16 +414,7 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
       },
     });
 
-    const cacheKey = `${userId}::${meetingPointId}::[${filteredBuddies.join(
-      ","
-    )}]`;
-
-    for (const key of potentialBuddies.keys()) {
-      if (key === cacheKey) {
-        return potentialBuddies.get(cacheKey);
-      }
-    }
-
+    const scores = [];
     const userPreferences = await prisma.user.findUnique({
       where: { id: userId },
       select: { preferences: true, major: true, classification: true },
@@ -444,41 +434,47 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
     const userLat = locationCoordinates.latitude;
     const userLon = locationCoordinates.longitude;
 
-    const scores = [];
     for (let i = 0; i < filteredBuddies.length; i++) {
       const buddy = filteredBuddies[i];
-      const locationCoordinatesBuddy = await locationCod(buddy.locationId);
-      const buddyLat = locationCoordinatesBuddy.latitude;
-      const buddyLon = locationCoordinatesBuddy.longitude;
+      const buddyId = buddy.id;
+      const cacheKey = `${buddyId}::${meetingPointId}`;
 
-      const distance = haversineFormula(userLat, userLon, buddyLat, buddyLon);
+      let totalScore = 0;
 
-      let distanceScore = 0;
-      let majorScore = 0;
-      let classificationScore = 0;
+      if (potentialBuddies.has(cacheKey)) {
+        totalScore = potentialBuddies.get(cacheKey);
+      } else {
+        const locationCoordinatesBuddy = await locationCod(buddy.locationId);
+        const buddyLat = locationCoordinatesBuddy.latitude;
+        const buddyLon = locationCoordinatesBuddy.longitude;
 
-      if (buddy.major === userPreferences.major) {
-        majorScore = 1 * majorWeight;
+        const distance = haversineFormula(userLat, userLon, buddyLat, buddyLon);
+
+        let distanceScore = 0;
+        let majorScore = 0;
+        let classificationScore = 0;
+
+        if (buddy.major === userPreferences.major) {
+          majorScore = 1 * majorWeight;
+        }
+        if (buddy.classification === userPreferences.classification) {
+          classificationScore = 1 * classificationWeight;
+        }
+        if (distance < 500) {
+          distanceScore = 1 * distanceWeight;
+        } else if (distance < 1000) {
+          distanceScore = 0.5 * distanceWeight;
+        } else if (distance < 1500) {
+          distanceScore = 0.25 * distanceWeight;
+        }
+
+        totalScore = majorScore + classificationScore + distanceScore;
+        potentialBuddies.set(cacheKey, totalScore);
       }
-      if (buddy.classification === userPreferences.classification) {
-        classificationScore = 1 * classificationWeight;
-      }
-      if (distance < 500) {
-        distanceScore = 1 * distanceWeight;
-      } else if (distance < 1000) {
-        distanceScore = 0.5 * distanceWeight;
-      } else if (distance < 1500) {
-        distanceScore = 0.25 * distanceWeight;
-      }
-
-      const totalScore = majorScore + classificationScore + distanceScore;
       scores.push({ totalScore, buddy: buddy });
     }
     const sorted = mergeSort(scores);
     const sortedBuddies = sorted.map((item) => item.buddy);
-
-    potentialBuddies.set(cacheKey, sortedBuddies);
-
     return sortedBuddies;
   } catch (error) {
     console.error("Failed to match");
