@@ -9,8 +9,13 @@ import admin from "firebase-admin";
 import { createRequire } from "module";
 import rateLimit from "express-rate-limit";
 var require = createRequire(import.meta.url);
-
 var serviceAccount = require("../serviceAccountKey.json");
+const veryCloseThershold = 500;
+const moderateThershold = 1000;
+const farThershold = 1500;
+const veryCloseScore = 1;
+const moderateScore = 0.5;
+const farScore = 0.25;
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -231,7 +236,7 @@ router.post("/buddyrequest", async (req, res) => {
       time,
       destinationId,
       meetingPointId,
-      userId
+      userId,
     );
     const latestRequestId = await prisma.buddyRequest.findFirst({
       orderBy: {
@@ -391,7 +396,7 @@ function mergeSort(array, currentDepth = 0, MAX_DEPTH = 50) {
 
   return merge(
     mergeSort(left, currentDepth + 1, MAX_DEPTH),
-    mergeSort(right, currentDepth + 1, MAX_DEPTH)
+    mergeSort(right, currentDepth + 1, MAX_DEPTH),
   );
 }
 
@@ -416,7 +421,7 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
     });
 
     const cacheKey = `${userId}::${meetingPointId}::[${filteredBuddies.join(
-      ","
+      ",",
     )}]`;
 
     for (const key of potentialBuddies.keys()) {
@@ -456,12 +461,6 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
       let distanceScore = 0;
       let majorScore = 0;
       let classificationScore = 0;
-      const veryCloseThershold = 500;
-      const moderateThershold = 1000;
-      const farThershold = 1500;
-      const veryCloseScore = 1;
-      const moderateScore = 0.5;
-      const farScore = 0.25;
 
       if (buddy.major === userPreferences.major) {
         majorScore = 1 * majorWeight;
@@ -674,7 +673,7 @@ router.get("/pastbuddies", async (req, res) => {
       pastBuddies.map((buddy) => ({
         ...buddy.buddyPair,
         matchedAt: buddy.createdAt,
-      }))
+      })),
     );
   } catch (err) {
     console.info(err);
