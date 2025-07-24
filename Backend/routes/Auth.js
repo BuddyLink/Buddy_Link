@@ -9,8 +9,13 @@ import admin from "firebase-admin";
 import { createRequire } from "module";
 import rateLimit from "express-rate-limit";
 var require = createRequire(import.meta.url);
-
 var serviceAccount = require("../serviceAccountKey.json");
+const veryCloseThershold = 500;
+const moderateThershold = 1000;
+const farThershold = 1500;
+const veryCloseScore = 1;
+const moderateScore = 0.5;
+const farScore = 0.25;
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -463,12 +468,12 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
       if (buddy.classification === userPreferences.classification) {
         classificationScore = 1 * classificationWeight;
       }
-      if (distance < 500) {
-        distanceScore = 1 * distanceWeight;
-      } else if (distance < 1000) {
-        distanceScore = 0.5 * distanceWeight;
-      } else if (distance < 1500) {
-        distanceScore = 0.25 * distanceWeight;
+      if (distance < veryCloseThershold) {
+        distanceScore = veryCloseScore * distanceWeight;
+      } else if (distance < moderateThershold) {
+        distanceScore = moderateScore * distanceWeight;
+      } else if (distance < farThershold) {
+        distanceScore = farScore * distanceWeight;
       }
 
       const totalScore = majorScore + classificationScore + distanceScore;
