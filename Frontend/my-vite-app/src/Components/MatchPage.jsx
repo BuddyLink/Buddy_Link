@@ -1,15 +1,27 @@
 import { Link, useLocation } from "react-router-dom";
 import { RiShieldUserFill } from "react-icons/ri";
 import { MdVerifiedUser } from "react-icons/md";
+import { useEffect } from "react";
+import confetti from "canvas-confetti";
 
 const matchPage = () => {
   const location = useLocation();
   const selected = location.state;
 
+  useEffect(() => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.7 },
+      scalar: 1.5,
+      colors: ["#16a34a", "#34d399", "#bbf7d0"],
+    });
+  }, []);
+
   return (
     <div className="flex justify-center bg-gradient-to-br from-emerald-400 to-green-100  items-center min-h-screen bg-gray-100 px-4 dark:from-gray-900 dark:to-gray-800">
       {selected && (
-        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md lg:px-10 lg:py-10 dark:bg-gray-800 dark:text-gray-200 ">
+        <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-md lg:px-20 lg:py-25 dark:bg-gray-800 dark:text-gray-200 ">
           <h1 className="text-2xl lg:text-4xl lg:mb-3 font-bold text-center text-green-700 mb-2 dark:text-emerald-600">
             {" "}
             Buddy Match{" "}
@@ -18,7 +30,7 @@ const matchPage = () => {
             <img
               src={selected.profilePic}
               alt="Buddy Img"
-              className="w-32 h-32 lg:w-40 h-40 rounded-full object-cover"
+              className="w-32 h-32 lg:w-45 lg:h-45 rounded-full object-cover"
               loading="lazy"
               style={{
                 maxWidth: "160px",
@@ -28,7 +40,7 @@ const matchPage = () => {
               }}
             />
           </div>
-          <div className=" text-left space-y-1 text-gray-700 dark:text-gray-300">
+          <div className=" text-left space-y-1 text-gray-700 dark:text-gray-300 lg:text-xl">
             <p>
               <span className="font-semibold"> Name: </span> {selected.name}{" "}
               {selected.surname}
@@ -55,15 +67,15 @@ const matchPage = () => {
               })}
             </p>
           </div>
-          <div className="mt-4 flex justify-center gap-5">
+          <div className="mt-4 flex justify-center gap-5 lg:mb-5">
             <Link to="/security">
-              <button className="flex items-center gap-1 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-700 transition dark:bg-gray-400 dark:gray-200">
+              <button className="flex items-center gap-1 bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-700 transition dark:bg-gray-400 dark:gray-200 lg:text-xl">
                 <RiShieldUserFill />
                 Safety
               </button>
             </Link>
             <Link to="/verify">
-              <button className="flex items-center gap-1 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition dark:bg-emerald-500 dark:hover:bg-emerald-700 ">
+              <button className="flex items-center gap-1 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition dark:bg-emerald-500 dark:hover:bg-emerald-700 lg:text-xl">
                 <MdVerifiedUser />
                 Verify
               </button>
