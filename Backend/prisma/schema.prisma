@@ -32,6 +32,8 @@ model User{
 	match 			  Match[] @relation("Match")
 	token 			  Token[] @relation("Token")
 	codeInput 		  CodeInput[] @relation("CodeInput")
+	status 			  String @default("INACTIVE")
+	preferences       Json @default("{}")
 }
 model BuddyRequest {
 	id 	              Int @id @default(autoincrement())
@@ -68,6 +70,7 @@ model BuddyPair{
 	confirmedAt        DateTime?
 	createdAt          DateTime @default(now())
 	match 			   Match[] @relation("BuddyMatch")
+	status 			   String @default("ACTIVE")
 }
 enum RequestStatus{
 	PENDING

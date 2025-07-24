@@ -9,13 +9,15 @@ import StartJourney from "./Components/StartJourney";
 import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import MatchPage from "./Components/MatchPage";
+import PastBuddies from "./Components/PastBuddies";
 import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { createToken } from "./Components/fetchingData";
 const vapidKey = import.meta.env.VITE_VAPID_KEY;
+const fcmApiKey = import.meta.env.VITE_FCM_API_KEY;
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA-u_TIvRbN6FAQmGsb9xbgqaAtsDmT2OI",
+  apiKey: fcmApiKey,
   authDomain: "capstone-project-ef714.firebaseapp.com",
   projectId: "capstone-project-ef714",
   storageBucket: "capstone-project-ef714.firebasestorage.app",
@@ -93,6 +95,7 @@ function App() {
         <Route path="/security" element={<SecurityPage />} />
         <Route path="/match" element={<MatchPage />} />
         <Route path="/start" element={<StartJourney />} />
+        <Route path="/past" element={<PastBuddies />} />
       </Routes>
     </div>
   );
