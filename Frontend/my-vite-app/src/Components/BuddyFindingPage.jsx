@@ -27,12 +27,17 @@ const BuddyFindingPage = () => {
 
   return (
     <div className="min-h-screen bg-green-50 py-6 px-4 lg:bg-gradient-to-br from-green-100 to-green-50 lg:text-l dark:bg-gray-900 dark:text-white mb-15 dark:bg-gray-900 dark:lg:bg-gradient-to-br dark:lg:from-gray-900 dark:lg:to-gray-800">
-      <button
-        onClick={() => handleDelete()}
-        className="items-center flex gap-1 bg-green-600 dark:bg-emerald-600 text-white px-2 py-2 rounded hover:bg-green-700 transition lg:text-m"
-      >
-        Close
-      </button>
+      <div className="relative group">
+        <button
+          onClick={() => handleDelete()}
+          className="items-center flex gap-1 bg-green-600 dark:bg-emerald-600 text-white px-2 py-2 rounded hover:bg-green-700 transition lg:text-m"
+        >
+          Close
+        </button>
+        <div className="absolute z-10 px-3 py-2 text-sm font-medium bg-gray-100 mt-1 text-gray-900 border border-green-700 rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:bg-gray-700">
+          Clicking will cancel your request.
+        </div>
+      </div>
       <h1 className="text-2xl font-bold text-center text-green-700 mb-2 lg:text-4xl lg:mt-4 dark:text-green-300 dark:text-emerald-400">
         Pick a Buddy
       </h1>

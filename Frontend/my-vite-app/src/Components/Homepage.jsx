@@ -5,6 +5,7 @@ import { getLocations, createRequest } from "./fetchingData";
 import { useNavigate } from "react-router-dom";
 import { Commet } from "react-loading-indicators";
 import Timer from "./Timer";
+import { TypeAnimation } from "react-type-animation";
 
 const homePage = ({ profile }) => {
   const [destination, setDestination] = useState("");
@@ -95,9 +96,17 @@ const homePage = ({ profile }) => {
   if (isSearching) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-emerald-500 to-green-100 dark:from-gray-900 dark:to-gray-800 flex flex-col gap-5 items-center text-center justify-center">
-        <p className="text-3xl text-white ">Searching for Buddy.....</p>
+        <TypeAnimation
+          sequence={["Searching for Buddy...", 1000, ""]}
+          speed={25}
+          wrapper="h1"
+          repeat={Infinity}
+          className="text-3xl text-white font-semibold"
+        />
         <Commet color={["#32cd32", "#327fcd", "#cd32cd", "#cd8032"]} />
-        <Timer duration={timeDuration} />
+        <div className="bg-white/20 px-5 py-2 font-semi-bold rounded-full text-l text-gray-900 tracking-wider border border-white/30 shadow-md backdrop-blur-md dark:bg-white/10 dark:text-white dark:border-white/20 ">
+          <Timer duration={timeDuration} />
+        </div>
       </div>
     );
   }
