@@ -112,3 +112,4 @@ model CodeInput{
 	userId     Int
 	user       User  @relation("CodeInput", fields: [userId], references:[id])
 }
+
