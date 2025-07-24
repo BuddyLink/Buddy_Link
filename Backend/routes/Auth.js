@@ -236,7 +236,7 @@ router.post("/buddyrequest", async (req, res) => {
       time,
       destinationId,
       meetingPointId,
-      userId,
+      userId
     );
     const latestRequestId = await prisma.buddyRequest.findFirst({
       orderBy: {
@@ -396,7 +396,7 @@ function mergeSort(array, currentDepth = 0, MAX_DEPTH = 50) {
 
   return merge(
     mergeSort(left, currentDepth + 1, MAX_DEPTH),
-    mergeSort(right, currentDepth + 1, MAX_DEPTH),
+    mergeSort(right, currentDepth + 1, MAX_DEPTH)
   );
 }
 
@@ -421,7 +421,7 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
     });
 
     const cacheKey = `${userId}::${meetingPointId}::[${filteredBuddies.join(
-      ",",
+      ","
     )}]`;
 
     for (const key of potentialBuddies.keys()) {
@@ -673,7 +673,7 @@ router.get("/pastbuddies", async (req, res) => {
       pastBuddies.map((buddy) => ({
         ...buddy.buddyPair,
         matchedAt: buddy.createdAt,
-      })),
+      }))
     );
   } catch (err) {
     console.info(err);

@@ -14,9 +14,10 @@ import { initializeApp } from "firebase/app";
 import { getMessaging, getToken, onMessage } from "firebase/messaging";
 import { createToken } from "./Components/fetchingData";
 const vapidKey = import.meta.env.VITE_VAPID_KEY;
+const fcmApiKey = import.meta.env.VITE_FCM_API_KEY;
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA-u_TIvRbN6FAQmGsb9xbgqaAtsDmT2OI",
+  apiKey: fcmApiKey,
   authDomain: "capstone-project-ef714.firebaseapp.com",
   projectId: "capstone-project-ef714",
   storageBucket: "capstone-project-ef714.firebasestorage.app",
