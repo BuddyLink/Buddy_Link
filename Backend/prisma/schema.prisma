@@ -33,6 +33,7 @@ model User{
 	token 			  Token[] @relation("Token")
 	codeInput 		  CodeInput[] @relation("CodeInput")
 	status 			  String @default("INACTIVE")
+	preferences       Json @default("{}")
 }
 model BuddyRequest {
 	id 	              Int @id @default(autoincrement())
