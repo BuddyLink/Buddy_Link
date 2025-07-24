@@ -4,10 +4,24 @@ import { PrismaClient } from '@prisma/client';
 const potentialBuddies = new Map();
 const prisma = new PrismaClient();
 const router = Router();
-import moment from 'moment';
-import admin from 'firebase-admin';
-import { createRequire } from 'module';
+import moment from "moment";
+import admin from "firebase-admin";
+import { createRequire } from "module";
+import rateLimit from "express-rate-limit";
 var require = createRequire(import.meta.url);
+var serviceAccount = require("../serviceAccountKey.json");
+const veryCloseThershold = 500;
+const moderateThershold = 1000;
+const farThershold = 1500;
+const veryCloseScore = 1;
+const moderateScore = 0.5;
+const farScore = 0.25;
+
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount),
+  });
+}
 
 var serviceAccount = require('../serviceAccountKey.json');
 
@@ -31,6 +45,7 @@ router.post('/signup', async (req, res) => {
       phone,
       walkCount = 0,
       passwordConfirmation,
+      preferences,
     } = req.body;
 
     if (
@@ -83,6 +98,7 @@ router.post('/signup', async (req, res) => {
         phone,
         walkCount,
         passwordConfirmation: hashedConPassword,
+        preferences,
       },
     });
     req.session.userId = newUser.id;
@@ -181,7 +197,7 @@ router.get('/profile', async (req, res) => {
   }
 });
 
-router.get('/locations', async (req, res) => {
+router.get("/locations", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
@@ -189,7 +205,7 @@ router.get('/locations', async (req, res) => {
     const locations = await prisma.location.findMany();
     res.json(locations);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to fetch locations', error: err });
+    res.status(500).json({ message: "Failed to fetch locations", error: err });
   }
 });
 
@@ -222,7 +238,7 @@ router.post('/buddyrequest', async (req, res) => {
     });
     const destinationId = buddyRequest.destination.id;
     const meetingPointId = buddyRequest.meetingPoint.id;
-    const userId = buddyRequest.requester.id;
+    const userId = req.session.userId;
     const matched = await matchedBuddy(
       date,
       time,
@@ -230,10 +246,23 @@ router.post('/buddyrequest', async (req, res) => {
       meetingPointId,
       userId,
     );
+    const latestRequestId = await prisma.buddyRequest.findFirst({
+      orderBy: {
+        id: "desc",
+      },
+    });
+    const requestId = latestRequestId.id;
+
+    await prisma.user.update({
+      where: { id: req.session.userId },
+      data: { status: "ACTIVE" },
+    });
+
     res.status(201).json({
       success: true,
       message: 'Request created successfully',
       matched: matched,
+      requestId: requestId,
     });
   } catch (err) {
     console.error('Error creating request:', err);
@@ -241,7 +270,30 @@ router.post('/buddyrequest', async (req, res) => {
   }
 });
 
-router.post('/logout', async (req, res) => {
+router.delete("/cancelRequest", async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  const { id } = req.body;
+  try {
+    await prisma.buddyRequest.delete({
+      where: { id: parseInt(id) },
+    });
+
+    await prisma.user.update({
+      where: { id: req.session.userId },
+      data: { status: "INACTIVE" },
+    });
+
+    res.status(200).json({ message: "Deleted" });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: error.message || "Failed to delete request" });
+  }
+});
+
+router.post("/logout", async (req, res) => {
   req.session.destroy((err) => {
     if (err) {
       return res.status(500).json({ message: 'Internal server error' });
@@ -279,7 +331,7 @@ router.patch('/profile/edit', async (req, res) => {
   } catch (error) {
     res
       .status(500)
-      .json({ message: 'Failed to update Profile', error: error.message });
+      .json({ message: "Failed to update Profile", error: error.message });
   }
 });
 
@@ -313,7 +365,7 @@ async function locationCod(Id) {
     });
     return locationCoordinates;
   } catch (error) {
-    console.error('Failed to get coordinates', error);
+    console.error("Failed to get coordinates", error);
   }
 }
 // resource: https://www.youtube.com/watch?v=x_Z9FcAPmbk
@@ -372,6 +424,7 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
           lte: endTime,
         },
         destinationPairId: Number(destinationId),
+        status: "ACTIVE",
       },
     });
 
@@ -385,23 +438,56 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
       }
     }
 
+    const userPreferences = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { preferences: true, major: true, classification: true },
+    });
+    const totalPreferences =
+      Number(userPreferences.preferences.distance) +
+      Number(userPreferences.preferences.major) +
+      Number(userPreferences.preferences.classification);
+    const distanceWeight =
+      Number(userPreferences.preferences.distance) / totalPreferences;
+    const majorWeight =
+      Number(userPreferences.preferences.major) / totalPreferences;
+    const classificationWeight =
+      Number(userPreferences.preferences.classification) / totalPreferences;
+
     const locationCoordinates = await locationCod(meetingPointId);
     const userLat = locationCoordinates.latitude;
     const userLon = locationCoordinates.longitude;
 
-    const distances = [];
+    const scores = [];
     for (let i = 0; i < filteredBuddies.length; i++) {
-      const locationCoordinatesBuddy = await locationCod(
-        filteredBuddies[i].locationId,
-      );
+      const buddy = filteredBuddies[i];
+      const locationCoordinatesBuddy = await locationCod(buddy.locationId);
       const buddyLat = locationCoordinatesBuddy.latitude;
       const buddyLon = locationCoordinatesBuddy.longitude;
 
       const distance = haversineFormula(userLat, userLon, buddyLat, buddyLon);
 
-      distances.push({ distance, buddy: filteredBuddies[i] });
+      let distanceScore = 0;
+      let majorScore = 0;
+      let classificationScore = 0;
+
+      if (buddy.major === userPreferences.major) {
+        majorScore = 1 * majorWeight;
+      }
+      if (buddy.classification === userPreferences.classification) {
+        classificationScore = 1 * classificationWeight;
+      }
+      if (distance < veryCloseThershold) {
+        distanceScore = veryCloseScore * distanceWeight;
+      } else if (distance < moderateThershold) {
+        distanceScore = moderateScore * distanceWeight;
+      } else if (distance < farThershold) {
+        distanceScore = farScore * distanceWeight;
+      }
+
+      const totalScore = majorScore + classificationScore + distanceScore;
+      scores.push({ totalScore, buddy: buddy });
     }
-    const sorted = mergeSort(distances);
+    const sorted = mergeSort(scores);
     const sortedBuddies = sorted.map((item) => item.buddy);
 
     potentialBuddies.set(cacheKey, sortedBuddies);
@@ -413,7 +499,53 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
   }
 }
 
-router.post('/token', async (req, res) => {
+router.post("/token", async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try {
+    const { fcmToken } = req.body;
+    const existingToken = await prisma.token.findFirst({
+      where: {
+        fcmToken,
+        userId: req.session.userId,
+      },
+    });
+    if (!existingToken) {
+      await prisma.token.create({
+        data: {
+          fcmToken,
+          user: {
+            connect: { id: req.session.userId },
+          },
+        },
+      });
+    }
+    res.status(201).json({
+      success: true,
+      message: "Token captured",
+    });
+  } catch (error) {
+    console.error("Error while capturing token");
+    res.status(500).json({ error: error.message || "Internal server error" });
+  }
+});
+
+function randomNumberGenerator() {
+  const randomNumber = new Uint8Array(5);
+  crypto.getRandomValues(randomNumber);
+  let digit = [];
+  for (var i = 0; i < randomNumber.length; i++) {
+    let number = randomNumber[i];
+    const numberArray = number.toString().split("").map(Number);
+    let firstDigit = numberArray[0];
+    digit.push(firstDigit);
+    var verificationCode = digit.join("");
+  }
+  return verificationCode;
+}
+
+router.post("/match", async (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
@@ -456,14 +588,6 @@ function randomNumberGenerator() {
     digit.push(firstDigit);
     var verificationCode = digit.join('');
   }
-  return verificationCode;
-}
-
-router.post('/match', async (req, res) => {
-  if (!req.session.userId) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-
   try {
     const { buddyPair } = req.body;
     const matchedPair = await prisma.match.create({
@@ -477,16 +601,26 @@ router.post('/match', async (req, res) => {
       },
     });
     const code = randomNumberGenerator();
+    const hashedCode = await hash(code, 10);
+    await prisma.codeInput.create({
+      data: {
+        codeInput: hashedCode,
+        user: {
+          connect: { id: req.session.userId },
+        },
+      },
+    });
+
     const token = await prisma.token.findFirst({
       orderBy: {
-        id: 'desc',
+        id: "desc",
       },
     });
     const Token = token.fcmToken;
     try {
       const message = {
         notification: {
-          title: 'Verification Code',
+          title: "Verification Code",
           body: code,
         },
         token: Token,
@@ -495,44 +629,15 @@ router.post('/match', async (req, res) => {
         .messaging()
         .send(message)
         .then((response) => {
-          console.info('Successfully', response);
+          console.info("Successfully", response);
         })
         .catch((error) => {
-          console.error('Error sending message', error);
+          console.error("Error sending message", error);
         });
     } catch (error) {
-      console.error('Error while sending message', error);
+      console.error("Error while sending message", error);
     }
 
-    res.status(201).json({
-      success: true,
-      message: 'Match captured',
-    });
-  } catch (error) {
-    console.error('Error while capturing match');
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
-
-router.post("/token", async (req, res) => {
-  if (!req.session.userId) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-  try {
-    const { fcmToken } = req.body;
-    const existingToken = await prisma.token.findUnique({
-      where: { fcmToken },
-    });
-    if (!existingToken) {
-      await prisma.token.create({
-        data: {
-          fcmToken,
-          user: {
-            connect: { id: req.session.userId },
-          },
-        },
-      });
-    }
     res.status(201).json({
       success: true,
       message: "Token captured",
@@ -540,6 +645,84 @@ router.post("/token", async (req, res) => {
   } catch (error) {
     console.error("Error while capturing token");
     res.status(500).json({ error: error.message || "Internal server error" });
+  }
+});
+
+const codeLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 3,
+  message: { error: "Too many attempts. Please try again later" },
+});
+
+router.post("/verify", codeLimiter, async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try {
+    const { codeInput } = req.body;
+    const code = await prisma.codeInput.findFirst({
+      where: { userId: req.session.userId },
+      orderBy: {
+        id: "desc",
+      },
+    });
+    if (!code) {
+      return res.status(404).json({ message: "No code found for user" });
+    }
+    const codeMatch = await compare(codeInput, code.codeInput);
+
+    if (!codeMatch) {
+      return res.status(401).json({ message: "Verification code incorrect" });
+    }
+    await prisma.user.update({
+      where: { id: req.session.userId },
+      data: { walkCount: { increment: 1 }, status: "INACTIVE" },
+    });
+    res.json({
+      success: true,
+      message: "Code verified",
+    });
+  } catch (error) {
+    console.error("Error while verifying code", error);
+    res.status(500).json({ error: error.message || "Internal server error" });
+  }
+});
+
+router.get("/pastbuddies", async (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  try {
+    const pastBuddies = await prisma.match.findMany({
+      where: { userId: req.session.userId },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        createdAt: true,
+        buddyPair: {
+          select: {
+            id: true,
+            name: true,
+            surname: true,
+            major: true,
+            classification: true,
+            walkCount: true,
+            profilePic: true,
+          },
+        },
+      },
+      take: 5,
+    });
+    res.json(
+      pastBuddies.map((buddy) => ({
+        ...buddy.buddyPair,
+        matchedAt: buddy.createdAt,
+      }))
+    );
+  } catch (err) {
+    console.info(err);
+    res.status(500).json({ message: `Internal server error ${err}` });
   }
 });
 

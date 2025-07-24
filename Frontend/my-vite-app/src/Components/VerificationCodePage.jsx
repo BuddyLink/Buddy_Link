@@ -1,50 +1,66 @@
-import { MdVerifiedUser } from 'react-icons/md';
-import NavBar from './NavBar';
+import { MdVerifiedUser } from "react-icons/md";
+import { insertCode } from "./fetchingData";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import NavBar from "./NavBar";
 
 const verificationCodePage = () => {
+  const [inputs, setInputs] = useState(Array(5).fill(""));
+  const navigate = useNavigate();
+
+  const handleChange = (value, index) => {
+    const insertedCode = [...inputs];
+    insertedCode[index] = value;
+    setInputs(insertedCode);
+  };
+
+  const handleClick = async (e) => {
+    const codeInput = inputs.join("");
+    e.preventDefault();
+    const data = {
+      codeInput,
+    };
+    const response = await insertCode(data);
+    if (response.success) {
+      navigate("/start");
+    } else {
+      if (response.status === 429) {
+        alert("Too many attempts. Please try again later!");
+      } else if (response.status === 401) {
+        alert("Incorrect Verification Code");
+      } else {
+        alert(response.message);
+      }
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-emerald-400 to-green-100 px-4 ">
-      <div className="bg-white p-6 rounded-lg shadow-md w-full text-center sm:p-6 md:p-10 w-80 sm:w-96 md:w-[30rem] lg:-[36rem] ">
-        <MdVerifiedUser className="text-5xl text-green-600 mx-auto mb-2 md:text-8xl" />
-        <h1 className="text-xl font-semibold text-gray-800 mb-2 md:text-2xl">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-emerald-400 to-green-100 px-4 dark:from-gray-900 dark:to-gray-800">
+      <div className="bg-white p-6 rounded-lg shadow-md w-full text-center sm:p-6 md:p-10 w-80 sm:w-96 md:w-[30rem] lg:-[36rem] dark:bg-gray-800 dark:text-gray-200 ">
+        <MdVerifiedUser className="text-5xl text-green-600 mx-auto mb-2 md:text-8xl " />
+        <h1 className="text-xl font-semibold text-gray-800 mb-2 md:text-2xl dark:text-gray-100">
           Verify Your Buddy
         </h1>
-        <p className="text-gray-600 mb-4 text-sm md:text-m">
-          Enter Verification Code:{' '}
+        <p className="text-gray-600 mb-4 text-sm md:text-m dark:text-gray-300">
+          Enter Verification Code:{" "}
         </p>
         <div className="flex justify-center gap-2 mb-6">
-          <input
-            type="tel"
-            maxLength="1"
-            inputMode="numeric"
-            className="w-12 h-12 text-center border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-          <input
-            type="tel"
-            maxLength="1"
-            inputMode="numeric"
-            className="w-12 h-12 text-center border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-          <input
-            type="tel"
-            maxLength="1"
-            inputMode="numeric"
-            className="w-12 h-12 text-center border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-          <input
-            type="tel"
-            maxLength="1"
-            inputMode="numeric"
-            className="w-12 h-12 text-center border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
-          <input
-            type="tel"
-            maxLength="1"
-            inputMode="numeric"
-            className="w-12 h-12 text-center border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+          {inputs.map((digit, index) => (
+            <input
+              key={index}
+              type="tel"
+              maxLength="1"
+              inputMode="numeric"
+              value={digit}
+              onChange={(e) => handleChange(e.target.value, index)}
+              className="w-12 h-12 text-center border border-gray-300 rounded-md text-lg focus:outline-none focus:ring-2 focus:ring-green-500 dark:border-gray-500  dark:bg-gray-700 dark:text-gray-200"
+            />
+          ))}
         </div>
-        <button className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition">
+        <button
+          onClick={handleClick}
+          className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition dark:bg-emerald-600 dark:hover:bg-emerald-800"
+        >
           Verify
         </button>
       </div>

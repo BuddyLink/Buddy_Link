@@ -14,7 +14,7 @@ app.use(
   cors({
     origin: CLIENT_URL,
     credentials: true,
-  })
+  }),
 );
 
 app.use(
@@ -23,7 +23,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: { secure: false, httpOnly: true, maxAge: 1000 * 60 * 60 },
-  })
+  }),
 );
 
 app.use(AuthRoutes);

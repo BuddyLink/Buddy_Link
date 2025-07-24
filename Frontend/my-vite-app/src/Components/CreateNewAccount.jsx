@@ -1,19 +1,22 @@
-import { useState } from 'react';
-import { createNewAccount, getMe } from './fetchingData';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { createNewAccount, getMe } from "./fetchingData";
+import { useNavigate } from "react-router-dom";
 
 const createNewUserAccount = () => {
-  const [name, setName] = useState('');
-  const [surname, setSurname] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [major, setMajor] = useState('');
-  const [classification, setClassification] = useState('');
-  const [profilePicture, setProfilePicture] = useState('');
-  const [imagePreview, setImagePreview] = useState('');
-  const [preferredContact, setPreferredContact] = useState('');
-  const [phone, setPhone] = useState('');
-  const [passwordConfirmation,setPasswordConfirmation] = useState('');
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [major, setMajor] = useState("");
+  const [classification, setClassification] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [preferredContact, setPreferredContact] = useState("");
+  const [phone, setPhone] = useState("");
+  const [passwordConfirmation, setPasswordConfirmation] = useState("");
+  const [distancePreferences, setDistancePreferences] = useState("");
+  const [majorPreferences, setMajorPreferences] = useState("");
+  const [classificationPreferences, setClassificationPreferences] = useState("");
   const navigate = useNavigate();
 
   const handleProfile = (e) => {
@@ -27,6 +30,11 @@ const createNewUserAccount = () => {
       reader.readAsDataURL(file);
     }
   };
+
+  let preferences = {};
+  preferences["distance"] = distancePreferences;
+  preferences["major"] = majorPreferences;
+  preferences["classification"] = classificationPreferences;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -42,21 +50,22 @@ const createNewUserAccount = () => {
       phone,
       walkCount: Number(0),
       passwordConfirmation,
+      preferences,
     };
     const result = await createNewAccount(data);
     if (result?.success) {
       const user = await getMe();
       if (user) {
-        navigate('/');
+        navigate("/");
       }
     } else {
-      alert(result.error || 'User not created');
+      alert(result.error || "User not created");
     }
   };
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 to-green-300 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
-      <div className="bg-[#f1fff3] rounded-2xl shadow-md p-6 w-full max-w-md sm:max-w-lg lg:max-w-xl sm:p-10 mt-3 mb-3 ">
-        <h2 className="text-2xl lg:text-4xl font-semibold text-green-800 mb-4 text-center">
+    <div className="min-h-screen bg-gradient-to-br from-green-100 to-green-300 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
+      <div className="bg-[#f1fff3]  dark:bg-gray-800 rounded-2xl shadow-md p-6 w-full max-w-md sm:max-w-lg lg:max-w-xl sm:p-10 mt-3 mb-3 dark:text-gray-600">
+        <h2 className="text-2xl lg:text-4xl font-semibold text-green-800 mb-4 text-center dark:text-emerald-600">
           Create New Account
         </h2>
         <form className="space-y-4" onSubmit={handleSubmit}>
@@ -67,7 +76,7 @@ const createNewUserAccount = () => {
               placeholder="Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500"
+              className="p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
             />
             <input
               type="text"
@@ -75,7 +84,7 @@ const createNewUserAccount = () => {
               placeholder="Surname"
               value={surname}
               onChange={(e) => setSurname(e.target.value)}
-              className="p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500"
+              className="p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
             />
           </div>
           <input
@@ -84,7 +93,7 @@ const createNewUserAccount = () => {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500"
+            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
           />
           <input
             type="password"
@@ -92,7 +101,7 @@ const createNewUserAccount = () => {
             placeholder="Password (atleast 6 characters)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500"
+            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
           />
           <input
             type="password"
@@ -100,7 +109,7 @@ const createNewUserAccount = () => {
             placeholder="Password Confirmation"
             value={passwordConfirmation}
             onChange={(e) => setPasswordConfirmation(e.target.value)}
-            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500"
+            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
           />
           <input
             type="text"
@@ -108,14 +117,14 @@ const createNewUserAccount = () => {
             placeholder="Major"
             value={major}
             onChange={(e) => setMajor(e.target.value)}
-            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500"
+            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
           />
           <select
             name="classification"
             required
             value={classification}
             onChange={(e) => setClassification(e.target.value)}
-            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] text-gray-500 hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] text-gray-500 hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white "
           >
             <option className="hover: bg-green-100" value="">
               Select a Classification
@@ -134,7 +143,7 @@ const createNewUserAccount = () => {
             </option>
           </select>
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-green-800">
+            <label className="block text-sm font-medium text-green-800 dark:text-gray-300">
               Upload Profile Picture :
             </label>
             <input
@@ -142,7 +151,7 @@ const createNewUserAccount = () => {
               required
               accept="image/*"
               onChange={handleProfile}
-              className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+              className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:file:text-gray-300 dark:file:bg-gray-600 dark:hover:file:bg-gray-800"
             />
             {imagePreview && (
               <div className="mt-2 flex justify-center">
@@ -155,7 +164,7 @@ const createNewUserAccount = () => {
             )}
           </div>
           <select
-            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] text-gray-500 hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400"
+            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] text-gray-500 hover:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-400 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
             placeholder="Preferred Contact"
             value={preferredContact}
             onChange={(e) => setPreferredContact(e.target.value)}
@@ -175,12 +184,60 @@ const createNewUserAccount = () => {
             placeholder="Phone Number"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500"
+            className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
             maxLength="15"
           />
+          <h2 className="font-semibold text-green-800 dark:text-emerald-600">
+            Set your pairing preferences below :{" "}
+          </h2>
+          <label className="block text-sm font-medium text-green-800 dark:text-gray-300">
+            Distance Preference :
+          </label>
+          <div>
+            <input
+              type="range"
+              required
+              id="distancePreference"
+              min="1"
+              max="100"
+              value={distancePreferences}
+              onChange={(e) => setDistancePreferences(e.target.value)}
+              className="w-full rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
+            />
+          </div>
+          <label className="block text-sm font-medium text-green-800 dark:text-gray-300">
+            Major Preference :
+          </label>
+          <div>
+            <input
+              type="range"
+              required
+              id="majorPreference"
+              min="1"
+              max="100"
+              value={majorPreferences}
+              onChange={(e) => setMajorPreferences(e.target.value)}
+              className="w-full rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
+            />
+          </div>
+          <label className="block text-sm font-medium text-green-800 dark:text-gray-300">
+            Classification Preference :
+          </label>
+          <div>
+            <input
+              type="range"
+              required
+              id="classificationPreference"
+              min="1"
+              max="100"
+              value={classificationPreferences}
+              onChange={(e) => setClassificationPreferences(e.target.value)}
+              className="w-full rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
+            />
+          </div>
           <button
             type="submit"
-            className="w-full bg-green-600 text-white font-semibold py-2 rounded-md mt-2 hover:bg-green-800"
+            className="w-full bg-green-600 text-white font-semibold py-2 rounded-md mt-2 hover:bg-green-800 dark:bg-emerald-500 dark:hover:bg-emerald-800 dark:text-gray-100"
           >
             Create New Account
           </button>

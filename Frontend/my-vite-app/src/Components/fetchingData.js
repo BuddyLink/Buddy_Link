@@ -184,3 +184,62 @@ export async function createToken(data) {
     return { error: error.message };
   }
 }
+
+export async function insertCode(data) {
+  try {
+    const response = await fetch(`${baseUrl}/verify`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+    const result = await response.json();
+    if (!response.ok) {
+      return {
+        success: false,
+        message: result.message || "Verification failed",
+        status: response.status,
+      };
+    }
+    return { success: true, data: result };
+  } catch (error) {
+    return { success: false, message: error.message || "Server error" };
+  }
+}
+
+export async function getPastBuddies() {
+  try {
+    const response = await fetch(`${baseUrl}/pastbuddies`, {
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Failed to get past buddies", error.message);
+  }
+}
+
+export async function deleteRequest(data) {
+  try {
+    const response = await fetch(`${baseUrl}/cancelRequest`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      throw new Error(`Response status: ${response.status}`);
+    }
+    return true;
+  } catch (error) {
+    console.error({ error: error.message } || "Failed to delete request");
+    return false;
+  }
+}
