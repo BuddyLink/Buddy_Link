@@ -366,45 +366,45 @@ async function locationCod(Id) {
     console.error("Failed to get coordinates", error);
   }
 }
-// resource: https://www.youtube.com/watch?v=x_Z9FcAPmbk
-function merge(leftArray, rightArray) {
-  const merged = [];
-  let i = 0;
-  let j = 0;
-  while (i < leftArray.length && j < rightArray.length) {
-    if (leftArray[i].totalScore > rightArray[j].totalScore) {
-      merged.push(leftArray[i]);
-      i++;
-    } else {
-      merged.push(rightArray[j]);
-      j++;
-    }
+
+class Node {
+  constructor(score,buddy) {
+    this.score = score;
+    this.buddy = buddy;
+    this.left = null;
+    this.right = null;
   }
-  while (i < leftArray.length) {
-    merged.push(leftArray[i]);
-    i++;
+}
+function insert(root, score,buddy) {
+  if (root == null)
+    return new Node(score,buddy);
+
+  if (root.buddy === buddy)
+    return root;
+
+  if(score < root.score){
+    root.left = insert(root.left, score,buddy);
+  }else if(score > root.score){
+    root.right = insert(root.right, score,buddy);
   }
-  while (j < rightArray.length) {
-    merged.push(rightArray[j]);
-    j++;
-  }
-  return merged;
+  return root;
 }
 
-function mergeSort(array, currentDepth = 0, MAX_DEPTH = 50) {
-  if (currentDepth > MAX_DEPTH) {
-    throw new Error('Maximum recursion depth has exceeded!!');
+function inorder(root,result) {
+  if (root != null) {
+    inorder(root.right, result);
+    result.push(JSON.parse(root.buddy));
+    inorder(root.left, result);
   }
-  if (array.length <= 1) return array;
-  const half = Math.floor(array.length / 2);
-  const left = array.slice(0, half);
-  const right = array.slice(half);
-
-  return merge(
-    mergeSort(left, currentDepth + 1, MAX_DEPTH),
-    mergeSort(right, currentDepth + 1, MAX_DEPTH),
-  );
 }
+
+function sorted(root) {
+  let result = [];
+  inorder(root, result);
+  return result;
+}
+
+let root = null;
 
 async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
   try {
@@ -425,7 +425,6 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
       },
     });
 
-    const scores = [];
     const userPreferences = await prisma.user.findUnique({
       where: { id: userId },
       select: { preferences: true, major: true, classification: true },
@@ -481,11 +480,10 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
 
         totalScore = majorScore + classificationScore + distanceScore;
         potentialBuddies.set(cacheKey, totalScore);
+        root = insert(root, totalScore, JSON.stringify(buddy));
       }
-      scores.push({ totalScore, buddy: buddy });
     }
-    const sorted = mergeSort(scores);
-    const sortedBuddies = sorted.map((item) => item.buddy);
+    const sortedBuddies = sorted(root);
     return sortedBuddies;
   } catch (error) {
     console.error('Failed to match');
