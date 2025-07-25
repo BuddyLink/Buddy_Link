@@ -23,8 +23,6 @@ if (!admin.apps.length) {
   });
 }
 
-var serviceAccount = require('../serviceAccountKey.json');
-
 if (!admin.apps.length) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
@@ -374,7 +372,7 @@ function merge(leftArray, rightArray) {
   let i = 0;
   let j = 0;
   while (i < leftArray.length && j < rightArray.length) {
-    if (leftArray[i].totalScore < rightArray[j].totalScore) {
+    if (leftArray[i].totalScore > rightArray[j].totalScore) {
       merged.push(leftArray[i]);
       i++;
     } else {
@@ -463,32 +461,31 @@ async function matchedBuddy(date, time, destinationId, meetingPointId, userId) {
 
         const distance = haversineFormula(userLat, userLon, buddyLat, buddyLon);
 
-      let distanceScore = 0;
-      let majorScore = 0;
-      let classificationScore = 0;
+        let distanceScore = 0;
+        let majorScore = 0;
+        let classificationScore = 0;
 
-      if (buddy.major === userPreferences.major) {
-        majorScore = 1 * majorWeight;
-      }
-      if (buddy.classification === userPreferences.classification) {
-        classificationScore = 1 * classificationWeight;
-      }
-      if (distance < veryCloseThershold) {
-        distanceScore = veryCloseScore * distanceWeight;
-      } else if (distance < moderateThershold) {
-        distanceScore = moderateScore * distanceWeight;
-      } else if (distance < farThershold) {
-        distanceScore = farScore * distanceWeight;
-      }
+        if (buddy.major === userPreferences.major) {
+          majorScore = 1 * majorWeight;
+        }
+        if (buddy.classification === userPreferences.classification) {
+          classificationScore = 1 * classificationWeight;
+        }
+        if (distance < veryCloseThershold) {
+          distanceScore = veryCloseScore * distanceWeight;
+        } else if (distance < moderateThershold) {
+          distanceScore = moderateScore * distanceWeight;
+        } else if (distance < farThershold) {
+          distanceScore = farScore * distanceWeight;
+        }
 
-      const totalScore = majorScore + classificationScore + distanceScore;
+        totalScore = majorScore + classificationScore + distanceScore;
+        potentialBuddies.set(cacheKey, totalScore);
+      }
       scores.push({ totalScore, buddy: buddy });
     }
     const sorted = mergeSort(scores);
     const sortedBuddies = sorted.map((item) => item.buddy);
-
-    potentialBuddies.set(cacheKey, sortedBuddies);
-
     return sortedBuddies;
   } catch (error) {
     console.error('Failed to match');
@@ -544,47 +541,9 @@ function randomNumberGenerator() {
 
 router.post("/match", async (req, res) => {
   if (!req.session.userId) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    return res.status(401).json({ message: "Unauthorized" });
   }
-  try {
-    const { fcmToken } = req.body;
-    const existingToken = await prisma.token.findFirst({
-      where: {
-        fcmToken,
-        userId: req.session.userId,
-      },
-    });
-    if (!existingToken) {
-      await prisma.token.create({
-        data: {
-          fcmToken,
-          user: {
-            connect: { id: req.session.userId },
-          },
-        },
-      });
-    }
-    res.status(201).json({
-      success: true,
-      message: 'Token captured',
-    });
-  } catch (error) {
-    console.error('Error while capturing token');
-    res.status(500).json({ error: error.message || 'Internal server error' });
-  }
-});
 
-function randomNumberGenerator() {
-  const randomNumber = new Uint8Array(5);
-  crypto.getRandomValues(randomNumber);
-  let digit = [];
-  for (var i = 0; i < randomNumber.length; i++) {
-    let number = randomNumber[i];
-    const numberArray = number.toString().split('').map(Number);
-    let firstDigit = numberArray[0];
-    digit.push(firstDigit);
-    var verificationCode = digit.join('');
-  }
   try {
     const { buddyPair } = req.body;
     const matchedPair = await prisma.match.create({
@@ -598,6 +557,7 @@ function randomNumberGenerator() {
       },
     });
     const code = randomNumberGenerator();
+
     const hashedCode = await hash(code, 10);
     await prisma.codeInput.create({
       data: {
@@ -637,10 +597,10 @@ function randomNumberGenerator() {
 
     res.status(201).json({
       success: true,
-      message: "Token captured",
+      message: "Match captured",
     });
   } catch (error) {
-    console.error("Error while capturing token");
+    console.error("Error while capturing match");
     res.status(500).json({ error: error.message || "Internal server error" });
   }
 });
@@ -715,7 +675,7 @@ router.get("/pastbuddies", async (req, res) => {
       pastBuddies.map((buddy) => ({
         ...buddy.buddyPair,
         matchedAt: buddy.createdAt,
-      }))
+      })),
     );
   } catch (err) {
     console.info(err);
