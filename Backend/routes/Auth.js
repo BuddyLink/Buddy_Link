@@ -390,6 +390,39 @@ function insert(root, score,buddy) {
   return root;
 }
 
+function getSuccessor(curr) {
+  curr = curr.right;
+  while (curr !== null && curr.left !== null) {
+    curr = curr.left;
+  }
+  return curr;
+}
+
+function deleteNode(root,score,buddy){
+  if (root === null){
+    return root;
+  }
+
+  if(score < root.score){
+    root.left = deleteNode(root.left, score,buddy);
+  }else if(score > root.score){
+    root.right = deleteNode(root.right, score,buddy);
+  }else{
+    if (root.left === null)
+      return root.right;
+
+    if (root.right === null)
+      return root.left;
+
+    let succ = getSuccessor(root);
+    root.score = succ.score;
+    root.right = deleteNode(root.right, succ.score,buddy);
+  }
+  console.log(root);
+  return root;
+
+}
+
 function inorder(root,result) {
   if (root != null) {
     inorder(root.right, result);
