@@ -51,10 +51,10 @@ const Map = ({ start, destination }) => {
   const position = [32.5278, -92.7147];
 
   return (
-    <div className="w-full h-[500px] rounded-xl mt-4 relative ">
+    <div className="w-full h-[500px] rounded-xl mt-4 relative z-0">
       <MapContainer
         center={position}
-        zoom={19}
+        zoom={17}
         scrollWheelZoom={true}
         className="h-full w-full"
       >
