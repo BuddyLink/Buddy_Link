@@ -33,80 +33,87 @@ const pastBuddies = () => {
   };
 
   return (
-    <div className="min-h-screen bg-green-50 py-6 px-4 lg:bg-gradient-to-br from-green-100 to-green-50 lg:text-l mb-15 dark:bg-gray-900 dark:lg:bg-gradient-to-br dark:lg:from-gray-900 dark:lg:to-gray-800">
-      <h1 className="text-3xl font-bold text-center text-green-700 mb-3 lg:text-4xl lg:mt-4 dark:text-emerald-400">
-        Walk History 
-      </h1>
-      <ul className="space-y-6 max-w-md mx-auto lg:w-200">
-        {pastBuddy && pastBuddy.length > 0 ? (
-          pastBuddy.map((buddy, index) => {
-            const likedKey = `${buddy.id}_${new Date(
-              buddy.matchedAt
-            ).getTime()}`;
-            return (
-              <li
-                key={index}
-                className="bg-white p-4 rounded-xl shadow-md flex items-center space-x-4 dark:bg-gray-800 dark:border-green-300"
-              >
-                <img
-                  src={buddy.profilePic}
-                  alt="Buddy profile"
-                  className="w-23 h-23 rounded-full object-cover border-2 border-green-500"
-                  loading="lazy"
-                  style={{
-                    maxWidth: "92px",
-                    maxHeight: "92px",
-                    width: "auto",
-                    height: "auto",
-                  }}
-                />
-                <div className="flex-1 ml-5 lg:text-m">
-                  <p className="font-semibold text-gray-700 dark:text-gray-300">
-                    {buddy.name} {buddy.surname}
-                  </p>
-                  <p className="text-sm text-gray-600 lg:text-m dark:text-gray-300">
-                    {buddy.major}
-                  </p>
-                  <p className="text-sm text-gray-600 lg:text-m dark:text-gray-300">
-                    {buddy.classification}
-                  </p>
-                  <p className="text-sm text-gray-600 lg:text-m dark:text-gray-300">
-                    Walk Count: {buddy.walkCount}
-                  </p>
-                  <p className="text-sm text-gray-600 lg:text-m dark:text-gray-300">
-                    {new Date(buddy.matchedAt).toLocaleDateString("en-US")}
-                    {"   @"}
-                    {new Date(buddy.matchedAt).toLocaleTimeString("en-US", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                      timeZone: "UTC",
-                    })}
-                  </p>
-                  <div className="flex justify-center gap-3 mt-3 ml-20">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleLike(likedKey);
-                      }}
-                      className={`text-2xl transition ${
-                        liked[likedKey] ? "text-red-500" : "text-gray-400"
-                      }`}
-                    >
-                      {liked[likedKey] ? <FaHeart /> : <FaRegHeart />}
-                    </button>
-                  </div>
-                </div>
-              </li>
-            );
-          })
-        ) : (
-          <p className="text-center text-gray-500 justify-center text-semibold mt-20 text-3xl">
-            {" "}
-            No Past Buddies Found
-          </p>
-        )}
-      </ul>
+    <div className="min-h-screen bg-green-50 lg:bg-gradient-to-br from-green-100 to-green-50 lg:text-l lg:px-8 lg:py-5 lg:mt-5 mb-15 dark:bg-gray-900 dark:lg:bg-gradient-to-br dark:lg:from-gray-900 dark:lg:to-gray-800">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <h1 className="text-3xl font-bold text-center text-green-700 mb-8 lg:text-5xl lg:mt-4 dark:text-emerald-400">
+          Walk History
+        </h1>
+        <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 max-w-7xl mx-auto ">
+          {pastBuddy && pastBuddy.length > 0 ? (
+            pastBuddy.map((buddy, index) => {
+              const likedKey = `${buddy.id}_${new Date(
+                buddy.matchedAt
+              ).getTime()}`;
+              return (
+                <li key={index} className="h-full">
+                  <article className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-md hover:shadow-lg transition overflow-hidden ring-1 ring-emerald-50 dark:ring-gray-700">
+                    <div className="relative h-16 md:h-20 bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-400 dark:from-emerald-700 dark:via-emerald-600 dark:to-green-500" />
+                    {/* <div className="flex flex-row md:flex-col lg:flex-col justify-center items-center md:items-start gap-4 h-full"> */}
+                    <div className=" absolute -top-0 mt-5 left-6 flex justify-center">
+                      <img
+                        src={buddy.profilePic}
+                        alt="Buddy profile"
+                        className=" w-16 h-16 sm:w-14 sm:h-14 md:w-20 md:h-20 rounded-full object-cover border-2 border-green-500"
+                        loading="lazy"
+                        style={{
+                          maxWidth: "92px",
+                          maxHeight: "92px",
+                          width: "auto",
+                          height: "auto",
+                        }}
+                      />
+                    </div>
+                    <div className="md:pt-10 md:pb-3  lg:text-m px-6  pt-2 text-left ml-28 leading-normal">
+                      <h3 className="text-base md:text-lg font-semibold text-gray-700 dark:text-gray-300 lg:text-xl leading-normal">
+                        {buddy.name} {buddy.surname}
+                      </h3>
+                      <p className="text-xs md:text-sm text-gray-600 lg:text-l dark:text-gray-300 lg:text-l">
+                        {buddy.major}
+                      </p>
+                      <p className="text-xs md:text-sm  text-gray-600 lg:text-l dark:text-gray-300">
+                        {buddy.classification}
+                      </p>
+                      <p className=" text-xs md:text-sm  text-gray-600 lg:text-l dark:text-gray-300">
+                        <span className="font-semibold">Walk Count: </span>
+                        {buddy.walkCount}
+                      </p>
+                      <p className="text-xs md:text-sm  text-gray-600 lg:text-l dark:text-gray-300">
+                        {new Date(buddy.matchedAt).toLocaleDateString("en-US")}
+                        {"     @"}
+                        {new Date(buddy.matchedAt).toLocaleTimeString("en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                          timeZone: "UTC",
+                        })}
+                      </p>
+                    </div>
+                    <div className="flex justify-center gap-3 mt-0 mb-2 items ml-63 lg:ml-65">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          toggleLike(likedKey);
+                        }}
+                        className={`text-2xl lg:text-3xl transition ${
+                          liked[likedKey] ? "text-green-500" : "text-gray-400"
+                        }`}
+                      >
+                        {liked[likedKey] ? <FaHeart /> : <FaRegHeart />}
+                      </button>
+                    </div>
+                    {/* </div> */}
+                  </article>
+                </li>
+              );
+            })
+          ) : (
+            <p className="text-center text-gray-500 justify-center text-semibold mt-20 text-3xl">
+              {" "}
+              No Past Buddies Found
+            </p>
+          )}
+        </ul>
+      </div>
       <NavBar />
     </div>
   );
