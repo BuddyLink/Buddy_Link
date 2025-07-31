@@ -669,7 +669,7 @@ router.get("/pastbuddies", async (req, res) => {
           },
         },
       },
-      take: 5,
+      take: 6,
     });
     res.json(
       pastBuddies.map((buddy) => ({
