@@ -35,7 +35,7 @@ const pastBuddies = () => {
   return (
     <div className="min-h-screen bg-green-50 py-6 px-4 lg:bg-gradient-to-br from-green-100 to-green-50 lg:text-l mb-15 dark:bg-gray-900 dark:lg:bg-gradient-to-br dark:lg:from-gray-900 dark:lg:to-gray-800">
       <h1 className="text-3xl font-bold text-center text-green-700 mb-3 lg:text-4xl lg:mt-4 dark:text-emerald-400">
-        Past Buddies
+        Walk History 
       </h1>
       <ul className="space-y-6 max-w-md mx-auto lg:w-200">
         {pastBuddy && pastBuddy.length > 0 ? (
