@@ -182,7 +182,7 @@ const homePage = ({ profile }) => {
           </select>
           <button
             type="submit"
-            className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 text-white font-semibold py-2 px-4 mt-4 rounded-md transition"
+            className="w-full bg-emerald-600 hover:bg-emerald-700 dark:bg-emerald-500 text-white font-semibold py-2 px-4 mt-4 rounded-md transition cursor-default hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Find a Buddy!!
           </button>

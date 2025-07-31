@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { MdLocationPin } from "react-icons/md";
 import { FaWalking } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 const signInPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     const data = {
@@ -25,6 +28,11 @@ const signInPage = () => {
       alert(result.error || "User not found");
     }
   };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-emerald-400 to-green-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center py-10 sm:px-6 lg:px-8">
       <div className=" w-full  dark:bg-gray-800 dark:text-gray-200 max-w-sm sm:max-w-md md:max-w-lg bg-white shadow-xl rounded-2xl p-6 sm:p-8 mt-15 mr-3 ml-3 ">
@@ -48,18 +56,29 @@ const signInPage = () => {
             <input
               type="email"
               value={email}
+              placeholder="Enter your email"
               onChange={(e) => setEmail(e.target.value)}
               className="w-full mt-1 p-2 border rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-400 dark:placeholder-gray-400"
             />
             <label className="block text-left justify-left text-m font-medium text-gray-600 mb-1.5 dark:text-gray-200">
               Password
             </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full mt-1 p-2 border rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-400 dark:placeholder-gray-400"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                placeholder="Enter your password"
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full mt-1 p-2 border rounded-md bg-white shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-400 dark:bg-gray-700 dark:text-gray-200 dark:border-gray-400 dark:placeholder-gray-400 pr-16"
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute inset-y-0 right-3 my-auto text-sm font-medium text-gray-600 dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-200"
+              >
+                {showPassword ? <FaEye size={20} /> : <FaEyeSlash size={20} />}
+              </button>
+            </div>
             <button
               className="w-full mt-4 bg-emerald-500 py-2 px-6 rounded-md mt-6 text-center text-m text-gray-700 trasition-transform hover:scale-90 justify-center dark:bg-emerald-500 dark:text-gray-900"
               onClick={handleLogin}
