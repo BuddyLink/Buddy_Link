@@ -24,8 +24,8 @@ const profilePage = ({ setProfile, profile }) => {
   const closeModal = () => setIsModalOpen(false);
   const defaultAvatar = "/assets/_500W_500H.jpg";
   return (
-    <div className="min-h-screen w-full bg-gradient-to-b from-green-50 to-green-100  dark:from-gray-900 dark:to-gray-800 flex flex-col items-center justify-start p-8 sm:px-6 lg:px-20 lg:justify-center ">
-      <div className="relative w-full max-w-5xl mt-10 text-center lg:border lg:border-green-300 lg:rounded-md dark:border-gray-600">
+    <div className="min-h-screen w-full bg-gradient-to-br from-green-50 to-green-100  dark:from-gray-900 dark:to-gray-800 flex flex-col items-center justify-start p-8 sm:px-6 lg:px-20 lg:justify-center ">
+      <div className="relative w-full max-w-5xl mt-10 text-center lg:border lg:border-green-700 lg:rounded-md lg:shadow-lg dark:border-gray-600">
         <div className="flex flex-col items-center text-center dark:text-gray-300 space-y-4">
           <button
             onClick={openModal}
@@ -36,33 +36,38 @@ const profilePage = ({ setProfile, profile }) => {
           {isModalOpen && (
             <EditProfileModal profile={profile} onClose={closeModal} />
           )}
-          <h2 className="text-3xl font-bond text-green-900 dark:text-emerald-500 mt-13 mb-8 sm:text-2xl md:text-4xl ">
-            {profile.name}
-            {"  "}
-            {profile.surname}
-          </h2>
-          <img
-            src={profile.profilePicture}
-            alt="profile pic"
-            className="w-50 h-50 sm:w-65 sm:h-65 rounded-full mx-auto mt-4 object-cover border border-green-300"
-            onError={(e) => {
-              (e.target.onerror = null), (e.target.src = defaultAvatar);
-            }}
-          />
-        </div>
-        <div className="mt-6 text-green-900 space-y-2 lg:mb-6 lg:mt-9 ">
-          <h3 className="text-lg lg:text-xl dark:text-gray-200">
-            <span className="font-bold"><RiGraduationCapLine />Major: </span>
-            {profile.major}
-          </h3>
-          <h3 className="text-lg lg:text-xl dark:text-gray-200">
-            <span className="font-bold"><HiOutlineClipboardDocumentCheck />Classification: </span>
-            {profile.classification}
-          </h3>
-          <h3 className="text-lg lg:text-xl dark:text-gray-200">
-            <span className="font-bold"><BsPersonWalking />Walk Count: </span>
-            {profile.walkCount}
-          </h3>
+          <div className="text-left">
+            <h2 className="text-3xl font-bond text-green-900 dark:text-emerald-500 mt-13 mb-8 sm:text-2xl md:text-4xl lg:text-5xl hover:underline">
+              {profile.name}
+              {"  "}
+              {profile.surname}
+            </h2>
+            <img
+              src={profile.profilePicture}
+              alt="profile pic"
+              className="w-50 h-50 sm:w-65 sm:h-65 rounded-full mx-auto mt-4 object-cover border border-green-700"
+              onError={(e) => {
+                (e.target.onerror = null), (e.target.src = defaultAvatar);
+              }}
+            />
+          </div>
+          <div className="mt-6 text-green-900 space-y-2 lg:mb-6 lg:mt-9 ">
+            <div className="flex items-center gap-2 mb-2 text-lg lg:text-2xl dark:text-gray-200 mb-3">
+              <RiGraduationCapLine className="text-xl lg:text-2xl " />
+              <span className="font-semibold">Major: </span>
+              <span>{profile.major}</span>
+            </div>
+            <div className="flex items-center gap-2 mb-2 text-lg lg:text-2xl dark:text-gray-200 mb-3">
+              <HiOutlineClipboardDocumentCheck className="text-xl lg:text-2xl " />
+              <span className="font-semibold">Classification: </span>
+              <span> {profile.classification}</span>
+            </div>
+            <div className="flex items-center gap-2 mb-2 text-lg lg:text-2xl dark:text-gray-200">
+              <BsPersonWalking className="text-xl lg:text-2xl " />
+              <span className="font-semibold">Walk Count: </span>
+              <span>{profile.walkCount}</span>
+            </div>
+          </div>
         </div>
       </div>
       <NavBar />
