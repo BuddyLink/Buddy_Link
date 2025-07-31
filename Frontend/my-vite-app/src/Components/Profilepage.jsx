@@ -4,6 +4,9 @@ import { getProfile } from "./fetchingData";
 import NavBar from "./NavBar";
 import EditProfileModal from "./EditProfileModal";
 import { LiaUserEditSolid } from "react-icons/lia";
+import { RiGraduationCapLine } from "react-icons/ri";
+import { BsPersonWalking } from "react-icons/bs";
+import { HiOutlineClipboardDocumentCheck } from "react-icons/hi2";
 
 const profilePage = ({ setProfile, profile }) => {
   const { id } = useParams();
@@ -49,15 +52,15 @@ const profilePage = ({ setProfile, profile }) => {
         </div>
         <div className="mt-6 text-green-900 space-y-2 lg:mb-6 lg:mt-9 ">
           <h3 className="text-lg lg:text-xl dark:text-gray-200">
-            <span className="font-bold">Major: </span>
+            <span className="font-bold"><RiGraduationCapLine />Major: </span>
             {profile.major}
           </h3>
           <h3 className="text-lg lg:text-xl dark:text-gray-200">
-            <span className="font-bold">Classification: </span>
+            <span className="font-bold"><HiOutlineClipboardDocumentCheck />Classification: </span>
             {profile.classification}
           </h3>
           <h3 className="text-lg lg:text-xl dark:text-gray-200">
-            <span className="font-bold">Walk Count: </span>
+            <span className="font-bold"><BsPersonWalking />Walk Count: </span>
             {profile.walkCount}
           </h3>
         </div>

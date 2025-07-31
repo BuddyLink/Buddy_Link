@@ -73,6 +73,7 @@ function App() {
   onMessage(messaging, (payload) => {
     if (Notification.permission === "granted") {
       new Notification(payload.notification.title, {
+        icon: "/assets/icons/90A7FB37-0786-4422-ACAC-30B953902EA8_1_201_a.jpeg",
         body: payload.notification.body,
         requireInteraction: true,
       });

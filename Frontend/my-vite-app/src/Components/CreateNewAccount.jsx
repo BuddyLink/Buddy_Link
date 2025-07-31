@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createNewAccount, getMe } from "./fetchingData";
 import { useNavigate } from "react-router-dom";
+import { CiCircleInfo } from "react-icons/ci";
 
 const createNewUserAccount = () => {
   const [name, setName] = useState("");
@@ -16,7 +17,8 @@ const createNewUserAccount = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [distancePreferences, setDistancePreferences] = useState("");
   const [majorPreferences, setMajorPreferences] = useState("");
-  const [classificationPreferences, setClassificationPreferences] = useState("");
+  const [classificationPreferences, setClassificationPreferences] =
+    useState("");
   const navigate = useNavigate();
 
   const handleProfile = (e) => {
@@ -170,7 +172,7 @@ const createNewUserAccount = () => {
             onChange={(e) => setPreferredContact(e.target.value)}
           >
             <option className="hover: bg-green-100" value="">
-              Select a Preferred Contact
+              Preferred Contact Method
             </option>
             <option className="hover: bg-green-100" value="email">
               Email
@@ -187,9 +189,31 @@ const createNewUserAccount = () => {
             className="w-full p-2 rounded-md border border-gray-400 bg-[#f1fff3] placeholder-gray-500 dark:bg-gray-700 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-400 "
             maxLength="15"
           />
-          <h2 className="font-semibold text-green-800 dark:text-emerald-600">
-            Set your pairing preferences below :{" "}
-          </h2>
+          <div className="flex items-center gap-2 mb-2 lg:gap-52">
+            <h2 className="font-semibold text-green-800 dark:text-emerald-600">
+              Set your pairing preferences below {" "}
+            </h2>
+            <div className="relative group">
+              <CiCircleInfo
+                size={21}
+                className="text-gray-600 dark:text-gray-300 hover:text-gray-900 cursor-help focus:outline-none font-semibold"
+                tabIndex={0}
+                aria-describedby="pref-tip"
+              />
+              <div
+                id="pref-tip"
+                role="tooltip"
+                className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-72 max-w-xs rounded-md px-3 py-2 text-xs leading-snug bg-[#f1fff3]  font-semibold text-emerald-900 border border-green-600 shadow-lg  opacity-0  pointer-events-none transition-opacity duration-200n group-hover:opacity-100 group-focus-within:opacity-100"
+              >
+                Slide each slider to show how strongly you value that preference
+                for matching.
+                <div
+                  className="absolute top-full left-1/2 -translate-x-1/2 w-0 h-0 border-x-8 border-x-transparent border-b-8 border-b-gray-900 text-[#f1fff3]"
+                  aria-hidden="true"
+                />
+              </div>
+            </div>
+          </div>
           <label className="block text-sm font-medium text-green-800 dark:text-gray-300">
             Distance Preference :
           </label>

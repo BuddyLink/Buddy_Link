@@ -22,7 +22,7 @@ messaging.onBackgroundMessage((payload) => {
     payload.notification?.title || "Background Message Title";
   const notificationOptions = {
     body: payload.notification?.body || "Background Message body",
-    icon: "/firebase-logo.png",
+    icon: "/assets/icons/90A7FB37-0786-4422-ACAC-30B953902EA8_1_201_a.jpeg",
     requireInteraction: true,
   };
 
