@@ -32,69 +32,73 @@ const BuddyFindingPage = () => {
           onClick={() => handleDelete()}
           className="items-center flex gap-1 bg-green-600 dark:bg-emerald-600 text-white px-2 py-2 rounded hover:bg-green-700 transition lg:text-m"
         >
-          Close
+          Cancel
         </button>
         <div className="absolute z-10 px-3 py-2 text-sm font-medium bg-gray-100 mt-1 text-gray-900 border border-green-700 rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:bg-gray-700">
           Clicking will cancel your request.
         </div>
       </div>
-      <h1 className="text-2xl font-bold text-center text-green-700 mb-2 lg:text-4xl lg:mt-4 dark:text-green-300 dark:text-emerald-400">
-        Pick a Buddy
-      </h1>
-      <p className="text-center text-gray-600 mb-6 lg:text-xl lg:mt-4 dark:text-gray-300">
-        One Step close to your destination !
-      </p>
-      <ul className="space-y-6 max-w-md mx-auto lg:w-200">
-        {match && match.length > 0 ? (
-          match.map((person, index) => (
-            <li
-              key={index}
-              className="bg-white p-4 rounded-xl shadow-md flex items-center space-x-4 dark:bg-gray-800"
-            >
-              <img
-                src={person.profilePic}
-                alt="Buddy profile"
-                className="w-23 h-23 rounded-full object-cover border-2 border-green-500"
-                loading="lazy"
-                style={{
-                  maxWidth: "92px",
-                  maxHeight: "92px",
-                  width: "auto",
-                  height: "auto",
-                }}
-              />
-              <div className="flex-1 ml-5 lg:text-m">
-                <p className="font-semibold text-gray-800 dark:text-gray-300">
-                  {person.name} {person.surname}
-                </p>
-                <p className="text-sm text-gray-600 lg:text-m dark:text-gray-300">
-                  {person.major}
-                </p>
-                <p className="text-sm text-gray-600 lg:text-m dark:text-gray-300">
-                  {person.classification}
-                </p>
-                <p className="text-sm text-gray-600 lg:text-m dark:text-gray-300">
-                  Walk Count: {person.walkCount}
-                </p>
-                <div className="flex  justify-center gap-3 mt-3">
-                  <button
-                    onClick={() => handleClick(person)}
-                    className="items-center flex ml-15 gap-1 bg-green-600 dark:bg-emerald-600 text-white px-2 py-2 rounded hover:bg-green-700 transition lg:text-m"
-                  >
-                    <MdEmojiPeople />
-                    BuddyUp
-                  </button>
-                </div>
-              </div>
-            </li>
-          ))
-        ) : (
-          <p className="text-center text-gray-500 justify-center text-semibold mt-20 text-3xl">
-            {" "}
-            No Buddies Found
-          </p>
-        )}
-      </ul>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <h1 className="text-2xl font-bold text-center text-green-700 mb-2 lg:text-5xl lg:mt-4 dark:text-green-300 dark:text-emerald-400">
+          Pick a Buddy
+        </h1>
+        <p className="text-center text-gray-600 mb-6 lg:text-2xl lg:mt-4 dark:text-gray-300">
+          One Step close to your destination !
+        </p>
+        <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 max-w-7xl mx-auto ">
+          {match && match.length > 0 ? (
+            match.map((person, index) => (
+              <li key={index} className="h-full">
+                <article className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-md hover:scale-105 transition overflow-hidden ring-1 ring-emerald-50 dark:ring-gray-700">
+                  <div className="relative h-16 md:h-20 bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-400 dark:from-emerald-700 dark:via-emerald-600 dark:to-green-500" />
+                  <div className=" absolute -top-0 mt-5 left-6 flex justify-center">
+                    <img
+                      src={person.profilePic}
+                      alt="Buddy profile"
+                      className="w-16 h-16 sm:w-14 sm:h-14 md:w-20 md:h-20 rounded-full object-cover border-2 border-green-500"
+                      loading="lazy"
+                      style={{
+                        maxWidth: "92px",
+                        maxHeight: "92px",
+                        width: "auto",
+                        height: "auto",
+                      }}
+                    />
+                  </div>
+                  <div className="md:pt-6 md:pb-3  lg:text-m px-6  pt-2 text-left ml-28 leading-normal">
+                    <h3 className="text-base md:text-lg font-semibold text-gray-700 dark:text-gray-300 lg:text-xl leading-normal">
+                      {person.name} {person.surname}
+                    </h3>
+                    <p className="text-xs md:text-sm text-gray-600 lg:text-l dark:text-gray-300 lg:text-l">
+                      {person.major}
+                    </p>
+                    <p className="text-xs md:text-sm text-gray-600 lg:text-l dark:text-gray-300 lg:text-l">
+                      {person.classification}
+                    </p>
+                    <p className="text-xs md:text-sm text-gray-600 lg:text-l dark:text-gray-300 lg:text-l">
+                      Walk Count: {person.walkCount}
+                    </p>
+                  </div>
+                  <div className=" flex justify-center gap-3 mt-1 mb-2 items ml-50 lg:ml-65 lg:mt-0">
+                    <button
+                      onClick={() => handleClick(person)}
+                      className="text-xs lg:text-l items-center flex ml-1 gap-1 bg-green-600 dark:bg-emerald-600 text-white px-1.5 py-1.5 lg:py-2 lg:px-2 rounded hover:bg-green-700 transition "
+                    >
+                      <MdEmojiPeople />
+                      BuddyUp
+                    </button>
+                  </div>
+                </article>
+              </li>
+            ))
+          ) : (
+            <p className="text-center text-gray-500 justify-center text-semibold mt-20 text-3xl">
+              {" "}
+              No Buddies Found
+            </p>
+          )}
+        </ul>
+      </div>
       <NavBar />
     </div>
   );

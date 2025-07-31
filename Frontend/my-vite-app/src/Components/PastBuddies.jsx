@@ -46,9 +46,8 @@ const pastBuddies = () => {
               ).getTime()}`;
               return (
                 <li key={index} className="h-full">
-                  <article className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-md hover:shadow-lg transition overflow-hidden ring-1 ring-emerald-50 dark:ring-gray-700">
+                  <article className="relative bg-white dark:bg-gray-800 rounded-3xl shadow-md hover:scale-105 transition overflow-hidden ring-1 ring-emerald-50 dark:ring-gray-700">
                     <div className="relative h-16 md:h-20 bg-gradient-to-r from-emerald-600 via-emerald-500 to-green-400 dark:from-emerald-700 dark:via-emerald-600 dark:to-green-500" />
-                    {/* <div className="flex flex-row md:flex-col lg:flex-col justify-center items-center md:items-start gap-4 h-full"> */}
                     <div className=" absolute -top-0 mt-5 left-6 flex justify-center">
                       <img
                         src={buddy.profilePic}
@@ -101,7 +100,6 @@ const pastBuddies = () => {
                         {liked[likedKey] ? <FaHeart /> : <FaRegHeart />}
                       </button>
                     </div>
-                    {/* </div> */}
                   </article>
                 </li>
               );
