@@ -29,7 +29,7 @@ const StartJourney = () => {
       </p>
       <div className="w-full max-w-4xl mb-15 mx-auto bg-emerald-50 dark:bg-gray-800 rounded-3xl shadow-xl px-6 py-8 sm:p-8 md:mt-5 md:pt-15 md:pb-15">
         <div className="mb-4">
-          <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1 md:text-xl md:font-normal">
+          <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1 md:text-xl md:font-normal text-left ml-2">
             Starting Point{" "}
           </label>
           <select
@@ -53,7 +53,7 @@ const StartJourney = () => {
           </select>
         </div>
         <div className="mb-6">
-          <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1 mt-2 md:text-xl md:font-normal">
+          <label className="block text-gray-700 dark:text-gray-200 font-semibold mb-1 mt-2 md:text-xl md:font-normal text-left ml-2">
             Destination{" "}
           </label>
           <select

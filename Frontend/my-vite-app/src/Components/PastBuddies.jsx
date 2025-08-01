@@ -41,7 +41,7 @@ const pastBuddies = () => {
         <h1 className="text-3xl font-bold text-center text-green-700 mb-8 lg:text-5xl lg:mt-4 dark:text-emerald-400">
           Walk History
         </h1>
-        <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 max-w-7xl mx-auto ">
+        <ul className={`mt-8 w-full ${ pastBuddy.length ? "grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 max-w-7xl mx-auto ": "grid min-h-[30vh] place-content-center"}`}>
           {pastBuddy && pastBuddy.length > 0 ? (
             pastBuddy.map((buddy, index) => {
               const likedKey = `${buddy.id}_${new Date(
@@ -109,13 +109,13 @@ const pastBuddies = () => {
             })
           ) : (
             <div className="block text-center">
-              <div className="text-center text-gray-500 justify-center text-semibold mt-20 text-3xl lg:text-4xl border boder-green-400 shadow-lg rounded-full pt-8 px-2 py-2">
+              <div className="text-center text-gray-500 justify-center text-semibold mt-20 text-3xl lg:text-4xl border boder-green-400 shadow-lg rounded-full pt-8 lg:px-18 lg:py-7 hover:shadow-lg px-6 py-3">
                 <div className="flex flex-col">
-                  <LuSearchX size={50} className="mb-0 ml-3 mt-1" />{" "}
-                  <span className="ml-2">No Walk History Found</span>
+                  <LuSearchX size={50} className="mb-0 ml-3 mt-1 lg:ml-0" />{" "}
+                  <span className="ml-2 lg:ml-12 font-semibold lg:text-4xl">No Walk History Found</span>
                   <PiSmileySad
                     size={70}
-                    className="text-center justify-center ml-40 mt-4"
+                    className="text-center justify-center ml-25 lg:ml-44 mt-4"
                   />
                 </div>
               </div>
