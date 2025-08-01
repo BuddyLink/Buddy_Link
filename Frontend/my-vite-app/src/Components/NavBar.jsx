@@ -23,7 +23,7 @@ const navBar = () => {
           <IoHome className="text-2xl " />
           <p className="text-xs">Home</p>
         </button>
-        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2  whitespace-nowrap  px-3 py-2 text-sm font-medium bg-gray-100 text-gray-900 border border-green-700 rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:bg-gray-700 z-50">
+        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2  whitespace-nowrap  px-3 py-2 text-sm font-medium bg-gray-100 text-gray-900 dark:text-white border border-green-700 rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:bg-gray-700 z-50">
           Home
         </div>
       </Link>
@@ -33,7 +33,7 @@ const navBar = () => {
           <IoPersonCircleOutline className="text-2xl" />
           <p className="text-xs">Profile</p>
         </button>
-        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2  whitespace-nowrap  px-3 py-2 text-sm font-medium bg-gray-100 text-gray-900 border border-green-700 rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:bg-gray-700 z-50">
+        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2  whitespace-nowrap  px-3 py-2 text-sm font-medium bg-gray-100 text-gray-900 dark:text-white border border-green-700 rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:bg-gray-700 z-50">
           Profile
         </div>
       </Link>
@@ -42,7 +42,7 @@ const navBar = () => {
           <GiPlayerPrevious className="text-2xl" />
           <p className="text-xs">Activity</p>
         </button>
-        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2  whitespace-nowrap  px-3 py-2 text-sm font-medium bg-gray-100 text-gray-900 border border-green-700 rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:bg-gray-700 z-50">
+        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2  whitespace-nowrap  px-3 py-2 text-sm font-medium bg-gray-100 text-gray-900 dark:text-white border border-green-700 rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:bg-gray-700 z-50">
           Activity
         </div>
       </Link>
@@ -54,7 +54,7 @@ const navBar = () => {
           <GiExitDoor className="text-2xl" />
           <p className="text-xs">LogOut</p>
         </button>
-        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2  whitespace-nowrap  px-3 py-2 text-sm font-medium bg-gray-100 text-gray-900 border border-green-700 rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:bg-gray-700 z-50">
+        <div className="absolute bottom-full mb-2 left-1/2 transform -translate-x-1/2  whitespace-nowrap  px-3 py-2 text-sm font-medium bg-gray-100 text-gray-900 dark:text-white border border-green-700 rounded-md shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 dark:bg-gray-700 z-50">
           LogOut
         </div>
       </div>

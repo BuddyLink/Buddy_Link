@@ -4,6 +4,9 @@ import { useState, useEffect } from "react";
 import NavBar from "./NavBar";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
+import { LuSearchX } from "react-icons/lu";
+import { PiSmileySad } from "react-icons/pi";
+
 
 const pastBuddies = () => {
   const { id } = useParams();
@@ -105,10 +108,18 @@ const pastBuddies = () => {
               );
             })
           ) : (
-            <p className="text-center text-gray-500 justify-center text-semibold mt-20 text-3xl">
-              {" "}
-              No Past Buddies Found
-            </p>
+            <div className="block text-center">
+              <div className="text-center text-gray-500 justify-center text-semibold mt-20 text-3xl lg:text-4xl border boder-green-400 shadow-lg rounded-full pt-8 px-2 py-2">
+                <div className="flex flex-col">
+                  <LuSearchX size={50} className="mb-0 ml-3 mt-1" />{" "}
+                  <span className="ml-2">No Walk History Found</span>
+                  <PiSmileySad
+                    size={70}
+                    className="text-center justify-center ml-40 mt-4"
+                  />
+                </div>
+              </div>
+            </div>
           )}
         </ul>
       </div>

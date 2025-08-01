@@ -2,6 +2,8 @@ import NavBar from "./NavBar";
 import { useNavigate, useLocation } from "react-router-dom";
 import { MdEmojiPeople } from "react-icons/md";
 import { createMatch, deleteRequest } from "./fetchingData";
+import { LuSearchX } from "react-icons/lu";
+import { PiSmileySad } from "react-icons/pi";
 
 const BuddyFindingPage = () => {
   const navigate = useNavigate();
@@ -92,10 +94,16 @@ const BuddyFindingPage = () => {
               </li>
             ))
           ) : (
-            <p className="text-center text-gray-500 justify-center text-semibold mt-20 text-3xl">
+            <div className="block text-center">
+            <div className="text-center text-gray-500 justify-center text-semibold mt-20 text-3xl lg:text-4xl border boder-green-400 shadow-lg rounded-full pt-8 px-2 py-2">
+              <div className="flex flex-col">
+              <LuSearchX size={50} className="mb-0 ml-3 mt-1"/>
               {" "}
-              No Buddies Found
-            </p>
+              <span className="ml-2">No Buddies Found</span>
+              <PiSmileySad size={70} className="text-center justify-center ml-40 mt-4"/>
+              </div>
+            </div>
+            </div>
           )}
         </ul>
       </div>
