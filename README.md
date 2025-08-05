@@ -192,23 +192,11 @@ The Timer component utilizes useState to track the current time in milliseconds,
 
 A timeFormat function is implemented to convert milliseconds to minutes and seconds, making the time more readable and user-friendly. This feature enhances the user experience by providing a clear visual representation of the time remaining during the search interval.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Project Plan:
 https://docs.google.com/document/d/1xoo9j7mae8e2677XxaH5VUi-aIn2QbsZgvPqw7rEBKM/edit?usp=sharing
+
+Demo:
+https://drive.google.com/file/d/1oZWvzEhyysN8ZOuFsZ0pl0lyeCTmIMJG/view
+
+[BuddyLink -Stecy Chirinda Capstone Project.mp4.zip](https://github.com/user-attachments/files/21604269/BuddyLink.-Stecy.Chirinda.Capstone.Project.mp4.zip)
+
